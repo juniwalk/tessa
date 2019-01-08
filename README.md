@@ -1,14 +1,12 @@
 
-JuniWalk / Tessa
-################
+### JuniWalk / Tessa TODO
 
 - Bundles can depend on other bundles
 - Circular reference must be forbidden
 - Move Nette stuff into Nette bridge? (make dependency on nette optional)
 
 
-Structure
-#########
+### Structure
 
 - AssetManager
 	- Compiler
@@ -23,42 +21,36 @@ Structure
 - AssetControl
 
 
-Console commands
-################
+### Console commands
 
 - Compile all bundles (warm up all)
 - Compile specific bundle (warm up)
 - List bundles
 
 
-Neon configuration
-##################
-
-extension:
-	tessa: JuniWalk\Tessa\DI\TessaExtention
+### Neon configuration
+```yaml
+extensions:
+    tessa: JuniWalk\Tessa\DI\TessaExtension
 
 tessa:
-	naming: "{type}{bundle}-{hash}-{filename}"
-	outputDir: "%wwwDir%/static/{bundle}/{type}"
-	joinFiles: true
+    outputDir: %wwwDir%/static
+    checkLastModified: FALSE
+    filters:
+        - JuniWalk\Tessa\Filters\UrlFixerFilter(%wwwDir%)
 
-	filters:
-		- @filterServiceName
-		- App\Services\RelativeUrlFilter(%wwwDir%)
-		- JuniWalk\Tessa\IFilter
+    default:
+        joinFiles: false
+        assets:
+            - %wwwDir%/vendor/font-awesome/css/font-awesome.min.css
+            - %wwwDir%/vendor/jquery/dist/jquery.min.js
+            - %wwwDir%/vendor/bootstrap/dist/css/bootstrap.min.css
+            - %wwwDir%/vendor/bootstrap/dist/js/bootstrap.min.js
+            - %wwwDir%/vendor/nette-forms/src/assets/netteForms.min.js
+            - %wwwDir%/assets/style.css
+            - %wwwDir%/assets/main.js
 
-	import:
-		- bundles/bootstrap.neon
-
-
-	bundle-default:
-		- "https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600&subset=latin-ext"
-		- "#boostrap"
-
-	bundle-frontend:
-		- %wwwDir%/css/frontend.css
-		- %wwwDir%/js/frontend.js
-
-	bundle-backend:
-		- %wwwDir%/css/backend.css
-		- %wwwDir%/js/backend.js
+    frontpage:
+        extend: default
+        assets: []
+```
