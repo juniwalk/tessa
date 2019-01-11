@@ -75,11 +75,6 @@ final class BundleManager
 			throw ReadOnlyBundleException::fromBundle($bundle);
 		}
 
-		if ($extend = $bundle->getExtendBundle()) {
-			// TODO Make sure there is no recursion in bundle compilation.
-			$assets += $this->compile($extend, $type)->getAssets();
-		}
-
 		if ($bundle instanceof AssetBundle && $bundle->isJoinFiles()) {
 			$bundle = $bundle->getCombinedBy($type);
 		}
@@ -98,6 +93,11 @@ final class BundleManager
 			]));
 
 			$assets[] = $this->storage->store($name, $asset);
+		}
+
+		if ($extend = $bundle->getExtendBundle()) {
+			// TODO Make sure there is no recursion in bundle compilation.
+			$assets += $this->compile($extend, $type)->getAssets();
 		}
 
 		return new ReadOnlyBundle($bundle->getName().$type, ... $assets);
