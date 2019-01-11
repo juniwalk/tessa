@@ -51,6 +51,8 @@ final class UrlFixerFilter implements Filter
 
         foreach ($urls as $url) {
             $absoluteUrl = $this->absolutizeUrl($url['url'], $asset);
+            $absoluteUrl = 'url(\''.$absoluteUrl.'\')';
+
             $content = str_replace($url[0], $absoluteUrl, $content);
         }
 
