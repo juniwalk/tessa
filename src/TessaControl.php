@@ -67,7 +67,7 @@ final class TessaControl extends Control
         $output = '';
 
         foreach ($bundle->getAssets() as $asset) {
-            $html = Html::el('script type="text/javascript')->setSrc($this->createPublicPath($asset));
+            $html = Html::el('script type="text/javascript"')->setSrc($this->createPublicPath($asset));
             $output .= $html.PHP_EOL;
         }
 
