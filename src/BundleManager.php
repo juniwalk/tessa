@@ -79,6 +79,11 @@ final class BundleManager
 			$bundle = $bundle->getCombinedBy($type);
 		}
 
+		if ($extend = $bundle->getExtendBundle()) {
+			// TODO Make sure there is no recursion in bundle compilation.
+			$assets += $this->compile($extend, $type)->getAssets();
+		}
+
 		foreach ($bundle->getAssets() as $asset) {
 			if (!$asset->isTypeOf($type)) {
 				continue;
@@ -93,11 +98,6 @@ final class BundleManager
 			]));
 
 			$assets[] = $this->storage->store($name, $asset);
-		}
-
-		if ($extend = $bundle->getExtendBundle()) {
-			// TODO Make sure there is no recursion in bundle compilation.
-			$assets += $this->compile($extend, $type)->getAssets();
 		}
 
 		return new ReadOnlyBundle($bundle->getName().$type, ... $assets);
