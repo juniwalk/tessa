@@ -15,8 +15,28 @@ use Nette\Utils\Strings;
 
 final class UrlFixerFilter implements Filter
 {
-    /** @var string */
-    const URL_PATTERN = '/url\(\s*([\'"])?(?<url>[^\)]+)(?(1)\1)\s*\)/ix';
+    /**
+	 * @author Kravko
+	 * @var string
+	 * @see https://github.com/janmarek/WebLoader/blob/2dad67556ab2f434bbb14de048ce539155a6e1df/WebLoader/Filter/CssUrlsFilter.php
+	 */
+    const URL_PATTERN = '~
+		(?<![a-z])
+		url\(                                     ## url(
+			\s*                                   ##   optional whitespace
+			([\'"])?                              ##   optional single/double quote
+			(?!data:)                             ##   keep data URIs
+			(   (?: (?:\\\\.)+                    ##     escape sequences
+				|   [^\'"\\\\,()\s]+              ##     safe characters
+				|   (?(1)   (?!\1)[\'"\\\\,() \t] ##       allowed special characters
+					|       ^                     ##       (none, if not quoted)
+					)
+				)*                                ##     (greedy match)
+			)
+			(?(1)\1)                              ##   optional single/double quote
+			\s*                                   ##   optional whitespace
+		\)                                        ## )
+	~xs';
 
     /** @var string */
     private $docRoot;
@@ -45,13 +65,13 @@ final class UrlFixerFilter implements Filter
     {
         if (!$asset->isTypeOf('css')) {
             return $content;
-        }
+		}
 
-        $urls = Strings::matchAll($content, self::URL_PATTERN);
+        $urls = Strings::matchAll($content, static::URL_PATTERN);
 
         foreach ($urls as $url) {
-            $absoluteUrl = $this->absolutizeUrl($url['url'], $asset);
-            $absoluteUrl = 'url(\''.$absoluteUrl.'\')';
+            $absoluteUrl = $this->absolutizeUrl($url[2], $asset);
+            $absoluteUrl = 'url('.$url[1].$absoluteUrl.$url[1].')';
 
             $content = str_replace($url[0], $absoluteUrl, $content);
         }
