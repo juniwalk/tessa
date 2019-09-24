@@ -86,7 +86,6 @@ final class Storage
 			return $asset;
 		}
 
-		// TODO Ignore result of hasBeenModified in debug mode
 		if (!$asset->hasBeenModified($file, $this->checkLastModified)) {
 			return new FileAsset($file);
 		}

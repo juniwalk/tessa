@@ -91,7 +91,6 @@ final class BundleManager
 		}
 
 		if ($extend = $bundle->getExtendBundle()) {
-			// TODO Make sure there is no recursion in bundle compilation.
 			$assets += $this->compile($extend, $type)->getAssets();
 		}
 
@@ -102,9 +101,6 @@ final class BundleManager
 
 			$name = implode('-', array_filter([
 				$bundle->getName().$type,
-				// TODO Determine how to lower time hit on this
-				// TODO Create cache of hash($oldPath) => $crc32b
-				//$asset->getCrc32(),
 				$asset->getName(),
 			]));
 
