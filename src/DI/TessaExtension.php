@@ -15,14 +15,14 @@ use JuniWalk\Tessa\Storage;
 
 final class TessaExtension extends \Nette\DI\CompilerExtension
 {
-    /** @var string[] */
+	/** @var string[] */
 	private $default = [
 		'outputDir' => null,
 		'checkLastModified' => true,
 		'filters' => [],
 	];
 
-    /** @var string[] */
+	/** @var string[] */
 	private $bundle = [
 		'joinFiles' => false,
 		'extend' => null,
@@ -30,31 +30,31 @@ final class TessaExtension extends \Nette\DI\CompilerExtension
 	];
 
 
-    /**
-     * @return void
-     */
+	/**
+	 * @return void
+	 */
 	public function loadConfiguration()
 	{
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig();
 
-        $bundles = array_diff_key($config, $this->default);
-        $config = array_intersect_key($config, $this->default);
-        $config = $this->validateConfig($this->default, $config);
+		$bundles = array_diff_key($config, $this->default);
+		$config = array_intersect_key($config, $this->default);
+		$config = $this->validateConfig($this->default, $config);
 
 		$storage = $builder->addDefinition($this->prefix('storage'))
 			->setFactory(Storage::class, [$config['outputDir']])
-            ->addSetup('setCheckLastModified', [$config['checkLastModified']]);
+			->addSetup('setCheckLastModified', [$config['checkLastModified']]);
 
-        foreach ($config['filters'] as $filter) {
+		foreach ($config['filters'] as $filter) {
 			$storage->addSetup('addFilter', [$filter]);
-        }
+		}
 
 		$manager = $builder->addDefinition($this->prefix('manager'))
 			->setFactory(BundleManager::class, [$builder->parameters['wwwDir']]);
 
-        foreach ($bundles as $name => $params) {
-            $params = $this->validateConfig($this->bundle, $params);
+		foreach ($bundles as $name => $params) {
+			$params = $this->validateConfig($this->bundle, $params);
 			$assets = $this->fileToAsset($params['assets']);
 
 			$bundle = new AssetBundle($name, ... $assets);
@@ -62,7 +62,7 @@ final class TessaExtension extends \Nette\DI\CompilerExtension
 			$bundle->setExtendBundle($params['extend']);
 
 			$manager->addSetup('addBundle', [$bundle]);
-        }
+		}
 	}
 
 

@@ -10,6 +10,7 @@ namespace JuniWalk\Tessa;
 use JuniWalk\Tessa\Assets\Asset;
 use JuniWalk\Tessa\Assets\FileAsset;
 use JuniWalk\Tessa\Assets\HttpAsset;
+use JuniWalk\Tessa\Exceptions\AssetStoringFailedException;
 use JuniWalk\Tessa\Filters\Filter;
 
 final class Storage
@@ -75,6 +76,7 @@ final class Storage
 	 * @param  string  $name
 	 * @param  Asset  $asset
 	 * @return Asset
+	 * @throws AssetStoringFailedException
 	 */
 	public function store(string $name, Asset $asset): Asset
 	{
@@ -96,7 +98,7 @@ final class Storage
 		}
 
 		if (file_put_contents($file, $content) === false) {
-			throw new \Exception($file);
+			throw AssetStoringFailedException::fromFile($file);
 		}
 
 		return new FileAsset($file);

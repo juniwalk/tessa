@@ -35,9 +35,9 @@ abstract class AbstractAsset implements Asset
 	/**
 	 * @return string
 	 */
-	public function getFolder(): string
+	public function getFile(): string
 	{
-		return dirname($this->file);
+		return $this->file;
 	}
 
 
@@ -53,9 +53,9 @@ abstract class AbstractAsset implements Asset
 	/**
 	 * @return string
 	 */
-	public function getFile(): string
+	public function getFolder(): string
 	{
-		return $this->file;
+		return dirname($this->file);
 	}
 
 
