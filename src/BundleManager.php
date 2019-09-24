@@ -9,27 +9,40 @@
 
 namespace JuniWalk\Tessa;
 
-use JuniWalk\Tessa\Assets\Asset;
 use JuniWalk\Tessa\Bundles\AssetBundle;
 use JuniWalk\Tessa\Bundles\Bundle;
 use JuniWalk\Tessa\Bundles\ReadOnlyBundle;
 use JuniWalk\Tessa\Exceptions\BundleNotFoundException;
 use JuniWalk\Tessa\Exceptions\ReadOnlyBundleException;
+use Nette\Http\IRequest;
 
 final class BundleManager
 {
 	/** @var Storage */
 	private $storage;
 
+    /** @var string */
+    private $basePath;
+
+	/** @var string */
+	private $wwwDir;
+
 	/** @var Bundle[] */
 	private $bundles = [];
 
 
 	/**
+	 * @param  string  $wwwDir
+	 * @param  IRequest  $httpRequest
 	 * @param  Storage  $storage
 	 */
-	public function __construct(Storage $storage)
-	{
+	public function __construct(
+		string $wwwDir,
+		IRequest $httpRequest,
+		Storage $storage
+	) {
+        $this->basePath = $httpRequest->getUrl()->getBasePath();
+		$this->wwwDir = $wwwDir.'/';
 		$this->storage = $storage;
 	}
 
@@ -100,6 +113,10 @@ final class BundleManager
 			$assets[] = $this->storage->store($name, $asset);
 		}
 
-		return new ReadOnlyBundle($bundle->getName().$type, ... $assets);
+		$output = new ReadOnlyBundle($bundle->getName().$type, ... $assets);
+		$output->setBasePath($this->basePath);
+		$output->setWwwDir($this->wwwDir);
+
+		return $output;
 	}
 }

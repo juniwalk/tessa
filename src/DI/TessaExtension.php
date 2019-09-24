@@ -54,7 +54,7 @@ final class TessaExtension extends \Nette\DI\CompilerExtension
         }
 
 		$manager = $builder->addDefinition($this->prefix('manager'))
-			->setClass(BundleManager::class);
+			->setFactory(BundleManager::class, [$builder->parameters['wwwDir']]);
 
         foreach ($bundles as $name => $params) {
             $params = $this->validateConfig($this->bundle, $params);
@@ -66,17 +66,6 @@ final class TessaExtension extends \Nette\DI\CompilerExtension
 
 			$manager->addSetup('addBundle', [$bundle]);
         }
-
-		$manager = $builder->addDefinition($this->prefix('tessa'))
-			->setFactory(TessaControl::class, [$builder->parameters['wwwDir']]);
-	}
-
-
-    /**
-     * @return void
-     */
-	public function beforeCompile()
-	{
 	}
 
 

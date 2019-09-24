@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
- * @author    Martin Procházka <juniwalk@outlook.cz>
- * @link      https://github.com/juniwalk/tessa
  * @copyright (c) Martin Procházka
  * @license   MIT License
  */
@@ -13,11 +11,17 @@ use JuniWalk\Tessa\Assets\Asset;
 
 final class ReadOnlyBundle implements Bundle
 {
+    /** @var string */
+    private $basePath;
+
 	/** @var string */
-	protected $name;
+	private $wwwDir;
+
+	/** @var string */
+	private $name;
 
 	/** @var Asset[] */
-	protected $assets;
+	private $assets;
 
 
 	/**
@@ -28,6 +32,26 @@ final class ReadOnlyBundle implements Bundle
 	{
 		$this->name = $name;
 		$this->assets = $assets;
+	}
+
+
+	/**
+	 * @param  string  $basePath
+	 * @return void
+	 */
+	public function setBasePath(string $basePath): void
+	{
+		$this->basePath = $basePath;
+	}
+
+
+	/**
+	 * @param  string  $wwwDir
+	 * @return void
+	 */
+	public function setWwwDir(string $wwwDir): void
+	{
+		$this->wwwDir = $wwwDir;
 	}
 
 
@@ -46,5 +70,15 @@ final class ReadOnlyBundle implements Bundle
 	public function getAssets(): iterable
 	{
 		return $this->assets;
+	}
+
+
+	/**
+	 * @param  Asset  $asset
+	 * @return string
+	 */
+	public function createPublicPath(Asset $asset): string
+	{
+		return str_replace($this->wwwDir, $this->basePath, $asset->getFile());
 	}
 }

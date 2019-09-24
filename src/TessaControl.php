@@ -9,9 +9,7 @@
 
 namespace JuniWalk\Tessa;
 
-use JuniWalk\Tessa\Assets\Asset;
 use Nette\Application\UI\Control;
-use Nette\Http\IRequest;
 use Nette\Utils\Html;
 
 final class TessaControl extends Control
@@ -19,22 +17,12 @@ final class TessaControl extends Control
 	/** @var BundleManager */
 	private $manager;
 
-    /** @var string */
-    private $basePath;
-
-	/** @var string */
-	private $wwwDir;
-
 
 	/**
-	 * @param  string  $wwwDir
-	 * @param  IRequest  $httpRequest
 	 * @param  BundleManager  $manager
 	 */
-	public function __construct(string $wwwDir, IRequest $httpRequest, BundleManager $manager)
+	public function __construct(BundleManager $manager)
 	{
-        $this->basePath = $httpRequest->getUrl()->getBasePath();
-		$this->wwwDir = $wwwDir.'/';
 		$this->manager = $manager;
 	}
 
@@ -49,7 +37,9 @@ final class TessaControl extends Control
         $output = '';
 
         foreach ($bundle->getAssets() as $asset) {
-            $html = Html::el('link rel="stylesheet"')->setHref($this->createPublicPath($asset));
+			$html = Html::el('link rel="stylesheet"')
+				->setHref($bundle->createPublicPath($asset));
+
             $output .= $html.PHP_EOL;
         }
 
@@ -67,20 +57,12 @@ final class TessaControl extends Control
         $output = '';
 
         foreach ($bundle->getAssets() as $asset) {
-            $html = Html::el('script type="text/javascript"')->setSrc($this->createPublicPath($asset));
+			$html = Html::el('script type="text/javascript"')
+				->setSrc($bundle->createPublicPath($asset));
+
             $output .= $html.PHP_EOL;
         }
 
         echo trim($output);
-	}
-
-
-	/**
-	 * @param  Asset  $asset
-	 * @return string
-	 */
-	private function createPublicPath(Asset $asset): string
-	{
-		return str_replace($this->wwwDir, $this->basePath, $asset->getFile());
 	}
 }
