@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
- * @author    Martin Procházka <juniwalk@outlook.cz>
- * @link      https://github.com/juniwalk/tessa
  * @copyright (c) Martin Procházka
  * @license   MIT License
  */
@@ -17,7 +15,7 @@ use JuniWalk\Tessa\Filters\Filter;
 final class Storage
 {
 	/** @var bool */
-	private $checkLastModified = TRUE;
+	private $checkLastModified = true;
 
 	/** @var string */
 	private $outputDir;
@@ -39,7 +37,7 @@ final class Storage
 	 * @param  bool  $checkLastModified
 	 * @return void
 	 */
-	public function setCheckLastModified(bool $checkLastModified = TRUE): void
+	public function setCheckLastModified(bool $checkLastModified = true): void
 	{
 		$this->checkLastModified = $checkLastModified;
 	}
@@ -97,7 +95,7 @@ final class Storage
 			$content = $filter->apply($content, $asset);
 		}
 
-		if (file_put_contents($file, $content) === FALSE) {
+		if (file_put_contents($file, $content) === false) {
 			throw new \Exception($file);
 		}
 

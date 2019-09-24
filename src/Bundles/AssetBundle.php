@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
- * @author    Martin Procházka <juniwalk@outlook.cz>
- * @link      https://github.com/juniwalk/tessa
  * @copyright (c) Martin Procházka
  * @license   MIT License
  */
@@ -14,14 +12,14 @@ use JuniWalk\Tessa\Assets\HttpAsset;
 final class AssetBundle extends AbstractBundle
 {
     /** @var bool */
-    protected $joinFiles = FALSE;
+    protected $joinFiles = false;
 
 
 	/**
 	 * @param  bool  $joinFiles
 	 * @return void
 	 */
-	public function setJoinFiles(bool $joinFiles = TRUE): void
+	public function setJoinFiles(bool $joinFiles = true): void
 	{
 		$this->joinFiles = $joinFiles;
 	}

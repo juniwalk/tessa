@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
- * @author    Martin Procházka <juniwalk@outlook.cz>
- * @link      https://github.com/juniwalk/tessa
  * @copyright (c) Martin Procházka
  * @license   MIT License
  */

@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
- * @author    Martin Procházka <juniwalk@outlook.cz>
- * @link      https://github.com/juniwalk/tessa
  * @copyright (c) Martin Procházka
  * @license   MIT License
  */
@@ -14,21 +12,20 @@ use JuniWalk\Tessa\Assets\FileAsset;
 use JuniWalk\Tessa\BundleManager;
 use JuniWalk\Tessa\Bundles\AssetBundle;
 use JuniWalk\Tessa\Storage;
-use JuniWalk\Tessa\TessaControl;
 
 final class TessaExtension extends \Nette\DI\CompilerExtension
 {
     /** @var string[] */
 	private $default = [
-		'outputDir' => NULL,
-		'checkLastModified' => TRUE,
+		'outputDir' => null,
+		'checkLastModified' => true,
 		'filters' => [],
 	];
 
     /** @var string[] */
 	private $bundle = [
-		'joinFiles' => FALSE,
-		'extend' => NULL,
+		'joinFiles' => false,
+		'extend' => null,
 		'assets' => [],
 	];
 

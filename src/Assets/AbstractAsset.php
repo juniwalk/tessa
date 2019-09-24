@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
- * @author    Martin Procházka <juniwalk@outlook.cz>
- * @link      https://github.com/juniwalk/tessa
  * @copyright (c) Martin Procházka
  * @license   MIT License
  */
@@ -103,11 +101,11 @@ abstract class AbstractAsset implements Asset
 	public function hasBeenModified(string $file, bool $checkLastModified): bool
 	{
 		if (!file_exists($file)) {
-			return TRUE;
+			return true;
 		}
 
 		if (!$checkLastModified) {
-			return FALSE;
+			return false;
 		}
 
 		return filemtime($this->file) > filemtime($file);
