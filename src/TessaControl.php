@@ -15,6 +15,9 @@ final class TessaControl extends Control
 	/** @var BundleManager */
 	private $manager;
 
+	/** @var string[] */
+	private $history = [];
+
 
 	/**
 	 * @param  BundleManager  $manager
@@ -35,9 +38,16 @@ final class TessaControl extends Control
         $output = '';
 
         foreach ($bundle->getAssets() as $asset) {
-			$html = Html::el('link rel="stylesheet"')
-				->setHref($bundle->createPublicPath($asset));
+			$file = $bundle->createPublicPath($asset);
 
+			if (isset($this->history[$file])) {
+				continue;
+			}
+
+			$html = Html::el('link rel="stylesheet"')
+				->setHref($file);
+
+			$this->history[$file] = true;
             $output .= $html.PHP_EOL;
         }
 
@@ -55,9 +65,16 @@ final class TessaControl extends Control
         $output = '';
 
         foreach ($bundle->getAssets() as $asset) {
-			$html = Html::el('script type="text/javascript"')
-				->setSrc($bundle->createPublicPath($asset));
+			$file = $bundle->createPublicPath($asset);
 
+			if (isset($this->history[$file])) {
+				continue;
+			}
+
+			$html = Html::el('script type="text/javascript"')
+				->setSrc($file);
+
+			$this->history[$file] = true;
             $output .= $html.PHP_EOL;
         }
 

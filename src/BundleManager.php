@@ -11,6 +11,7 @@ use JuniWalk\Tessa\Bundles\AssetBundle;
 use JuniWalk\Tessa\Bundles\Bundle;
 use JuniWalk\Tessa\Bundles\ReadOnlyBundle;
 use JuniWalk\Tessa\Exceptions\BundleNotFoundException;
+use JuniWalk\Tessa\Exceptions\BundleRecursionException;
 use JuniWalk\Tessa\Exceptions\ReadOnlyBundleException;
 use Nette\Http\IRequest;
 
@@ -19,8 +20,8 @@ final class BundleManager
 	/** @var Storage */
 	private $storage;
 
-    /** @var string */
-    private $basePath;
+	/** @var string */
+	private $basePath;
 
 	/** @var string */
 	private $wwwDir;
@@ -39,7 +40,7 @@ final class BundleManager
 		IRequest $httpRequest,
 		Storage $storage
 	) {
-        $this->basePath = $httpRequest->getUrl()->getBasePath();
+		$this->basePath = $httpRequest->getUrl()->getBasePath();
 		$this->wwwDir = $wwwDir.'/';
 		$this->storage = $storage;
 	}
@@ -74,6 +75,7 @@ final class BundleManager
 	 * @param  string  $bundle
 	 * @param  string  $type
 	 * @throws BundleNotFoundException
+	 * @throws BundleRecursionException
 	 * @throws ReadOnlyBundleException
 	 * @return Bundle
 	 */
@@ -85,6 +87,8 @@ final class BundleManager
 		if ($bundle instanceof ReadOnlyBundle) {
 			throw ReadOnlyBundleException::fromBundle($bundle);
 		}
+
+		$this->detectRecursion($bundle);
 
 		if ($bundle instanceof AssetBundle && $bundle->isJoinFiles()) {
 			$bundle = $bundle->getCombinedBy($type);
@@ -112,5 +116,30 @@ final class BundleManager
 		$output->setWwwDir($this->wwwDir);
 
 		return $output;
+	}
+
+
+	/**
+	 * @param  Bundle  $bundle
+	 * @param  string[]  $history
+	 * @return string[]
+	 * @throws BundleRecursionException
+	 */
+	private function detectRecursion(Bundle $bundle, iterable $history = []): iterable
+	{
+		$history[$bundle->getName()] = true;
+
+		if ($extend = $bundle->getExtendBundle()) {
+			if (isset($history[$extend])) {
+				throw BundleRecursionException::fromBundle($bundle, $extend);
+			}
+
+			$history = $this->detectRecursion(
+				$this->getBundle($extend),
+				$history
+			);
+		}
+
+		return $history;
 	}
 }
