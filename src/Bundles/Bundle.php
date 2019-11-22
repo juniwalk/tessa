@@ -16,6 +16,12 @@ interface Bundle
 
 
 	/**
+	 * @return bool
+	 */
+	public function isDeferred(): bool;
+
+
+	/**
 	 * @return Asset[]
 	 */
 	public function getAssets(): iterable;

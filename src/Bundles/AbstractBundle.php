@@ -42,6 +42,15 @@ abstract class AbstractBundle implements Bundle
 
 
 	/**
+	 * @return bool
+	 */
+	public function isDeferred(): bool
+	{
+		return false;
+	}
+
+
+	/**
 	 * @param  string|NULL  $extend
 	 * @return void
 	 */

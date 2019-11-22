@@ -25,6 +25,7 @@ final class TessaExtension extends \Nette\DI\CompilerExtension
 	/** @var string[] */
 	private $bundle = [
 		'joinFiles' => false,
+		'defer' => false,
 		'extend' => null,
 		'assets' => [],
 	];
@@ -59,6 +60,7 @@ final class TessaExtension extends \Nette\DI\CompilerExtension
 
 			$bundle = new AssetBundle($name, ... $assets);
 			$bundle->setJoinFiles($params['joinFiles']);
+			$bundle->setDeferred($params['defer']);
 			$bundle->setExtendBundle($params['extend']);
 
 			$manager->addSetup('addBundle', [$bundle]);

@@ -74,6 +74,10 @@ final class TessaControl extends Control
 			$html = Html::el('script type="text/javascript"')
 				->setSrc($file);
 
+			if ($bundle->isDeferred()) {
+				$html->setAttribute('defer', 'defer');
+			}
+
 			$this->history[$file] = true;
             $output .= $html.PHP_EOL;
         }

@@ -12,13 +12,13 @@ use JuniWalk\Tessa\Assets\Asset;
 final class CombinedBundle implements Asset, Bundle
 {
 	/** @var string */
-	protected $name;
+	private $name;
 
 	/** @var string */
-	protected $type;
+	private $type;
 
 	/** @var Asset[] */
-	protected $assets;
+	private $assets;
 
 
 	/**

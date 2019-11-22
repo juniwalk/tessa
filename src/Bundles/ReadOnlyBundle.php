@@ -20,17 +20,22 @@ final class ReadOnlyBundle implements Bundle
 	/** @var string */
 	private $name;
 
+    /** @var bool */
+    private $defer;
+
 	/** @var Asset[] */
 	private $assets;
 
 
 	/**
 	 * @param string   $name
+	 * @param bool  $defer
 	 * @param Asset[]  $assets
 	 */
-	public function __construct(string $name, Asset ... $assets)
+	public function __construct(string $name, bool $defer, Asset ... $assets)
 	{
 		$this->name = $name;
+		$this->defer = $defer;
 		$this->assets = $assets;
 	}
 
@@ -61,6 +66,15 @@ final class ReadOnlyBundle implements Bundle
 	public function getName(): string
 	{
 		return $this->name;
+	}
+
+
+	/**
+	 * @return bool
+	 */
+	public function isDeferred(): bool
+	{
+		return $this->defer;
 	}
 
 
