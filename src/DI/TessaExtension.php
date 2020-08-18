@@ -25,6 +25,7 @@ final class TessaExtension extends CompilerExtension
 		return Expect::structure([
 			'outputDir' => Expect::string()->required(),
 			'checkLastModified' => Expect::bool(true),
+			'debugMode' => Expect::bool(false),
 			'filters' => Expect::list(),
 		])
 
@@ -47,7 +48,8 @@ final class TessaExtension extends CompilerExtension
 
 		$storage = $builder->addDefinition($this->prefix('storage'))
 			->setFactory(Storage::class, [$config->outputDir])
-			->addSetup('setCheckLastModified', [$config->checkLastModified]);
+			->addSetup('setCheckLastModified', [$config->checkLastModified])
+			->addSetup('setDebugMode', [$config->debugMode]);
 
 		foreach ($config->filters as $filter) {
 			$storage->addSetup('addFilter', [$filter]);
@@ -59,6 +61,7 @@ final class TessaExtension extends CompilerExtension
 		$bundles = array_diff_key((array) $config, [
 			'outputDir' => null,
 			'checkLastModified' => null,
+			'debugMode' => null,
 			'filters' => null,
 		]);
 

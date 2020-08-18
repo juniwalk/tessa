@@ -18,6 +18,9 @@ final class Storage
 	/** @var bool */
 	private $checkLastModified = true;
 
+	/** @var bool */
+	private $debugMode = false;
+
 	/** @var string */
 	private $outputDir;
 
@@ -54,6 +57,25 @@ final class Storage
 
 
 	/**
+	 * @param  bool  $debugMode
+	 * @return void
+	 */
+	public function setDebugMode(bool $debugMode = false): void
+	{
+		$this->debugMode = $debugMode;
+	}
+
+
+	/**
+	 * @return bool
+	 */
+	public function isDebugMode(): bool
+	{
+		return $this->debugMode;
+	}
+	
+
+	/**
 	 * @return string
 	 */
 	public function getOutputDir(): string
@@ -80,13 +102,14 @@ final class Storage
 	 */
 	public function store(string $name, Asset $asset): Asset
 	{
+		$checkLastModified = $this->checkLastModified && !$this->debugMode;
 		$file = $this->outputDir.'/'.$name;
 
 		if ($asset instanceof HttpAsset) {
 			return $asset;
 		}
 
-		if (!$asset->hasBeenModified($file, $this->checkLastModified)) {
+		if (!$asset->hasBeenModified($file, $checkLastModified)) {
 			return new FileAsset($file);
 		}
 
