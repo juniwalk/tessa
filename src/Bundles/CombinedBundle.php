@@ -26,7 +26,7 @@ final class CombinedBundle implements Asset, Bundle
 	 * @param string   $name
 	 * @param Asset[]  $assets
 	 */
-	public function __construct(string $name, Asset ... $assets)
+	public function __construct(string $name, ?Asset ... $assets)
 	{
 		$this->type = pathinfo($name, PATHINFO_EXTENSION);
 		$this->name = $name;

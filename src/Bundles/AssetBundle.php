@@ -7,7 +7,7 @@
 
 namespace JuniWalk\Tessa\Bundles;
 
-use JuniWalk\Tessa\Assets\HttpAsset;
+use JuniWalk\Tessa\Assets;
 
 final class AssetBundle extends AbstractBundle
 {
@@ -56,6 +56,30 @@ final class AssetBundle extends AbstractBundle
 	}
 
 
+	/**
+	 * @param  string[]  $files
+	 * @return Asset[]
+	 */
+	public function discoverAsset(string $file): void
+	{
+		switch(true) {
+			case Assets\HttpAsset::match($file):
+				$asset = new Assets\HttpAsset($file);
+				break;
+
+			case Assets\ScssAsset::match($file):
+				$asset = new Assets\ScssAsset($file);
+				break;
+
+			default:
+				$asset = new Assets\FileAsset($file);
+				break;
+		}
+
+		$this->assets[] = $asset;
+	}
+
+
     /**
      * @param  string  $type
      * @return Bundle
@@ -72,7 +96,7 @@ final class AssetBundle extends AbstractBundle
                 continue;
             }
 
-            if ($asset instanceof HttpAsset) {
+            if ($asset instanceof Assets\HttpAsset) {
                 $bundle->addAsset($asset);
                 continue;
             }

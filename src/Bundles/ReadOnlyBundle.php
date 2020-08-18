@@ -33,7 +33,7 @@ final class ReadOnlyBundle implements Bundle
 	 * @param bool  $defer
 	 * @param Asset[]  $assets
 	 */
-	public function __construct(string $name, bool $defer, Asset ... $assets)
+	public function __construct(string $name, bool $defer, ?Asset ... $assets)
 	{
 		$this->name = $name;
 		$this->defer = $defer;

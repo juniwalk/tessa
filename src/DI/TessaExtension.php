@@ -66,40 +66,17 @@ final class TessaExtension extends CompilerExtension
 		]);
 
 		foreach ($bundles as $name => $params) {
-			$assets = $this->fileToAsset($params->assets);
+			$bundle = $builder->addDefinition($this->prefix('bundle.'.$name))
+				->setFactory(AssetBundle::class, [$name])
+				->addSetup('setExtendBundle', [$params->extend])
+				->addSetup('setJoinFiles', [$params->joinFiles])
+				->addSetup('setDeferred', [$params->defer]);
 
-			$bundle = new AssetBundle($name, ... $assets);
-			$bundle->setJoinFiles($params->joinFiles);
-			$bundle->setDeferred($params->defer);
-			$bundle->setExtendBundle($params->extend);
+			foreach ($params->assets as $file) {
+				$bundle->addSetup('discoverAsset', [$file]);
+			}
 
 			$manager->addSetup('addBundle', [$bundle]);
 		}
-	}
-
-
-	/**
-	 * @param  string[]  $files
-	 * @return Asset[]
-	 */
-	private function fileToAsset(iterable $files): iterable
-	{
-		$assets = [];
-
-		foreach ($files as $file) {
-			if (Assets\HttpAsset::match($file)) {
-				$assets[] = new Assets\HttpAsset($file);
-				continue;
-			}
-
-			if (Assets\ScssAsset::match($file)) {
-				$assets[] = new Assets\ScssAsset($file);
-				continue;
-			}
-
-			$assets[] = new Assets\FileAsset($file);
-		}
-
-		return $assets;
 	}
 }

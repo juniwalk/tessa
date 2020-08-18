@@ -26,7 +26,7 @@ abstract class AbstractBundle implements Bundle
 	 * @param string   $name
 	 * @param Asset[]  $assets
 	 */
-	public function __construct(string $name, Asset ... $assets)
+	public function __construct(string $name, ?Asset ... $assets)
 	{
 		$this->name = $name;
 		$this->assets = $assets;
