@@ -7,7 +7,8 @@
 
 namespace JuniWalk\Tessa\Filters;
 
-use JuniWalk\Tessa\Assets\Asset;
+use JuniWalk\Tessa\Asset;
+use JuniWalk\Tessa\Filter;
 use JuniWalk\Tessa\Exceptions\MissingOptionalFeatureException;
 use ScssPhp\ScssPhp\Compiler;
 
@@ -41,10 +42,6 @@ final class ScssFilter implements Filter
 			return $content;
 		}
 
-		//try {
-			return $this->scss->compile($content);
-
-		//} catch (\Throwable $e) {
-		//}
+		return $this->scss->compile($content);
 	}
 }

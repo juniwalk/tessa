@@ -7,11 +7,11 @@
 
 namespace JuniWalk\Tessa;
 
-use JuniWalk\Tessa\Assets\Asset;
+use JuniWalk\Tessa\Asset;
 use JuniWalk\Tessa\Assets\FileAsset;
 use JuniWalk\Tessa\Assets\HttpAsset;
 use JuniWalk\Tessa\Exceptions\AssetStoringFailedException;
-use JuniWalk\Tessa\Filters\Filter;
+use JuniWalk\Tessa\Filter;
 
 final class Storage
 {

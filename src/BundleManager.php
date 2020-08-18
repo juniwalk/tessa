@@ -7,8 +7,8 @@
 
 namespace JuniWalk\Tessa;
 
+use JuniWalk\Tessa\Bundle;
 use JuniWalk\Tessa\Bundles\AssetBundle;
-use JuniWalk\Tessa\Bundles\Bundle;
 use JuniWalk\Tessa\Bundles\ReadOnlyBundle;
 use JuniWalk\Tessa\Exceptions\BundleNotFoundException;
 use JuniWalk\Tessa\Exceptions\BundleRecursionException;

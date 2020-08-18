@@ -5,7 +5,7 @@
  * @license   MIT License
  */
 
-namespace JuniWalk\Tessa\Assets;
+namespace JuniWalk\Tessa;
 
 interface Asset
 {

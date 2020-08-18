@@ -7,7 +7,8 @@
 
 namespace JuniWalk\Tessa\Filters;
 
-use JuniWalk\Tessa\Assets\Asset;
+use JuniWalk\Tessa\Asset;
+use JuniWalk\Tessa\Filter;
 use Nette\Http\IRequest;
 use Nette\Utils\Strings;
 

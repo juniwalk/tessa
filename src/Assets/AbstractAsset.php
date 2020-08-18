@@ -7,6 +7,7 @@
 
 namespace JuniWalk\Tessa\Assets;
 
+use JuniWalk\Tessa\Asset;
 use JuniWalk\Tessa\Exceptions\UnableToDetectTypeException;
 
 abstract class AbstractAsset implements Asset

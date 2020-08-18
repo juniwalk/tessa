@@ -5,9 +5,7 @@
  * @license   MIT License
  */
 
-namespace JuniWalk\Tessa\Filters;
-
-use JuniWalk\Tessa\Assets\Asset;
+namespace JuniWalk\Tessa;
 
 interface Filter
 {

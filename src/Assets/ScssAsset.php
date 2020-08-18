@@ -34,6 +34,6 @@ class ScssAsset extends FileAsset
 	 */
 	public function isTypeOf(string $type): bool
 	{
-		return $this->type === 'scss' && $type === 'css';
+		return in_array($type, ['css', 'scss']);
 	}
 }

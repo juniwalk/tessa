@@ -5,7 +5,7 @@
  * @license   MIT License
  */
 
-namespace JuniWalk\Tessa\Bundles;
+namespace JuniWalk\Tessa;
 
 interface Bundle
 {

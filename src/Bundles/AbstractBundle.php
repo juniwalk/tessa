@@ -7,7 +7,8 @@
 
 namespace JuniWalk\Tessa\Bundles;
 
-use JuniWalk\Tessa\Assets\Asset;
+use JuniWalk\Tessa\Asset;
+use JuniWalk\Tessa\Bundle;
 
 abstract class AbstractBundle implements Bundle
 {
