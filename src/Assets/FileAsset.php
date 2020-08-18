@@ -10,6 +10,16 @@ namespace JuniWalk\Tessa\Assets;
 class FileAsset extends AbstractAsset
 {
 	/**
+	 * @param  string  $file
+	 * @return bool
+	 */
+	public static function match(string $file): bool
+	{
+		return true;
+	}
+
+
+	/**
 	 * @return string
 	 */
 	public function getPath(): string

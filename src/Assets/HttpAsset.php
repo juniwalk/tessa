@@ -7,8 +7,18 @@
 
 namespace JuniWalk\Tessa\Assets;
 
-final class HttpAsset extends AbstractAsset
+class HttpAsset extends AbstractAsset
 {
+	/**
+	 * @param  string  $file
+	 * @return bool
+	 */
+	public static function match(string $file): bool
+	{
+		return (bool) preg_match('/^https?/i', $file);
+	}
+
+
 	/**
 	 * @return string
 	 */

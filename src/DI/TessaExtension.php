@@ -69,7 +69,7 @@ final class TessaExtension extends CompilerExtension
 
 
 	/**
-	 * @param  string[]  $assets
+	 * @param  string[]  $files
 	 * @return Asset[]
 	 */
 	private function fileToAsset(iterable $files): iterable
@@ -77,12 +77,12 @@ final class TessaExtension extends CompilerExtension
 		$assets = [];
 
 		foreach ($files as $file) {
-			if (preg_match('/^https?/i', $file)) {
+			if (Assets\HttpAsset::match($file)) {
 				$assets[] = new Assets\HttpAsset($file);
 				continue;
 			}
 
-			if (preg_match('/\.scss$/i', $file)) {
+			if (Assets\ScssAsset::match($file)) {
 				$assets[] = new Assets\ScssAsset($file);
 				continue;
 			}

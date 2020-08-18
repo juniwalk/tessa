@@ -10,6 +10,13 @@ namespace JuniWalk\Tessa\Assets;
 interface Asset
 {
 	/**
+	 * @param  string  $file
+	 * @return bool
+	 */
+	public static function match(string $file): bool;
+
+
+	/**
 	 * @return string
 	 */
 	public function getFile(): string;

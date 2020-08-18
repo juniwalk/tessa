@@ -7,8 +7,18 @@
 
 namespace JuniWalk\Tessa\Assets;
 
-final class ScssAsset extends FileAsset
+class ScssAsset extends FileAsset
 {
+	/**
+	 * @param  string  $file
+	 * @return bool
+	 */
+	public static function match(string $file): bool
+	{
+		return (bool) preg_match('/\.scss$/i', $file);
+	}
+
+
 	/**
 	 * @return string
 	 */
