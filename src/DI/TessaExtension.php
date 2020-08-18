@@ -12,23 +12,29 @@ use JuniWalk\Tessa\BundleManager;
 use JuniWalk\Tessa\Bundles\AssetBundle;
 use JuniWalk\Tessa\Storage;
 use Nette\DI\CompilerExtension;
+use Nette\Schema\Expect;
+use Nette\Schema\Schema;
 
 final class TessaExtension extends CompilerExtension
 {
-	/** @var string[] */
-	private $default = [
-		'outputDir' => null,
-		'checkLastModified' => true,
-		'filters' => [],
-	];
+	/**
+	 * @return Schema
+	 */
+	public function getConfigSchema(): Schema
+	{
+		return Expect::structure([
+			'outputDir' => Expect::string()->required(),
+			'checkLastModified' => Expect::bool(true),
+			'filters' => Expect::list(),
+		])
 
-	/** @var string[] */
-	private $bundle = [
-		'joinFiles' => false,
-		'defer' => false,
-		'extend' => null,
-		'assets' => [],
-	];
+		->otherItems(Expect::structure([
+			'joinFiles' => Expect::bool(false),
+			'defer' => Expect::bool(false),
+			'extend' => Expect::string(),
+			'assets' => Expect::list(),
+		]));
+	}
 
 
 	/**
@@ -39,29 +45,30 @@ final class TessaExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig();
 
-		$bundles = array_diff_key($config, $this->default);
-		$config = array_intersect_key($config, $this->default);
-		$config = $this->validateConfig($this->default, $config);
-
 		$storage = $builder->addDefinition($this->prefix('storage'))
-			->setFactory(Storage::class, [$config['outputDir']])
-			->addSetup('setCheckLastModified', [$config['checkLastModified']]);
+			->setFactory(Storage::class, [$config->outputDir])
+			->addSetup('setCheckLastModified', [$config->checkLastModified]);
 
-		foreach ($config['filters'] as $filter) {
+		foreach ($config->filters as $filter) {
 			$storage->addSetup('addFilter', [$filter]);
 		}
 
 		$manager = $builder->addDefinition($this->prefix('manager'))
 			->setFactory(BundleManager::class, [$builder->parameters['wwwDir']]);
 
+		$bundles = array_diff_key((array) $config, [
+			'outputDir' => null,
+			'checkLastModified' => null,
+			'filters' => null,
+		]);
+
 		foreach ($bundles as $name => $params) {
-			$params = $this->validateConfig($this->bundle, $params);
-			$assets = $this->fileToAsset($params['assets']);
+			$assets = $this->fileToAsset($params->assets);
 
 			$bundle = new AssetBundle($name, ... $assets);
-			$bundle->setJoinFiles($params['joinFiles']);
-			$bundle->setDeferred($params['defer']);
-			$bundle->setExtendBundle($params['extend']);
+			$bundle->setJoinFiles($params->joinFiles);
+			$bundle->setDeferred($params->defer);
+			$bundle->setExtendBundle($params->extend);
 
 			$manager->addSetup('addBundle', [$bundle]);
 		}
