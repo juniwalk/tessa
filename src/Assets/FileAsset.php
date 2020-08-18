@@ -7,7 +7,7 @@
 
 namespace JuniWalk\Tessa\Assets;
 
-final class FileAsset extends AbstractAsset
+class FileAsset extends AbstractAsset
 {
 	/**
 	 * @return string

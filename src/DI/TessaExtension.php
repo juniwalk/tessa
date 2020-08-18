@@ -7,13 +7,13 @@
 
 namespace JuniWalk\Tessa\DI;
 
-use JuniWalk\Tessa\Assets\HttpAsset;
-use JuniWalk\Tessa\Assets\FileAsset;
+use JuniWalk\Tessa\Assets;
 use JuniWalk\Tessa\BundleManager;
 use JuniWalk\Tessa\Bundles\AssetBundle;
 use JuniWalk\Tessa\Storage;
+use Nette\DI\CompilerExtension;
 
-final class TessaExtension extends \Nette\DI\CompilerExtension
+final class TessaExtension extends CompilerExtension
 {
 	/** @var string[] */
 	private $default = [
@@ -77,12 +77,17 @@ final class TessaExtension extends \Nette\DI\CompilerExtension
 		$assets = [];
 
 		foreach ($files as $file) {
-			if (preg_match('/https?/i', $file)) {
-				$assets[] = new HttpAsset($file);
+			if (preg_match('/^https?/i', $file)) {
+				$assets[] = new Assets\HttpAsset($file);
 				continue;
 			}
 
-			$assets[] = new FileAsset($file);
+			if (preg_match('/\.scss$/i', $file)) {
+				$assets[] = new Assets\ScssAsset($file);
+				continue;
+			}
+
+			$assets[] = new Assets\FileAsset($file);
 		}
 
 		return $assets;

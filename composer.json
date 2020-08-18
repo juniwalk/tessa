@@ -11,6 +11,10 @@
 		"psr-4": {"JuniWalk\\Tessa\\": "src/"}
 	},
 
+	"suggest": {
+		"scssphp/scssphp": "Enables compiling of SCSS files using ScssFilter."
+	},
+
 	"require": {
 		"php": ">=7.1",
 		"nette/application": ">=2.4",

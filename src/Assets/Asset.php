@@ -19,4 +19,23 @@ interface Asset
 	 * @return string
 	 */
 	public function getContent(): string;
+
+
+	/**
+	 * @return string
+	 */
+	public function getName(): string;
+
+
+	/**
+	 * @return string
+	 */
+	public function getType(): string;
+
+
+	/**
+	 * @param  string  $type
+	 * @return bool
+	 */
+	public function isTypeOf(string $type): bool;
 }
