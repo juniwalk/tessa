@@ -102,7 +102,7 @@ final class Storage
 	 */
 	public function store(string $name, Asset $asset): Asset
 	{
-		$checkLastModified = $this->checkLastModified && !$this->debugMode;
+		$checkLastModified = $this->checkLastModified || $this->debugMode;
 		$file = $this->outputDir.'/'.$name;
 
 		if ($asset instanceof HttpAsset) {
