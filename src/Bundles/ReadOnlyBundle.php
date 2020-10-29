@@ -98,7 +98,7 @@ final class ReadOnlyBundle implements Bundle
 		$path = str_replace($this->wwwDir, $this->basePath, $asset->getFile());
 
 		if ($asset instanceof FileAsset) {
-			$file .= '?'.$asset->getLastModified();
+			$path .= '?'.$asset->getLastModified();
 		}
 
 		return $path;
