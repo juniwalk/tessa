@@ -10,6 +10,7 @@ namespace JuniWalk\Tessa\DI;
 use JuniWalk\Tessa\Assets;
 use JuniWalk\Tessa\BundleManager;
 use JuniWalk\Tessa\Bundles\AssetBundle;
+use JuniWalk\Tessa\Commands\TessaWarmUpCommand;
 use JuniWalk\Tessa\Storage;
 use Nette\DI\CompilerExtension;
 use Nette\Schema\Expect;
@@ -78,5 +79,8 @@ final class TessaExtension extends CompilerExtension
 
 			$manager->addSetup('addBundle', [$bundle]);
 		}
+
+		$builder->addDefinition($this->prefix('warmUp'))
+			->setFactory(TessaWarmUpCommand::class);
 	}
 }

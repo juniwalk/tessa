@@ -72,6 +72,15 @@ final class BundleManager
 
 
 	/**
+	 * @return string[]
+	 */
+	public function getBundles(): iterable
+	{
+		return array_keys($this->bundles);
+	}
+
+
+	/**
 	 * @param  string  $bundle
 	 * @param  string  $type
 	 * @throws BundleNotFoundException

@@ -32,7 +32,7 @@ final class TessaControl extends Control
 	 * @param  string  $bundle
 	 * @return void
 	 */
-	public function renderCss(string $bundle = 'css'): void
+	public function renderCss(string $bundle = 'default'): void
 	{
 		$bundle = $this->manager->compile($bundle, 'css');
 		$output = '';
