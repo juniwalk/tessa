@@ -8,6 +8,7 @@
 namespace JuniWalk\Tessa\Bundles;
 
 use JuniWalk\Tessa\Asset;
+use JuniWalk\Tessa\Assets\FileAsset;
 use JuniWalk\Tessa\Bundle;
 
 final class ReadOnlyBundle implements Bundle
@@ -94,6 +95,12 @@ final class ReadOnlyBundle implements Bundle
 	 */
 	public function createPublicPath(Asset $asset): string
 	{
-		return str_replace($this->wwwDir, $this->basePath, $asset->getFile());
+		$path = str_replace($this->wwwDir, $this->basePath, $asset->getFile());
+
+		if ($asset instanceof FileAsset) {
+			$file .= '?'.$asset->getLastModified();
+		}
+
+		return $path;
 	}
 }
