@@ -34,10 +34,10 @@ final class TessaControl extends Control
 	 */
 	public function renderCss(string $bundle = 'css'): void
 	{
-        $bundle = $this->manager->compile($bundle, 'css');
-        $output = '';
+		$bundle = $this->manager->compile($bundle, 'css');
+		$output = '';
 
-        foreach ($bundle->getAssets() as $asset) {
+		foreach ($bundle->getAssets() as $asset) {
 			$file = $bundle->createPublicPath($asset);
 
 			if (isset($this->history[$file])) {
@@ -48,10 +48,10 @@ final class TessaControl extends Control
 				->setHref($file);
 
 			$this->history[$file] = true;
-            $output .= $html.PHP_EOL;
-        }
+			$output .= $html.PHP_EOL;
+		}
 
-        echo trim($output);
+		echo trim($output);
 	}
 
 
@@ -61,10 +61,10 @@ final class TessaControl extends Control
 	 */
 	public function renderJs(string $bundle = 'default'): void
 	{
-        $bundle = $this->manager->compile($bundle, 'js');
-        $output = '';
+		$bundle = $this->manager->compile($bundle, 'js');
+		$output = '';
 
-        foreach ($bundle->getAssets() as $asset) {
+		foreach ($bundle->getAssets() as $asset) {
 			$file = $bundle->createPublicPath($asset);
 
 			if (isset($this->history[$file])) {
@@ -79,9 +79,9 @@ final class TessaControl extends Control
 			}
 
 			$this->history[$file] = true;
-            $output .= $html.PHP_EOL;
-        }
+			$output .= $html.PHP_EOL;
+		}
 
-        echo trim($output);
+		echo trim($output);
 	}
 }

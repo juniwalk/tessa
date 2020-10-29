@@ -11,11 +11,11 @@ use JuniWalk\Tessa\Assets;
 
 final class AssetBundle extends AbstractBundle
 {
-    /** @var bool */
-    private $joinFiles = false;
+	/** @var bool */
+	private $joinFiles = false;
 
-    /** @var bool */
-    private $defer = false;
+	/** @var bool */
+	private $defer = false;
 
 
 	/**
@@ -80,31 +80,31 @@ final class AssetBundle extends AbstractBundle
 	}
 
 
-    /**
-     * @param  string  $type
-     * @return Bundle
-     */
-    public function getCombinedBy(string $type): Bundle
-    {
-        $bundle = new AssetBundle($this->getName());
+	/**
+	 * @param  string  $type
+	 * @return Bundle
+	 */
+	public function getCombinedBy(string $type): Bundle
+	{
+		$bundle = new AssetBundle($this->getName());
 		$bundle->setDeferred($this->defer);
 		$name = $this->getName().'.'.$type;
-        $assets = [];
+		$assets = [];
 
-        foreach ($this->assets as $asset) {
-            if (!$asset->isTypeOf($type)) {
-                continue;
-            }
+		foreach ($this->assets as $asset) {
+			if (!$asset->isTypeOf($type)) {
+				continue;
+			}
 
-            if ($asset instanceof Assets\HttpAsset) {
-                $bundle->addAsset($asset);
-                continue;
-            }
+			if ($asset instanceof Assets\HttpAsset) {
+				$bundle->addAsset($asset);
+				continue;
+			}
 
-            $assets[] = $asset;
-        }
+			$assets[] = $asset;
+		}
 
-        $bundle->addAsset(new CombinedBundle($name, ... $assets));
-        return $bundle;
-    }
+		$bundle->addAsset(new CombinedBundle($name, ... $assets));
+		return $bundle;
+	}
 }

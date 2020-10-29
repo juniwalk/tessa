@@ -76,11 +76,11 @@ final class CombinedBundle implements Asset, Bundle
 	 */
 	public function getContent(): string
 	{
-        $content = '';
+		$content = '';
 
-        foreach ($this->assets as $asset) {
-            $content .= $asset->getContent().PHP_EOL;
-        }
+		foreach ($this->assets as $asset) {
+			$content .= $asset->getContent().PHP_EOL;
+		}
 
 		return $content;
 	}

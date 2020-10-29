@@ -12,8 +12,8 @@ use JuniWalk\Tessa\Bundle;
 
 final class ReadOnlyBundle implements Bundle
 {
-    /** @var string */
-    private $basePath;
+	/** @var string */
+	private $basePath;
 
 	/** @var string */
 	private $wwwDir;
@@ -21,8 +21,8 @@ final class ReadOnlyBundle implements Bundle
 	/** @var string */
 	private $name;
 
-    /** @var bool */
-    private $defer;
+	/** @var bool */
+	private $defer;
 
 	/** @var Asset[] */
 	private $assets;
