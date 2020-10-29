@@ -7,6 +7,7 @@
 
 namespace JuniWalk\Tessa;
 
+use JuniWalk\Tessa\Assets\FileAsset;
 use Nette\Application\UI\Control;
 use Nette\Utils\Html;
 
@@ -40,6 +41,10 @@ final class TessaControl extends Control
 		foreach ($bundle->getAssets() as $asset) {
 			$file = $bundle->createPublicPath($asset);
 
+			if ($file instanceof FileAsset) {
+				$file .= '?'.$asset->getLastModified();
+			}
+
 			if (isset($this->history[$file])) {
 				continue;
 			}
@@ -66,6 +71,10 @@ final class TessaControl extends Control
 
 		foreach ($bundle->getAssets() as $asset) {
 			$file = $bundle->createPublicPath($asset);
+
+			if ($file instanceof FileAsset) {
+				$file .= '?'.$asset->getLastModified();
+			}
 
 			if (isset($this->history[$file])) {
 				continue;
