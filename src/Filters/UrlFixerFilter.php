@@ -48,7 +48,7 @@ final class UrlFixerFilter implements Filter
 	 * @param string  $docRoot
 	 * @param IRequest  $http
 	 */
-	public function __construct(string $docRoot = '/', IRequest $http)
+	public function __construct(string $docRoot, IRequest $http)
 	{
 		$this->basePath = $http->getUrl()->getBasePath();
 		$this->docRoot = $docRoot;
