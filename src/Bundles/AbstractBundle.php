@@ -16,6 +16,9 @@ abstract class AbstractBundle implements Bundle
 	protected $name;
 
 	/** @var string */
+	protected $cookieConsent;
+
+	/** @var string */
 	protected $extend;
 
 	/** @var Asset[] */
@@ -67,6 +70,25 @@ abstract class AbstractBundle implements Bundle
 	public function getExtendBundle(): ?string
 	{
 		return $this->extend;
+	}
+
+
+	/**
+	 * @param  string|NULL  $cookieConsent
+	 * @return void
+	 */
+	public function setCookieConsent(?string $cookieConsent): void
+	{
+		$this->cookieConsent = $cookieConsent;
+	}
+
+
+	/**
+	 * @return string|NULL
+	 */
+	public function getCookieConsent(): ?string
+	{
+		return $this->cookieConsent;
 	}
 
 

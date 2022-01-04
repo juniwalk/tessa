@@ -120,11 +120,9 @@ final class BundleManager
 			$assets[] = $this->storage->store($name, $asset);
 		}
 
-		$output = new ReadOnlyBundle(
-			$bundle->getName().$type,
-			$bundle->isDeferred(),
-			... $assets
-		);
+		$output = new ReadOnlyBundle($bundle->getName().$type, ... $assets);
+		$output->setCookieConsent($bundle->getCookieConsent());
+		$output->setDeferred($bundle->isDeferred());
 		$output->setBasePath($this->basePath);
 		$output->setWwwDir($this->wwwDir);
 

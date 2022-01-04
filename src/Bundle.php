@@ -16,6 +16,26 @@ interface Bundle
 
 
 	/**
+	 * @param  string|null  $cookieConsent
+	 * @return void
+	 */
+	public function setCookieConsent(?string $cookieConsent): void;
+
+
+	/**
+	 * @return string|null
+	 */
+	public function getCookieConsent(): ?string;
+
+
+	/**
+	 * @param  bool  $defer
+	 * @return void
+	 */
+	public function setDeferred(bool $defer = true): void;
+
+
+	/**
 	 * @return bool
 	 */
 	public function isDeferred(): bool;

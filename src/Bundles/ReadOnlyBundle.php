@@ -14,13 +14,16 @@ use JuniWalk\Tessa\Bundle;
 final class ReadOnlyBundle implements Bundle
 {
 	/** @var string */
+	private $name;
+
+	/** @var string */
+	private $cookieConsent;
+
+	/** @var string */
 	private $basePath;
 
 	/** @var string */
 	private $wwwDir;
-
-	/** @var string */
-	private $name;
 
 	/** @var bool */
 	private $defer;
@@ -30,15 +33,41 @@ final class ReadOnlyBundle implements Bundle
 
 
 	/**
-	 * @param string   $name
-	 * @param bool  $defer
+	 * @param string  $name
 	 * @param Asset[]  $assets
 	 */
-	public function __construct(string $name, bool $defer, ?Asset ... $assets)
+	public function __construct(string $name, ?Asset ... $assets)
 	{
 		$this->name = $name;
-		$this->defer = $defer;
 		$this->assets = $assets;
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getName(): string
+	{
+		return $this->name;
+	}
+
+
+	/**
+	 * @param  string|NULL  $cookieConsent
+	 * @return void
+	 */
+	public function setCookieConsent(?string $cookieConsent): void
+	{
+		$this->cookieConsent = $cookieConsent;
+	}
+
+
+	/**
+	 * @return string|NULL
+	 */
+	public function getCookieConsent(): ?string
+	{
+		return $this->cookieConsent;
 	}
 
 
@@ -63,11 +92,12 @@ final class ReadOnlyBundle implements Bundle
 
 
 	/**
-	 * @return string
+	 * @param  bool  $defer
+	 * @return void
 	 */
-	public function getName(): string
+	public function setDeferred(bool $defer = true): void
 	{
-		return $this->name;
+		$this->defer = $defer;
 	}
 
 

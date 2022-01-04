@@ -74,6 +74,11 @@ final class TessaControl extends Control
 			$html = Html::el('script type="text/javascript"')
 				->setSrc($file);
 
+			if ($cookieConsent = $bundle->getCookieConsent()) {
+				$html->setAttribute('cookie-consent', $cookieConsent);
+				$html->setAttribute('type', 'text/plain');
+			}
+
 			if ($bundle->isDeferred()) {
 				$html->setAttribute('defer', 'defer');
 			}

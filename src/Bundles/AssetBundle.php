@@ -86,9 +86,10 @@ final class AssetBundle extends AbstractBundle
 	 */
 	public function getCombinedBy(string $type): Bundle
 	{
-		$bundle = new AssetBundle($this->getName());
+		$bundle = new AssetBundle($this->name);
+		$bundle->setCookieConsent($this->cookieConsent);
 		$bundle->setDeferred($this->defer);
-		$name = $this->getName().'.'.$type;
+		$name = $this->name.'.'.$type;
 		$assets = [];
 
 		foreach ($this->assets as $asset) {

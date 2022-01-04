@@ -31,6 +31,7 @@ final class TessaExtension extends CompilerExtension
 		])
 
 		->otherItems(Expect::structure([
+			'cookieConsent' => Expect::string(),
 			'joinFiles' => Expect::bool(false),
 			'defer' => Expect::bool(false),
 			'extend' => Expect::string(),
@@ -70,6 +71,7 @@ final class TessaExtension extends CompilerExtension
 			$bundle = $builder->addDefinition($this->prefix('bundle.'.$name))
 				->setFactory(AssetBundle::class, [$name])
 				->addSetup('setExtendBundle', [$params->extend])
+				->addSetup('setCookieConsent', [$params->cookieConsent])
 				->addSetup('setJoinFiles', [$params->joinFiles])
 				->addSetup('setDeferred', [$params->defer]);
 
