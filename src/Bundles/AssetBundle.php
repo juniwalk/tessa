@@ -62,7 +62,7 @@ final class AssetBundle extends AbstractBundle
 	 */
 	public function discoverAsset(string $file): void
 	{
-		$params = parse_url($file, PHP_URL_QUERY);
+		$params = $this->parseParams($file);
 		$type = $params['type'] ?? null;
 
 		switch(true) {
@@ -110,5 +110,20 @@ final class AssetBundle extends AbstractBundle
 
 		$bundle->addAsset(new CombinedBundle($name, ... $assets));
 		return $bundle;
+	}
+
+
+	/**
+	 * @param  string  $file
+	 * @return string[]
+	 */
+	private function parseParams(string $file): iterable
+	{
+		if (!$query = parse_url($file, PHP_URL_QUERY)) {
+			return [];
+		}
+
+		parse_str($query, $params);
+		return $params;
 	}
 }
