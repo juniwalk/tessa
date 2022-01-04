@@ -21,15 +21,17 @@ abstract class AbstractAsset implements Asset
 
 	/**
 	 * @param  string  $file
+	 * @param  string|null  $type
 	 * @throws UnableToDetectTypeException
 	 */
-	public function __construct(string $file)
+	public function __construct(string $file, string $type = null)
 	{
-		if (!$this->type = pathinfo($file, PATHINFO_EXTENSION)) {
+		if (!$type && !$type = pathinfo($file, PATHINFO_EXTENSION)) {
 			throw UnableToDetectTypeException::fromFile($file);
 		}
 
 		$this->file = $file;
+		$this->type = $type;
 	}
 
 

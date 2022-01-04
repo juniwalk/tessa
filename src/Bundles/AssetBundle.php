@@ -62,17 +62,20 @@ final class AssetBundle extends AbstractBundle
 	 */
 	public function discoverAsset(string $file): void
 	{
+		$params = parse_url($file, PHP_URL_QUERY);
+		$type = $params['type'] ?? null;
+
 		switch(true) {
 			case Assets\HttpAsset::match($file):
-				$asset = new Assets\HttpAsset($file);
+				$asset = new Assets\HttpAsset($file, $type);
 				break;
 
 			case Assets\ScssAsset::match($file):
-				$asset = new Assets\ScssAsset($file);
+				$asset = new Assets\ScssAsset($file, $type);
 				break;
 
 			default:
-				$asset = new Assets\FileAsset($file);
+				$asset = new Assets\FileAsset($file, $type);
 				break;
 		}
 
