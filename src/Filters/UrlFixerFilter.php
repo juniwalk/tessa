@@ -19,7 +19,7 @@ final class UrlFixerFilter implements Filter
 	 * @var string
 	 * @see https://github.com/janmarek/WebLoader/blob/2dad67556ab2f434bbb14de048ce539155a6e1df/WebLoader/Filter/CssUrlsFilter.php
 	 */
-    const URL_PATTERN = '~
+    const PATTERN = '~
 		(?<![a-z])
 		url\(                                     ## url(
 			\s*                                   ##   optional whitespace
@@ -66,7 +66,7 @@ final class UrlFixerFilter implements Filter
 			return $content;
 		}
 
-		$urls = Strings::matchAll($content, static::URL_PATTERN);
+		$urls = Strings::matchAll($content, static::PATTERN);
 
 		foreach ($urls as $url) {
 			$absoluteUrl = $this->absolutizeUrl($url[2], $asset);
