@@ -15,6 +15,7 @@ use JuniWalk\Tessa\Storage;
 use Nette\DI\CompilerExtension;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
+use Nette\Utils\ArrayHash;
 
 final class TessaExtension extends CompilerExtension
 {
@@ -47,6 +48,10 @@ final class TessaExtension extends CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig();
+
+		if (!is_object($config)) {
+			$config = ArrayHash::from($config);
+		}
 
 		$storage = $builder->addDefinition($this->prefix('storage'))
 			->setFactory(Storage::class, [$config->outputDir])
