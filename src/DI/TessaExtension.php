@@ -56,7 +56,7 @@ final class TessaExtension extends CompilerExtension
 		$storage = $builder->addDefinition($this->prefix('storage'))
 			->setFactory(Storage::class, [$config->outputDir])
 			->addSetup('setCheckLastModified', [$config->checkLastModified])
-			->addSetup('setDebugMode', [$config->debugMode]);
+			->addSetup('setDebugMode', [$config->debugMode ?? false]);
 
 		foreach ($config->filters as $filter) {
 			$storage->addSetup('addFilter', [$filter]);
@@ -75,10 +75,10 @@ final class TessaExtension extends CompilerExtension
 		foreach ($bundles as $name => $params) {
 			$bundle = $builder->addDefinition($this->prefix('bundle.'.$name))
 				->setFactory(AssetBundle::class, [$name])
-				->addSetup('setExtendBundle', [$params->extend])
-				->addSetup('setCookieConsent', [$params->cookieConsent])
-				->addSetup('setJoinFiles', [$params->joinFiles])
-				->addSetup('setDeferred', [$params->defer]);
+				->addSetup('setExtendBundle', [$params->extend ?? null])
+				->addSetup('setCookieConsent', [$params->cookieConsent ?? null])
+				->addSetup('setJoinFiles', [$params->joinFiles ?? false])
+				->addSetup('setDeferred', [$params->defer ?? false]);
 
 			foreach ($params->assets as $file) {
 				$bundle->addSetup('discoverAsset', [$file]);
