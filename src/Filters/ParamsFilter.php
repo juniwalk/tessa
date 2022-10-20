@@ -15,38 +15,23 @@ use Nette\Utils\Strings;
 
 final class ParamsFilter implements Filter
 {
-    /** @var string */
     const PATTERN = '/(\%([A-Za-z][A-Za-z0-9\.]*[A-Za-z0-9])\%)/';
 
-	/** @var string[] */
-	private $params;
+	private array $params;
 
 
-	/**
-	 * @param string[]  $params
-	 */
-	public function __construct(iterable $params = [])
+	public function __construct(array $params = [])
 	{
 		$this->params = $params;
 	}
 
 
-	/**
-	 * @param  string  $key
-	 * @param  mixed  $value
-	 * @return void
-	 */
-	public function setParam(string $key, $value): void
+	public function setParam(string $key, mixed $value): void
 	{
 		$this->params[$key] = $value;
 	}
 
 
-	/**
-	 * @param  string  $content
-	 * @param  Asset  $asset
-	 * @return string
-	 */
 	public function apply(string $content, Asset $asset): string
 	{
 		if (!$asset->isTypeOf('js')) {
@@ -59,7 +44,7 @@ final class ParamsFilter implements Filter
 			try {
 				$value = Helpers::expand($var[0], $this->params, true);
 
-			} catch (InvalidArgumentException $e) {
+			} catch (InvalidArgumentException) {
 				continue;
 			}
 

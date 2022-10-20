@@ -14,12 +14,11 @@ use Nette\Utils\Strings;
 
 final class UrlFixerFilter implements Filter
 {
-    /**
+	/**
 	 * @author Kravko
-	 * @var string
 	 * @see https://github.com/janmarek/WebLoader/blob/2dad67556ab2f434bbb14de048ce539155a6e1df/WebLoader/Filter/CssUrlsFilter.php
 	 */
-    const PATTERN = '~
+	const PATTERN = '~
 		(?<![a-z])
 		url\(                                     ## url(
 			\s*                                   ##   optional whitespace
@@ -37,17 +36,10 @@ final class UrlFixerFilter implements Filter
 		\)                                        ## )
 	~xs';
 
-	/** @var string */
-	private $docRoot;
-
-	/** @var string */
-	private $basePath;
+	private string $docRoot;
+	private string $basePath;
 
 
-	/**
-	 * @param string  $docRoot
-	 * @param IRequest  $http
-	 */
 	public function __construct(string $docRoot, IRequest $http)
 	{
 		$this->basePath = $http->getUrl()->getBasePath();
@@ -55,11 +47,6 @@ final class UrlFixerFilter implements Filter
 	}
 
 
-	/**
-	 * @param  string  $content
-	 * @param  Asset  $asset
-	 * @return string
-	 */
 	public function apply(string $content, Asset $asset): string
 	{
 		if (!$asset->isTypeOf('css')) {
@@ -79,11 +66,6 @@ final class UrlFixerFilter implements Filter
 	}
 
 
-	/**
-	 * @param  string  $url
-	 * @param  Asset  $asset
-	 * @return string
-	 */
 	public function absolutizeUrl(string $url, Asset $asset): string
 	{
 		if (preg_match('/^([a-z]+:|\/)/i', $url)) {
@@ -103,10 +85,6 @@ final class UrlFixerFilter implements Filter
 	}
 
 
-	/**
-	 * @param  string  $path
-	 * @return string
-	 */
 	public function cannonicalizePath(string $path): string
 	{
 		$path = strtr($path, DIRECTORY_SEPARATOR, '/');

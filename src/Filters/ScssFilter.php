@@ -14,8 +14,7 @@ use ScssPhp\ScssPhp\Compiler;
 
 final class ScssFilter implements Filter
 {
-	/** @var Compiler */
-	private $scss;
+	private Compiler $scss;
 
 
 	/**
@@ -31,41 +30,24 @@ final class ScssFilter implements Filter
 	}
 
 
-	/**
-	 * @param  string[]  $formatter
-	 * @return void
-	 */
 	public function setFormatter(string $formatter): void
 	{
 		$this->scss->setFormatter($formatter);
 	}
 
 
-	/**
-	 * @param  string  $path
-	 * @return void
-	 */
 	public function addImportPath(string $path): void
 	{
 		$this->scss->addImportPath($path);
 	}
 
 
-	/**
-	 * @param  string[]  $variables
-	 * @return void
-	 */
 	public function setVariables(array $variables): void
 	{
 		$this->scss->setVariables($variables);
 	}
 
 
-	/**
-	 * @param  string  $content
-	 * @param  Asset  $asset
-	 * @return string
-	 */
 	public function apply(string $content, Asset $asset): string
 	{
 		if (!$asset->isTypeOf('scss')) {

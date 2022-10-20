@@ -15,79 +15,48 @@ use JuniWalk\Tessa\Filter;
 
 final class Storage
 {
-	/** @var bool */
-	private $checkLastModified = true;
-
-	/** @var bool */
-	private $debugMode = false;
-
-	/** @var string */
-	private $outputDir;
-
-	/** @var Filter[] */
-	private $filters = [];
+	private bool $checkLastModified = true;
+	private bool $debugMode = false;
+	private string $outputDir;
+	private array $filters = [];
 
 
-	/**
-	 * @param  string  $outputDir
-	 */
 	public function __construct(string $outputDir)
 	{
 		$this->outputDir = rtrim($outputDir, '/');
 	}
 
 
-	/**
-	 * @param  bool  $checkLastModified
-	 * @return void
-	 */
 	public function setCheckLastModified(bool $checkLastModified = true): void
 	{
 		$this->checkLastModified = $checkLastModified;
 	}
 
 
-	/**
-	 * @return bool
-	 */
 	public function hasCheckLastModified(): bool
 	{
 		return $this->checkLastModified;
 	}
 
 
-	/**
-	 * @param  bool  $debugMode
-	 * @return void
-	 */
 	public function setDebugMode(bool $debugMode = false): void
 	{
 		$this->debugMode = $debugMode;
 	}
 
 
-	/**
-	 * @return bool
-	 */
 	public function isDebugMode(): bool
 	{
 		return $this->debugMode;
 	}
 	
 
-	/**
-	 * @return string
-	 */
 	public function getOutputDir(): string
 	{
 		return $this->outputDir;
 	}
 
 
-	/**
-	 * @param  Filter  $filter
-	 * @return void
-	 */
 	public function addFilter(Filter $filter): void
 	{
 		$this->filters[] = $filter;
@@ -95,9 +64,6 @@ final class Storage
 
 
 	/**
-	 * @param  string  $name
-	 * @param  Asset  $asset
-	 * @return Asset
 	 * @throws AssetStoringFailedException
 	 */
 	public function store(string $name, Asset $asset): Asset

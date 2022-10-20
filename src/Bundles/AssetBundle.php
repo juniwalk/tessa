@@ -11,55 +11,34 @@ use JuniWalk\Tessa\Assets;
 
 final class AssetBundle extends AbstractBundle
 {
-	/** @var bool */
-	private $joinFiles = false;
-
-	/** @var bool */
-	private $defer = false;
+	private bool $joinFiles = false;
+	private bool $defer = false;
 
 
-	/**
-	 * @param  bool  $joinFiles
-	 * @return void
-	 */
 	public function setJoinFiles(bool $joinFiles = true): void
 	{
 		$this->joinFiles = $joinFiles;
 	}
 
 
-	/**
-	 * @return bool
-	 */
 	public function isJoinFiles(): bool
 	{
 		return $this->joinFiles;
 	}
 
 
-	/**
-	 * @param  bool  $defer
-	 * @return void
-	 */
 	public function setDeferred(bool $defer = true): void
 	{
 		$this->defer = $defer;
 	}
 
 
-	/**
-	 * @return bool
-	 */
 	public function isDeferred(): bool
 	{
 		return $this->defer;
 	}
 
 
-	/**
-	 * @param  string[]  $files
-	 * @return Asset[]
-	 */
 	public function discoverAsset(string $file): void
 	{
 		$params = $this->parseParams($file);
@@ -83,10 +62,6 @@ final class AssetBundle extends AbstractBundle
 	}
 
 
-	/**
-	 * @param  string  $type
-	 * @return Bundle
-	 */
 	public function getCombinedBy(string $type): Bundle
 	{
 		$bundle = new AssetBundle($this->name);
@@ -113,11 +88,7 @@ final class AssetBundle extends AbstractBundle
 	}
 
 
-	/**
-	 * @param  string  $file
-	 * @return string[]
-	 */
-	private function parseParams(string $file): iterable
+	private function parseParams(string $file): array
 	{
 		if (!$query = parse_url($file, PHP_URL_QUERY)) {
 			return [];

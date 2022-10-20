@@ -7,54 +7,54 @@
 
 namespace JuniWalk\Tessa\Commands;
 
+use JuniWalk\Tessa\Bundle;
 use JuniWalk\Tessa\BundleManager;
+use JuniWalk\Utils\Console\AbstractCommand;
+use JuniWalk\Utils\Console\Tools\ProgressIndicator;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 final class TessaWarmUpCommand extends AbstractCommand
 {
-	/** @var string */
+	protected static $defaultDescription = 'Compile all available bundles.';
 	protected static $defaultName = 'tessa:warm-up';
 
-	/** @var BundleManager */
-	private $bundleManager;
 
-
-	/**
-	 * @param BundleManager  $bundleManager
-	 */
 	public function __construct(
-		BundleManager $bundleManager
+		private readonly BundleManager $bundleManager
 	) {
-		$this->bundleManager = $bundleManager;
 		parent::__construct();
 	}
 
 
 	protected function configure()
 	{
-		$this->setConfirm('This command will compile all available bundles, continue? <comment>[Y,n]</comment> ');
-		$this->setDescription('Compile all available bundles.');
+		$this->setDescription($this::$defaultDescription);
 		$this->setName($this::$defaultName);
 	}
 
 
-	/**
-	 * @param  InputInterface   $input
-	 * @param  OutputInterface  $output
-	 * @return int
-	 */
+	protected function interact(InputInterface $input, OutputInterface $output): void
+	{
+		$this->addQuestion(function($cli) {
+			return $cli->confirm('This command will compile all available bundles, continue?');
+		});
+
+		parent::interact($input, $output);
+	}
+
+
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
-		$bundleManager = $this->bundleManager;
-		$bundles = $bundleManager->getBundles();
+		$status = new ProgressIndicator($output);
+		$status->iterate($this->bundleManager->getBundles(), function($status, Bundle $bundle) {
+			$status->setMessage($bundle->getName());
 
-		foreach ($bundles as $bundle) {
-			$bundleManager->compile($bundle, 'css');
-			$bundleManager->compile($bundle, 'js');
-		}
+			$this->bundleManager->compile($bundle, 'css');
+			$this->bundleManager->compile($bundle, 'js');
+		});
 
-		return 0;
+		return Command::SUCCESS;
 	}
 }

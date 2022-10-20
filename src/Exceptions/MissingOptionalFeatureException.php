@@ -9,13 +9,8 @@ namespace JuniWalk\Tessa\Exceptions;
 
 final class MissingOptionalFeatureException extends TessaException
 {
-    /**
-     * @param  string  $feature
-     * @param  string  $package
-     * @return static
-     */
-    public static function fromFeature(string $feature, string $package): self
-    {
+	public static function fromFeature(string $feature, string $package): self
+	{
 		return new static('For use of '.$feature.' you need to install '.$package, 500);
-    }
+	}
 }

@@ -11,10 +11,6 @@ use JuniWalk\Tessa\Bundles\Bundle;
 
 final class ReadOnlyBundleException extends TessaException
 {
-	/**
-	 * @param  Bundle  $bundle
-	 * @return static
-	 */
 	public static function fromBundle(Bundle $bundle): self
 	{
 		return new static('Bundle "'.$bundle->getName().'" is read-only and cannot be compiled.');

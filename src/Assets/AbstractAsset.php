@@ -12,16 +12,11 @@ use JuniWalk\Tessa\Exceptions\UnableToDetectTypeException;
 
 abstract class AbstractAsset implements Asset
 {
-	/** @var string */
-	protected $file;
-
-	/** @var string */
-	protected $type;
+	protected string $file;
+	protected string $type;
 
 
 	/**
-	 * @param  string  $file
-	 * @param  string|null  $type
 	 * @throws UnableToDetectTypeException
 	 */
 	public function __construct(string $file, string $type = null)
@@ -35,72 +30,45 @@ abstract class AbstractAsset implements Asset
 	}
 
 
-	/**
-	 * @return string
-	 */
 	public function getFile(): string
 	{
 		return $this->file;
 	}
 
 
-	/**
-	 * @return string
-	 */
 	public function getName(): string
 	{
 		return basename($this->file);
 	}
 
 
-	/**
-	 * @return string
-	 */
 	public function getFolder(): string
 	{
 		return dirname($this->file);
 	}
 
 
-	/**
-	 * @return string
-	 */
 	public function getType(): string
 	{
 		return $this->type;
 	}
 
 
-	/**
-	 * @param  string  $type
-	 * @return bool
-	 */
 	public function isTypeOf(string $type): bool
 	{
 		return $this->type == $type;
 	}
 
 
-	/**
-	 * @return string
-	 */
 	public function getCrc32(): string
 	{
 		return hash_file('crc32b', $this->file);
 	}
 
 
-	/**
-	 * @return string
-	 */
 	abstract public function getContent(): string;
 
 
-	/**
-	 * @param  string  $file
-	 * @param  bool  $checkLastModified
-	 * @return bool
-	 */
 	public function hasBeenModified(string $file, bool $checkLastModified): bool
 	{
 		if (!file_exists($file)) {

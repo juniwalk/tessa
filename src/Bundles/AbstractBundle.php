@@ -12,23 +12,12 @@ use JuniWalk\Tessa\Bundle;
 
 abstract class AbstractBundle implements Bundle
 {
-	/** @var string */
-	protected $name;
-
-	/** @var string */
-	protected $cookieConsent;
-
-	/** @var string */
-	protected $extend;
-
-	/** @var Asset[] */
-	protected $assets;
+	protected string $name;
+	protected string $cookieConsent;
+	protected string $extend;
+	protected array $assets;
 
 
-	/**
-	 * @param string   $name
-	 * @param Asset[]  $assets
-	 */
 	public function __construct(string $name, ?Asset ... $assets)
 	{
 		$this->name = $name;
@@ -36,76 +25,49 @@ abstract class AbstractBundle implements Bundle
 	}
 
 
-	/**
-	 * @return string
-	 */
 	public function getName(): string
 	{
 		return $this->name;
 	}
 
 
-	/**
-	 * @return bool
-	 */
 	public function isDeferred(): bool
 	{
 		return false;
 	}
 
 
-	/**
-	 * @param  string|NULL  $extend
-	 * @return void
-	 */
 	public function setExtendBundle(?string $extend): void
 	{
 		$this->extend = $extend;
 	}
 
 
-	/**
-	 * @return string|NULL
-	 */
 	public function getExtendBundle(): ?string
 	{
 		return $this->extend;
 	}
 
 
-	/**
-	 * @param  string|NULL  $cookieConsent
-	 * @return void
-	 */
 	public function setCookieConsent(?string $cookieConsent): void
 	{
 		$this->cookieConsent = $cookieConsent;
 	}
 
 
-	/**
-	 * @return string|NULL
-	 */
 	public function getCookieConsent(): ?string
 	{
 		return $this->cookieConsent;
 	}
 
 
-	/**
-	 * @param  Asset  $asset
-	 * @return void
-	 */
 	public function addAsset(Asset $asset): void
 	{
 		$this->assets[] = $asset;
 	}
 
 
-	/**
-	 * @return Asset[]
-	 */
-	public function getAssets(): iterable
+	public function getAssets(): array
 	{
 		return $this->assets;
 	}

@@ -9,10 +9,5 @@ namespace JuniWalk\Tessa;
 
 interface Filter
 {
-    /**
-     * @param  string  $content
-     * @param  Asset  $asset
-     * @return string
-     */
-    public function apply(string $content, Asset $asset): string;
+	public function apply(string $content, Asset $asset): string;
 }

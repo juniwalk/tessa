@@ -13,29 +13,14 @@ use JuniWalk\Tessa\Bundle;
 
 final class ReadOnlyBundle implements Bundle
 {
-	/** @var string */
-	private $name;
-
-	/** @var string */
-	private $cookieConsent;
-
-	/** @var string */
-	private $basePath;
-
-	/** @var string */
-	private $wwwDir;
-
-	/** @var bool */
-	private $defer;
-
-	/** @var Asset[] */
-	private $assets;
+	private string $name;
+	private string $cookieConsent;
+	private string $basePath;
+	private string $wwwDir;
+	private bool $defer;
+	private array $assets;
 
 
-	/**
-	 * @param string  $name
-	 * @param Asset[]  $assets
-	 */
 	public function __construct(string $name, ?Asset ... $assets)
 	{
 		$this->name = $name;
@@ -43,86 +28,54 @@ final class ReadOnlyBundle implements Bundle
 	}
 
 
-	/**
-	 * @return string
-	 */
 	public function getName(): string
 	{
 		return $this->name;
 	}
 
 
-	/**
-	 * @param  string|NULL  $cookieConsent
-	 * @return void
-	 */
 	public function setCookieConsent(?string $cookieConsent): void
 	{
 		$this->cookieConsent = $cookieConsent;
 	}
 
 
-	/**
-	 * @return string|NULL
-	 */
 	public function getCookieConsent(): ?string
 	{
 		return $this->cookieConsent;
 	}
 
 
-	/**
-	 * @param  string  $basePath
-	 * @return void
-	 */
 	public function setBasePath(string $basePath): void
 	{
 		$this->basePath = $basePath;
 	}
 
 
-	/**
-	 * @param  string  $wwwDir
-	 * @return void
-	 */
 	public function setWwwDir(string $wwwDir): void
 	{
 		$this->wwwDir = $wwwDir;
 	}
 
 
-	/**
-	 * @param  bool  $defer
-	 * @return void
-	 */
 	public function setDeferred(bool $defer = true): void
 	{
 		$this->defer = $defer;
 	}
 
 
-	/**
-	 * @return bool
-	 */
 	public function isDeferred(): bool
 	{
 		return $this->defer;
 	}
 
 
-	/**
-	 * @return Asset[]
-	 */
-	public function getAssets(): iterable
+	public function getAssets(): array
 	{
 		return $this->assets;
 	}
 
 
-	/**
-	 * @param  Asset  $asset
-	 * @return string
-	 */
 	public function createPublicPath(Asset $asset): string
 	{
 		$path = str_replace($this->wwwDir, $this->basePath, $asset->getFile());

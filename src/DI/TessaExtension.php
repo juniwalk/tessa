@@ -7,7 +7,6 @@
 
 namespace JuniWalk\Tessa\DI;
 
-use JuniWalk\Tessa\Assets;
 use JuniWalk\Tessa\BundleManager;
 use JuniWalk\Tessa\Bundles\AssetBundle;
 use JuniWalk\Tessa\Commands\TessaWarmUpCommand;

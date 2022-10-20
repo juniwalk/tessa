@@ -17,24 +17,12 @@ use Nette\Http\IRequest;
 
 final class BundleManager
 {
-	/** @var Storage */
-	private $storage;
-
-	/** @var string */
-	private $basePath;
-
-	/** @var string */
-	private $wwwDir;
-
-	/** @var Bundle[] */
-	private $bundles = [];
+	private Storage $storage;
+	private string $basePath;
+	private string $wwwDir;
+	private array $bundles = [];
 
 
-	/**
-	 * @param  string  $wwwDir
-	 * @param  IRequest  $httpRequest
-	 * @param  Storage  $storage
-	 */
 	public function __construct(
 		string $wwwDir,
 		IRequest $httpRequest,
@@ -46,10 +34,6 @@ final class BundleManager
 	}
 
 
-	/**
-	 * @param  Bundle  $bundle
-	 * @return void
-	 */
 	public function addBundle(Bundle $bundle): void
 	{
 		$this->bundles[$bundle->getName()] = $bundle;
@@ -57,8 +41,6 @@ final class BundleManager
 
 
 	/**
-	 * @param  string  $bundle
-	 * @return Bundle
 	 * @throws BundleNotFoundException
 	 */
 	public function getBundle(string $bundle): Bundle
@@ -71,22 +53,16 @@ final class BundleManager
 	}
 
 
-	/**
-	 * @return string[]
-	 */
-	public function getBundles(): iterable
+	public function getBundles(): array
 	{
 		return array_keys($this->bundles);
 	}
 
 
 	/**
-	 * @param  string  $bundle
-	 * @param  string  $type
 	 * @throws BundleNotFoundException
 	 * @throws BundleRecursionException
 	 * @throws ReadOnlyBundleException
-	 * @return Bundle
 	 */
 	public function compile(string $bundle, string $type): Bundle
 	{
@@ -131,12 +107,9 @@ final class BundleManager
 
 
 	/**
-	 * @param  Bundle  $bundle
-	 * @param  string[]  $history
-	 * @return string[]
 	 * @throws BundleRecursionException
 	 */
-	private function detectRecursion(Bundle $bundle, iterable $history = []): iterable
+	private function detectRecursion(Bundle $bundle, array $history = []): array
 	{
 		$history[$bundle->getName()] = true;
 
