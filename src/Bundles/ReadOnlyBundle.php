@@ -14,7 +14,7 @@ use JuniWalk\Tessa\Bundle;
 final class ReadOnlyBundle implements Bundle
 {
 	private string $name;
-	private string $cookieConsent;
+	private ?string $cookieConsent;
 	private string $basePath;
 	private string $wwwDir;
 	private bool $defer;

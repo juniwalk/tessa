@@ -13,8 +13,8 @@ use JuniWalk\Tessa\Bundle;
 abstract class AbstractBundle implements Bundle
 {
 	protected string $name;
-	protected string $cookieConsent;
-	protected string $extend;
+	protected ?string $cookieConsent;
+	protected ?string $extend;
 	protected array $assets;
 
 
