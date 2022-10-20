@@ -48,11 +48,11 @@ final class TessaWarmUpCommand extends AbstractCommand
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$status = new ProgressIndicator($output);
-		$status->iterate($this->bundleManager->getBundles(), function($status, Bundle $bundle) {
-			$status->setMessage($bundle->getName());
+		$status->iterate($this->bundleManager->getBundles(), function($status, string $bundleName) {
+			$status->setMessage($bundleName);
 
-			$this->bundleManager->compile($bundle, 'css');
-			$this->bundleManager->compile($bundle, 'js');
+			$this->bundleManager->compile($bundleName, 'css');
+			$this->bundleManager->compile($bundleName, 'js');
 		});
 
 		return Command::SUCCESS;
