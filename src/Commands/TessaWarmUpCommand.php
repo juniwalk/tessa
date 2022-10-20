@@ -7,7 +7,6 @@
 
 namespace JuniWalk\Tessa\Commands;
 
-use JuniWalk\Tessa\Bundle;
 use JuniWalk\Tessa\BundleManager;
 use JuniWalk\Utils\Console\AbstractCommand;
 use JuniWalk\Utils\Console\Tools\ProgressIndicator;
