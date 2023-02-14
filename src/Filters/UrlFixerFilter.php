@@ -9,8 +9,8 @@ namespace JuniWalk\Tessa\Filters;
 
 use JuniWalk\Tessa\Asset;
 use JuniWalk\Tessa\Filter;
+use JuniWalk\Utils\Strings;
 use Nette\Http\IRequest;
-use Nette\Utils\Strings;
 
 final class UrlFixerFilter implements Filter
 {

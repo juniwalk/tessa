@@ -9,9 +9,9 @@ namespace JuniWalk\Tessa\Filters;
 
 use JuniWalk\Tessa\Asset;
 use JuniWalk\Tessa\Filter;
+use JuniWalk\Utils\Strings;
 use Nette\DI\Helpers;
 use Nette\InvalidArgumentException;
-use Nette\Utils\Strings;
 
 final class ParamsFilter implements Filter
 {
