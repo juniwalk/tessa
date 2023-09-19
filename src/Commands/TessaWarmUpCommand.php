@@ -19,7 +19,6 @@ final class TessaWarmUpCommand extends AbstractCommand
 	protected static $defaultDescription = 'Compile all available bundles.';
 	protected static $defaultName = 'tessa:warm-up';
 
-
 	public function __construct(
 		private readonly BundleManager $bundleManager
 	) {

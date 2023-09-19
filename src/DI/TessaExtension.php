@@ -18,9 +18,6 @@ use Nette\Utils\ArrayHash;
 
 final class TessaExtension extends CompilerExtension
 {
-	/**
-	 * @return Schema
-	 */
 	public function getConfigSchema(): Schema
 	{
 		return Expect::structure([
@@ -34,16 +31,14 @@ final class TessaExtension extends CompilerExtension
 			'cookieConsent' => Expect::string(),
 			'joinFiles' => Expect::bool(false),
 			'defer' => Expect::bool(false),
+			'async' => Expect::bool(false),
 			'extend' => Expect::string(),
 			'assets' => Expect::list(),
 		]));
 	}
 
 
-	/**
-	 * @return void
-	 */
-	public function loadConfiguration()
+	public function loadConfiguration(): void
 	{
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig();
@@ -78,6 +73,7 @@ final class TessaExtension extends CompilerExtension
 				->addSetup('setCookieConsent', [$params->cookieConsent ?? null])
 				->addSetup('setJoinFiles', [$params->joinFiles ?? false])
 				->addSetup('setDeferred', [$params->defer ?? false]);
+				->addSetup('setAsync', [$params->async ?? false]);
 
 			foreach ($params->assets as $file) {
 				$bundle->addSetup('discoverAsset', [$file]);

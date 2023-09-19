@@ -18,10 +18,10 @@ final class ReadOnlyBundle implements Bundle
 	private string $basePath;
 	private string $wwwDir;
 	private bool $defer;
+	private bool $async;
 	private array $assets;
 
-
-	public function __construct(string $name, ?Asset ... $assets)
+	public function __construct(string $name, ?Asset ...$assets)
 	{
 		$this->name = $name;
 		$this->assets = $assets;
@@ -67,6 +67,18 @@ final class ReadOnlyBundle implements Bundle
 	public function isDeferred(): bool
 	{
 		return $this->defer;
+	}
+
+
+	public function setAsync(bool $async = true): void
+	{
+		$this->async = $async;
+	}
+
+
+	public function isAsync(): bool
+	{
+		return $this->async;
 	}
 
 

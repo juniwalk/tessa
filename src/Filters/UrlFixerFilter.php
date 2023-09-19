@@ -39,7 +39,6 @@ final class UrlFixerFilter implements Filter
 	private string $docRoot;
 	private string $basePath;
 
-
 	public function __construct(string $docRoot, IRequest $http)
 	{
 		$this->basePath = $http->getUrl()->getBasePath();

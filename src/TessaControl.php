@@ -15,7 +15,6 @@ final class TessaControl extends Control
 	private BundleManager $manager;
 	private array $history = [];
 
-
 	public function __construct(BundleManager $manager)
 	{
 		$this->manager = $manager;
@@ -67,6 +66,10 @@ final class TessaControl extends Control
 
 			if ($bundle->isDeferred()) {
 				$html->setAttribute('defer', 'defer');
+			}
+
+			if ($bundle->isAsync()) {
+				$html->setAttribute('async', 'async');
 			}
 
 			$this->history[$file] = true;

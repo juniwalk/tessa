@@ -16,7 +16,6 @@ final class ScssFilter implements Filter
 {
 	private Compiler $scss;
 
-
 	/**
 	 * @throws MissingOptionalFeatureException
 	 */

@@ -19,7 +19,6 @@ final class ParamsFilter implements Filter
 
 	private array $params;
 
-
 	public function __construct(array $params = [])
 	{
 		$this->params = $params;

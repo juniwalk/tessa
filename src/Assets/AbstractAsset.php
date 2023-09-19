@@ -15,7 +15,6 @@ abstract class AbstractAsset implements Asset
 	protected string $file;
 	protected string $type;
 
-
 	/**
 	 * @throws UnableToDetectTypeException
 	 */

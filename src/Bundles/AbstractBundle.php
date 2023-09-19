@@ -17,8 +17,7 @@ abstract class AbstractBundle implements Bundle
 	protected ?string $extend;
 	protected array $assets;
 
-
-	public function __construct(string $name, ?Asset ... $assets)
+	public function __construct(string $name, ?Asset ...$assets)
 	{
 		$this->name = $name;
 		$this->assets = $assets;

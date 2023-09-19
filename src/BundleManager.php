@@ -22,7 +22,6 @@ final class BundleManager
 	private string $wwwDir;
 	private array $bundles = [];
 
-
 	public function __construct(
 		string $wwwDir,
 		IRequest $httpRequest,
