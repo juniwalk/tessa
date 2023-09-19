@@ -72,7 +72,7 @@ final class TessaExtension extends CompilerExtension
 				->addSetup('setExtendBundle', [$params->extend ?? null])
 				->addSetup('setCookieConsent', [$params->cookieConsent ?? null])
 				->addSetup('setJoinFiles', [$params->joinFiles ?? false])
-				->addSetup('setDeferred', [$params->defer ?? false]);
+				->addSetup('setDeferred', [$params->defer ?? false])
 				->addSetup('setAsync', [$params->async ?? false]);
 
 			foreach ($params->assets as $file) {
