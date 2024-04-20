@@ -90,8 +90,8 @@ final class TessaControl extends Control
 	{
 		$control = $this->getPresenter();
 		$renderMethod = match ($type) {
-			'css' => $this->renderCss(...);
-			'js' => $this->renderJs(...);
+			'css' => $this->renderCss(...),
+			'js' => $this->renderJs(...),
 
 			default => throw AssetTypeException::fromType($type),
 		};
