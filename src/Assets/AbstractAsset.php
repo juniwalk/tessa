@@ -8,19 +8,19 @@
 namespace JuniWalk\Tessa\Assets;
 
 use JuniWalk\Tessa\Asset;
-use JuniWalk\Tessa\Exceptions\UnableToDetectTypeException;
+use JuniWalk\Tessa\Exceptions\AssetTypeException;
 
 abstract class AbstractAsset implements Asset
 {
 	/**
-	 * @throws UnableToDetectTypeException
+	 * @throws AssetTypeException
 	 */
 	public function __construct(
 		protected string $file,
 		protected ?string $type = null,
 	) {
 		if (!$type && !$type = pathinfo($file, PATHINFO_EXTENSION)) {
-			throw UnableToDetectTypeException::fromFile($file);
+			throw AssetTypeException::fromFile($file);
 		}
 
 		$this->type = $type;
