@@ -19,7 +19,7 @@ final class Storage
 	private array $filters = [];
 
 	public function __construct(
-		private readonly string $outputDir,
+		private string $outputDir,
 		private bool $debugMode = false,
 	) {
 		$this->outputDir = rtrim($outputDir, '/');
