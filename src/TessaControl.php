@@ -7,8 +7,12 @@
 
 namespace JuniWalk\Tessa;
 
+use JuniWalk\Tessa\Attributes\AssetBundle;
+use JuniWalk\Tessa\Exceptions\AssetTypeException;
 use Nette\Application\UI\Control;
+use Nette\Application\UI\Presenter;
 use Nette\Utils\Html;
+use ReflectionClass;
 
 final class TessaControl extends Control
 {
@@ -76,5 +80,56 @@ final class TessaControl extends Control
 		}
 
 		echo trim($output);
+	}
+
+
+	/**
+	 * @throws AssetTypeException
+	 */
+	public function render(string $type): void
+	{
+		$control = $this->getPresenter();
+		$renderMethod = match ($type) {
+			'css' => $this->renderCss(...);
+			'js' => $this->renderJs(...);
+
+			default => throw AssetTypeException::fromType($type),
+		};
+
+		$bundles = $this->findAssetBundles($control);
+
+		foreach ($control->getComponents() as $component) {
+			$bundles += $this->findAssetBundles($component);
+		}
+
+		foreach ($bundles as $bundle) {
+			$renderMethod($bundle->newInstance()->bundleName);
+		}
+	}
+
+
+	private function findAssetBundles(Control $control): array
+	{
+		$class = new ReflectionClass($control);
+		$bundles = $class->getAttributes(AssetBundle::class);
+
+		if ($parent = $class->getParentClass()) {
+			$bundles = array_merge($bundles, $parent->getAttributes(AssetBundle::class));
+		}
+
+		if ($class->isSubclassOf(Presenter::class) && $view = $control->getAction()) {
+			$viewAction = Presenter::formatActionMethod($view);
+			$viewRender = Presenter::formatRenderMethod($view);
+
+			if ($class->hasMethod($viewAction)) {
+				$bundles = array_merge($bundles, $class->getMethod($viewAction)->getAttributes(AssetBundle::class));
+			}
+
+			if ($class->hasMethod($viewRender)) {
+				$bundles = array_merge($bundles, $class->getMethod($viewRender)->getAttributes(AssetBundle::class));
+			}
+		}
+
+		return $bundles;
 	}
 }
