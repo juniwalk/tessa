@@ -16,12 +16,12 @@ use JuniWalk\Tessa\Filter;
 final class Storage
 {
 	private bool $checkLastModified = true;
-	private bool $debugMode = false;
-	private string $outputDir;
 	private array $filters = [];
 
-	public function __construct(string $outputDir)
-	{
+	public function __construct(
+		private readonly string $outputDir,
+		private bool $debugMode = false,
+	) {
 		$this->outputDir = rtrim($outputDir, '/');
 	}
 

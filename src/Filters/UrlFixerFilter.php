@@ -18,7 +18,7 @@ final class UrlFixerFilter implements Filter
 	 * @author Kravko
 	 * @see https://github.com/janmarek/WebLoader/blob/2dad67556ab2f434bbb14de048ce539155a6e1df/WebLoader/Filter/CssUrlsFilter.php
 	 */
-	const PATTERN = '~
+	private const Pattern = '~
 		(?<![a-z])
 		url\(                                     ## url(
 			\s*                                   ##   optional whitespace
@@ -36,13 +36,13 @@ final class UrlFixerFilter implements Filter
 		\)                                        ## )
 	~xs';
 
-	private string $docRoot;
 	private string $basePath;
 
-	public function __construct(string $docRoot, IRequest $http)
-	{
+	public function __construct(
+		private readonly string $docRoot,
+		IRequest $http
+	) {
 		$this->basePath = $http->getUrl()->getBasePath();
-		$this->docRoot = $docRoot;
 	}
 
 
@@ -52,7 +52,7 @@ final class UrlFixerFilter implements Filter
 			return $content;
 		}
 
-		$urls = Strings::matchAll($content, static::PATTERN);
+		$urls = Strings::matchAll($content, static::Pattern);
 
 		foreach ($urls as $url) {
 			$absoluteUrl = $this->absolutizeUrl($url[2], $asset);

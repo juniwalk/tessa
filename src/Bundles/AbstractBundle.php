@@ -12,13 +12,14 @@ use JuniWalk\Tessa\Bundle;
 
 abstract class AbstractBundle implements Bundle
 {
-	protected string $name;
 	protected ?string $cookieConsent;
 	protected ?string $extend;
 	protected array $assets;
 
-	public function __construct(string $name, ?Asset ...$assets)
-	{
+	public function __construct(
+		protected readonly string $name,
+		?Asset ...$assets,
+	) {
 		$this->name = $name;
 		$this->assets = $assets;
 	}

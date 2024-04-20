@@ -20,7 +20,7 @@ final class TessaWarmUpCommand extends AbstractCommand
 	protected static $defaultName = 'tessa:warm-up';
 
 	public function __construct(
-		private readonly BundleManager $bundleManager
+		private readonly BundleManager $bundleManager,
 	) {
 		parent::__construct();
 	}
@@ -35,10 +35,7 @@ final class TessaWarmUpCommand extends AbstractCommand
 
 	protected function interact(InputInterface $input, OutputInterface $output): void
 	{
-		$this->addQuestion(function($cli) {
-			return $cli->confirm('This command will compile all available bundles, continue?');
-		});
-
+		$this->addQuestion(fn($cli) => $cli->confirm('This command will compile all available bundles, continue?'));
 		parent::interact($input, $output);
 	}
 

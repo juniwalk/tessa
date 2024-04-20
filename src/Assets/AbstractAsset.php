@@ -12,19 +12,17 @@ use JuniWalk\Tessa\Exceptions\UnableToDetectTypeException;
 
 abstract class AbstractAsset implements Asset
 {
-	protected string $file;
-	protected string $type;
-
 	/**
 	 * @throws UnableToDetectTypeException
 	 */
-	public function __construct(string $file, string $type = null)
-	{
+	public function __construct(
+		protected string $file,
+		protected ?string $type = null,
+	) {
 		if (!$type && !$type = pathinfo($file, PATHINFO_EXTENSION)) {
 			throw UnableToDetectTypeException::fromFile($file);
 		}
 
-		$this->file = $file;
 		$this->type = $type;
 	}
 

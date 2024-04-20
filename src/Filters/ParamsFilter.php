@@ -15,13 +15,11 @@ use Nette\InvalidArgumentException;
 
 final class ParamsFilter implements Filter
 {
-    const PATTERN = '/(\%([A-Za-z][A-Za-z0-9\.]*[A-Za-z0-9])\%)/';
+    private const Pattern = '/(\%([A-Za-z][A-Za-z0-9\.]*[A-Za-z0-9])\%)/';
 
-	private array $params;
-
-	public function __construct(array $params = [])
-	{
-		$this->params = $params;
+	public function __construct(
+		private array $params = [],
+	) {
 	}
 
 
@@ -37,7 +35,7 @@ final class ParamsFilter implements Filter
 			return $content;
 		}
 
-		$vars = Strings::matchAll($content, static::PATTERN);
+		$vars = Strings::matchAll($content, static::Pattern);
 
 		foreach ($vars as $var) {
 			try {

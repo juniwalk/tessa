@@ -13,7 +13,6 @@ use JuniWalk\Tessa\Bundle;
 
 final class ReadOnlyBundle implements Bundle
 {
-	private string $name;
 	private ?string $cookieConsent;
 	private string $basePath;
 	private string $wwwDir;
@@ -21,9 +20,10 @@ final class ReadOnlyBundle implements Bundle
 	private bool $async;
 	private array $assets;
 
-	public function __construct(string $name, ?Asset ...$assets)
-	{
-		$this->name = $name;
+	public function __construct(
+		private readonly string $name,
+		?Asset ...$assets,
+	) {
 		$this->assets = $assets;
 	}
 

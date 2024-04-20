@@ -12,18 +12,17 @@ use Nette\Utils\Html;
 
 final class TessaControl extends Control
 {
-	private BundleManager $manager;
 	private array $history = [];
 
-	public function __construct(BundleManager $manager)
-	{
-		$this->manager = $manager;
+	public function __construct(
+		private readonly BundleManager $bundleManager,
+	) {
 	}
 
 
 	public function renderCss(string $bundle = 'default'): void
 	{
-		$bundle = $this->manager->compile($bundle, 'css');
+		$bundle = $this->bundleManager->compile($bundle, 'css');
 		$output = '';
 
 		foreach ($bundle->getAssets() as $asset) {
@@ -46,7 +45,7 @@ final class TessaControl extends Control
 
 	public function renderJs(string $bundle = 'default'): void
 	{
-		$bundle = $this->manager->compile($bundle, 'js');
+		$bundle = $this->bundleManager->compile($bundle, 'js');
 		$output = '';
 
 		foreach ($bundle->getAssets() as $asset) {

@@ -17,19 +17,16 @@ use Nette\Http\IRequest;
 
 final class BundleManager
 {
-	private Storage $storage;
-	private string $basePath;
-	private string $wwwDir;
+	private readonly string $basePath;
 	private array $bundles = [];
 
 	public function __construct(
-		string $wwwDir,
+		private readonly string $wwwDir,
+		private readonly Storage $storage,
 		IRequest $httpRequest,
-		Storage $storage
 	) {
 		$this->basePath = $httpRequest->getUrl()->getBasePath();
-		$this->wwwDir = $wwwDir.'/';
-		$this->storage = $storage;
+		$this->wwwDir = rtrim($wwwDir, '/').'/';
 	}
 
 
