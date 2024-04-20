@@ -20,7 +20,6 @@ abstract class AbstractBundle implements Bundle
 		protected readonly string $name,
 		?Asset ...$assets,
 	) {
-		$this->name = $name;
 		$this->assets = $assets;
 	}
 
