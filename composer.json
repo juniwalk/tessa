@@ -1,5 +1,6 @@
 {
 	"name": "juniwalk/tessa",
+	"type": "library",
 	"license": "MIT",
 
 	"authors": [{
@@ -11,15 +12,34 @@
 		"psr-4": {"JuniWalk\\Tessa\\": "src/"}
 	},
 
-	"suggest": {
-		"scssphp/scssphp": "Enables compiling of SCSS files using ScssFilter."
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"config": {
+		"sort-packages": true,
+		"allow-plugins": {
+			"phpstan/extension-installer": true
+		}
 	},
 
 	"require": {
 		"php": ">=8.1",
-		"juniwalk/utils": "^2.0|^3.0",
+		"juniwalk/utils": "^3.0",
 		"nette/application": ">=2.4",
 		"nette/di": ">=2.4",
 		"nette/schema": "^1.0"
+	},
+
+	"require-dev": {
+		"nette/tester": "^2.5",
+		"phpstan/extension-installer": "^1.0",
+		"phpstan/phpstan": "^1.0",
+		"phpstan/phpstan-nette": "^1.0",
+		"scssphp/scssphp": "^1.0",
+		"staabm/phpstan-todo-by": "^0.1",
+		"symfony/console": "^7.0"
+	},
+
+	"suggest": {
+		"scssphp/scssphp": "Enables compiling of SCSS files using ScssFilter."
 	}
 }
