@@ -7,7 +7,7 @@
 
 namespace JuniWalk\Tessa\Exceptions;
 
-use JuniWalk\Tessa\Bundles\Bundle;
+use JuniWalk\Tessa\Bundle;
 
 final class BundleRecursionException extends TessaException
 {

@@ -8,6 +8,7 @@
 namespace JuniWalk\Tessa\Bundles;
 
 use JuniWalk\Tessa\Assets;
+use JuniWalk\Tessa\Bundle;
 
 final class AssetBundle extends AbstractBundle
 {
