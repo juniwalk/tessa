@@ -12,9 +12,10 @@ use JuniWalk\Tessa\Bundle;
 
 abstract class AbstractBundle implements Bundle
 {
-	protected ?string $cookieConsent = null;
+	/** @var array<string, mixed> */
+	protected array $attributes = [];
+
 	protected ?string $extend = null;
-	protected bool $isModule = false;
 
 	/** @var Asset[] */
 	protected array $assets;
@@ -33,21 +34,33 @@ abstract class AbstractBundle implements Bundle
 	}
 
 
-	public function setModule(bool $module): void
+	/**
+	 * @return array<string, mixed>
+	 */
+	public function getAttributes(): array
 	{
-		$this->isModule = $module;
+		return $this->attributes;
 	}
 
 
-	public function isModule(): bool
+	/**
+	 * @param array<string, mixed> $attributes
+	 */
+	public function setAttributes(array $attributes): void
 	{
-		return $this->isModule;
+		$this->attributes = $attributes;
 	}
 
 
-	public function isDeferred(): bool
+	public function setAttribute(string $name, mixed $value): void
 	{
-		return false;
+		$this->attributes[$name] = $value;
+	}
+
+
+	public function getAttribute(string $name): mixed
+	{
+		return $this->attributes[$name] ?? null;
 	}
 
 
@@ -60,18 +73,6 @@ abstract class AbstractBundle implements Bundle
 	public function getExtendBundle(): ?string
 	{
 		return $this->extend;
-	}
-
-
-	public function setCookieConsent(?string $cookieConsent): void
-	{
-		$this->cookieConsent = $cookieConsent;
-	}
-
-
-	public function getCookieConsent(): ?string
-	{
-		return $this->cookieConsent;
 	}
 
 

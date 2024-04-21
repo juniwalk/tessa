@@ -12,11 +12,10 @@ use JuniWalk\Tessa\Bundle;
 
 final class CombinedBundle implements Asset, Bundle
 {
-	private ?string $cookieConsent = null;
-	private bool $isModule = false;
-	private bool $defer = false;
-	private bool $async = false;
 	private string $type;
+
+	/** @var array<string, mixed> */
+	private array $attributes = [];
 
 	/** @var Asset[] */
 	private array $assets;
@@ -33,6 +32,39 @@ final class CombinedBundle implements Asset, Bundle
 	public function getName(): string
 	{
 		return $this->name;
+	}
+
+
+	public function setModule(bool $module): void
+	{
+		$this->setAttribute('type', $module ? 'module' : null);
+	}
+
+
+	public function isModule(): bool
+	{
+		return $this->getAttribute('type') === 'module';
+	}
+
+
+	/**
+	 * @return array<string, mixed>
+	 */
+	public function getAttributes(): array
+	{
+		return $this->attributes;
+	}
+
+
+	public function setAttribute(string $name, mixed $value): void
+	{
+		$this->attributes[$name] = $value;
+	}
+
+
+	public function getAttribute(string $name): mixed
+	{
+		return $this->attributes[$name] ?? null;
 	}
 
 
@@ -63,18 +95,6 @@ final class CombinedBundle implements Asset, Bundle
 	public function isTypeOf(string $type): bool
 	{
 		return $this->type == $type;
-	}
-
-
-	public function setModule(bool $module): void
-	{
-		$this->isModule = $module;
-	}
-
-
-	public function isModule(): bool
-	{
-		return $this->isModule;
 	}
 
 
@@ -110,45 +130,9 @@ final class CombinedBundle implements Asset, Bundle
 	}
 
 
-	public function setDeferred(bool $defer = true): void
-	{
-		$this->defer = $defer;
-	}
-
-
-	public function isDeferred(): bool
-	{
-		return $this->defer;
-	}
-
-
 	public function setExtendBundle(?string $extend): void {}
 	public function getExtendBundle(): ?string {
 		return null;
-	}
-
-
-	public function setAsync(bool $async = true): void
-	{
-		$this->async = $async;
-	}
-
-
-	public function isAsync(): bool
-	{
-		return $this->async;
-	}
-
-
-	public function setCookieConsent(?string $cookieConsent): void
-	{
-		$this->cookieConsent = $cookieConsent;
-	}
-
-
-	public function getCookieConsent(): ?string
-	{
-		return $this->cookieConsent;
 	}
 
 

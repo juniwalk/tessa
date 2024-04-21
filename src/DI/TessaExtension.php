@@ -11,6 +11,7 @@ use JuniWalk\Tessa\BundleManager;
 use JuniWalk\Tessa\Bundles\AssetBundle;
 use JuniWalk\Tessa\Commands\TessaWarmUpCommand;
 use JuniWalk\Tessa\Storage;
+use JuniWalk\Tessa\TessaControl;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\Statement;
 use Nette\DI\InvalidConfigurationException;
@@ -57,25 +58,32 @@ final class TessaExtension extends CompilerExtension
 		}
 
 		$manager = $builder->addDefinition($this->prefix('manager'))
-			->setFactory(BundleManager::class, [$builder->parameters['wwwDir']])
+			->setFactory(BundleManager::class)
 			->addSetup('setDirectLinking', [$config->directLinking]);
 
-		foreach ($config->bundles as $name => $params) {
-			$bundle = $builder->addDefinition($this->prefix('bundle.'.$name))
-				->setFactory(AssetBundle::class, [$name])
-				->addSetup('setExtendBundle', [$params->extend])
-				->addSetup('setCookieConsent', [$params->cookieConsent])
-				->addSetup('setJoinFiles', [$params->joinFiles])
-				->addSetup('setModule', [$params->isModule])
-				->addSetup('setDeferred', [$params->defer])
-				->addSetup('setAsync', [$params->async]);
+		foreach ($config->bundles as $bundleName => $bundle) {
+			$stmt = $builder->addDefinition($this->prefix('bundle.'.$bundleName))
+				->setFactory(AssetBundle::class, [$bundleName])
+				->addSetup('setExtendBundle', [$bundle->extend])
+				->addSetup('setJoinFiles', [$bundle->joinFiles]);
 
-			foreach ($params->assets as $file) {
-				$bundle->addSetup('discoverAsset', [$file]);
+			if ($bundle->isModule) {
+				$stmt->addSetup('setAttribute', ['type', 'module']);
 			}
 
-			$manager->addSetup('addBundle', [$bundle]);
+			$stmt->addSetup('setAttribute', ['cookie-consent', $bundle->cookieConsent]);
+			$stmt->addSetup('setAttribute', ['async', $bundle->async]);
+			$stmt->addSetup('setAttribute', ['defer', $bundle->defer]);
+
+			foreach ($bundle->assets as $file) {
+				$stmt->addSetup('discoverAsset', [$file]);
+			}
+
+			$manager->addSetup('addBundle', [$stmt]);
 		}
+
+		$builder->addDefinition($this->prefix('control'))
+			->setFactory(TessaControl::class, [$builder->parameters['wwwDir']]);
 
 		$builder->addDefinition($this->prefix('warmUp'))
 			->setFactory(TessaWarmUpCommand::class);

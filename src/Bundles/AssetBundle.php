@@ -13,8 +13,6 @@ use JuniWalk\Tessa\Bundle;
 final class AssetBundle extends AbstractBundle
 {
 	private bool $joinFiles = false;
-	private bool $defer = false;
-	private bool $async = false;
 
 
 	public function setJoinFiles(bool $joinFiles = true): void
@@ -26,30 +24,6 @@ final class AssetBundle extends AbstractBundle
 	public function isJoinFiles(): bool
 	{
 		return $this->joinFiles;
-	}
-
-
-	public function setDeferred(bool $defer = true): void
-	{
-		$this->defer = $defer;
-	}
-
-
-	public function isDeferred(): bool
-	{
-		return $this->defer;
-	}
-
-
-	public function setAsync(bool $async = true): void
-	{
-		$this->async = $async;
-	}
-
-
-	public function isAsync(): bool
-	{
-		return $this->async;
 	}
 
 
@@ -74,10 +48,7 @@ final class AssetBundle extends AbstractBundle
 	public function getCombinedBy(string $type): Bundle
 	{
 		$bundle = new AssetBundle($this->name);
-		$bundle->setCookieConsent($this->cookieConsent);
-		$bundle->setDeferred($this->defer);
-		$bundle->setAsync($this->async);
-		$name = $this->name.'.'.$type;
+		$bundle->setAttributes($this->attributes);
 		$assets = [];
 
 		foreach ($this->assets as $asset) {
@@ -93,7 +64,7 @@ final class AssetBundle extends AbstractBundle
 			$assets[] = $asset;
 		}
 
-		$bundle->addAsset(new CombinedBundle($name, ...$assets));
+		$bundle->addAsset(new CombinedBundle($this->name.'.'.$type, ...$assets));
 		return $bundle;
 	}
 

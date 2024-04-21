@@ -8,7 +8,6 @@
 use JuniWalk\Tessa\BundleManager;
 use JuniWalk\Tessa\Bundles\AssetBundle;
 use JuniWalk\Tessa\Storage;
-use Nette\Http\RequestFactory;
 use Tester\Assert;
 use Tester\Helpers;
 use Tester\TestCase;
@@ -25,8 +24,7 @@ final class CompileBundleTest extends TestCase
 	public function setUp()
 	{
 		$storage = new Storage(OutputStorage, true);
-		$request = (new RequestFactory)->fromGlobals();
-		$bundleManager = new BundleManager(DocumentRoot, $storage, $request);
+		$bundleManager = new BundleManager($storage);
 
 		$bundle = new AssetBundle('default');
 		$bundle->discoverAsset(AssetsStorage.'/module.mjs');
@@ -52,7 +50,7 @@ final class CompileBundleTest extends TestCase
 
 	public function testBundleModuleCompilation(): void
 	{
-		$this->bundleManager->getBundle('default')->setModule(true);
+		$this->bundleManager->getBundle('default')->setAttribute('type', 'module');
 		$bundle = $this->bundleManager->compile('default', 'js');
 
 		foreach ($bundle->getAssets() as $asset) {

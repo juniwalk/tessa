@@ -8,23 +8,30 @@
 namespace JuniWalk\Tessa;
 
 use JuniWalk\Tessa\Attributes\AssetBundle;
-use JuniWalk\Tessa\Bundles\ReadOnlyBundle;
 use JuniWalk\Tessa\Exceptions\AssetTypeException;
 use Nette\ComponentModel\IComponent as Component;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Presenter;
+use Nette\Http\IRequest as HttpRequest;
 use Nette\Utils\Html;
 use ReflectionAttribute;
 use ReflectionClass;
 
 final class TessaControl extends Control
 {
+	private readonly string $basePath;
+	private readonly string $wwwDir;
+
 	/** @var array<string, bool> */
 	private array $history = [];
 
 	public function __construct(
+		string $wwwDir,
+		HttpRequest $httpRequest,
 		private readonly BundleManager $bundleManager,
 	) {
+		$this->basePath = $httpRequest->getUrl()->getBasePath();
+		$this->wwwDir = rtrim($wwwDir, '/').'/';
 	}
 
 
@@ -34,13 +41,9 @@ final class TessaControl extends Control
 		$output = '';
 
 		foreach ($bundle->getAssets() as $asset) {
-			$file = $asset->getFile();
+			$file = $this->createPath($asset);
 
-			if ($bundle instanceof ReadOnlyBundle) {
-				$file = $bundle->createPublicPath($asset);
-			}
-
-			if (isset($this->history[$file])) {
+			if ($this->history[$file] ?? false) {
 				continue;
 			}
 
@@ -58,37 +61,26 @@ final class TessaControl extends Control
 	public function renderJs(string $bundle = 'default'): void
 	{
 		$bundle = $this->bundleManager->compile($bundle, 'js');
+		$bundleType = $bundle->getAttribute('type');
 		$output = '';
 
 		foreach ($bundle->getAssets() as $asset) {
-			$file = $asset->getFile();
+			$file = $this->createPath($asset);
 
-			if ($bundle instanceof ReadOnlyBundle) {
-				$file = $bundle->createPublicPath($asset);
-			}
-
-			if (isset($this->history[$file])) {
+			if ($this->history[$file] ?? false) {
 				continue;
 			}
 
 			$html = Html::el('script type="text/javascript"')
+				->addAttributes($bundle->getAttributes())
 				->setSrc($file);
 
-			if ($cookieConsent = $bundle->getCookieConsent()) {
-				$html->setAttribute('cookie-consent', $cookieConsent);
+			if ($bundle->getAttribute('cookie-consent')) {
 				$html->setAttribute('type', 'text/plain');
 			}
 
-			if ($asset->isModule() || $bundle->isModule()) {
+			if ($asset->isModule() || $bundleType == 'module') {
 				$html->setAttribute('type', 'module');
-			}
-
-			if ($bundle->isDeferred()) {
-				$html->setAttribute('defer', 'defer');
-			}
-
-			if ($bundle->isAsync()) {
-				$html->setAttribute('async', 'async');
 			}
 
 			$this->history[$file] = true;
@@ -150,5 +142,11 @@ final class TessaControl extends Control
 		}
 
 		return $bundles;
+	}
+
+
+	private function createPath(Asset $asset): string
+	{
+		return str_replace($this->wwwDir, $this->basePath, $asset->getPath());
 	}
 }

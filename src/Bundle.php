@@ -10,19 +10,19 @@ namespace JuniWalk\Tessa;
 interface Bundle
 {
 	public function getName(): string;
-	public function setModule(bool $module): void;
-	public function isModule(): bool;
-	public function setCookieConsent(?string $cookieConsent): void;
-	public function getCookieConsent(): ?string;
-	public function setDeferred(bool $defer = true): void;
-	public function isDeferred(): bool;
 	public function setExtendBundle(?string $extend): void;
 	public function getExtendBundle(): ?string;
-	public function setAsync(bool $async = true): void;
-	public function isAsync(): bool;
+
+	/**
+	 * @return array<string, mixed>
+	 */
+	public function getAttributes(): array;
+	public function setAttribute(string $name, mixed $value): void;
+	public function getAttribute(string $name): mixed;
 
 	/**
 	 * @return Asset[]
 	 */
 	public function getAssets(): array;
+	public function addAsset(Asset $asset): void;
 }

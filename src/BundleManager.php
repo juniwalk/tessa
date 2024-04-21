@@ -9,27 +9,18 @@ namespace JuniWalk\Tessa;
 
 use JuniWalk\Tessa\Bundle;
 use JuniWalk\Tessa\Bundles\AssetBundle;
-use JuniWalk\Tessa\Bundles\ReadOnlyBundle;
 use JuniWalk\Tessa\Exceptions\BundleNotFoundException;
 use JuniWalk\Tessa\Exceptions\BundleRecursionException;
-use JuniWalk\Tessa\Exceptions\ReadOnlyBundleException;
-use Nette\Http\IRequest;
 
 final class BundleManager
 {
-	private string $basePath;
-	private bool $directLinking = false;
-
 	/** @var array<string, Bundle> */
 	private array $bundles = [];
+	private bool $directLinking = false;
 
 	public function __construct(
-		private string $wwwDir,
-		private Storage $storage,
-		IRequest $httpRequest,
+		private readonly Storage $storage,
 	) {
-		$this->basePath = $httpRequest->getUrl()->getBasePath();
-		$this->wwwDir = rtrim($wwwDir, '/').'/';
 	}
 
 
@@ -76,17 +67,13 @@ final class BundleManager
 	/**
 	 * @throws BundleNotFoundException
 	 * @throws BundleRecursionException
-	 * @throws ReadOnlyBundleException
 	 */
 	public function compile(string $bundleName, string $type): Bundle
 	{
 		$bundle = $this->getBundle($bundleName);
+		$bundleType = $bundle->getAttribute('type');
 		$bundleName = $bundleName.$type;
 		$assets = [];
-
-		if ($bundle instanceof ReadOnlyBundle) {
-			throw ReadOnlyBundleException::fromBundle($bundle);
-		}
 
 		$this->detectRecursion($bundle);
 
@@ -103,20 +90,15 @@ final class BundleManager
 				continue;
 			}
 
-			if (!$this->directLinking && !$asset->isModule() && !$bundle->isModule()) {
+			if (!$this->directLinking && $bundleType <> 'module' && !$asset->isModule()) {
 				$asset = $this->storage->store($asset, $bundleName);
 			}
 
 			$assets[] = $asset;
 		}
 
-		$output = new ReadOnlyBundle($bundleName, ...$assets);
-		$output->setCookieConsent($bundle->getCookieConsent());
-		$output->setDeferred($bundle->isDeferred());
-		$output->setModule($bundle->isModule());
-		$output->setAsync($bundle->isAsync());
-		$output->setBasePath($this->basePath);
-		$output->setWwwDir($this->wwwDir);
+		$output = new AssetBundle($bundleName, ...$assets);
+		$output->setAttributes($bundle->getAttributes());
 
 		return $output;
 	}
