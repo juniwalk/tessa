@@ -62,21 +62,12 @@ final class AssetBundle extends AbstractBundle
 			$type = null;
 		}
 
-		switch(true) {
-			case Assets\HttpAsset::match($file):
-				$asset = new Assets\HttpAsset($file, $type);
-				break;
+		$this->assets[] = match (true) {
+			Assets\HttpAsset::match($file) => new Assets\HttpAsset($file, $type),
+			Assets\ScssAsset::match($file) => new Assets\ScssAsset($file, $type),
 
-			case Assets\ScssAsset::match($file):
-				$asset = new Assets\ScssAsset($file, $type);
-				break;
-
-			default:
-				$asset = new Assets\FileAsset($file, $type);
-				break;
-		}
-
-		$this->assets[] = $asset;
+			default => new Assets\FileAsset($file, $type),
+		};
 	}
 
 

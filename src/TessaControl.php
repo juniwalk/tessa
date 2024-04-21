@@ -79,6 +79,10 @@ final class TessaControl extends Control
 				$html->setAttribute('type', 'text/plain');
 			}
 
+			if ($asset->isModule() || $bundle->isModule()) {
+				$html->setAttribute('type', 'module');
+			}
+
 			if ($bundle->isDeferred()) {
 				$html->setAttribute('defer', 'defer');
 			}

@@ -12,8 +12,9 @@ use JuniWalk\Tessa\Bundle;
 
 abstract class AbstractBundle implements Bundle
 {
-	protected ?string $cookieConsent;
-	protected ?string $extend;
+	protected ?string $cookieConsent = null;
+	protected ?string $extend = null;
+	protected bool $isModule = false;
 
 	/** @var Asset[] */
 	protected array $assets;
@@ -29,6 +30,18 @@ abstract class AbstractBundle implements Bundle
 	public function getName(): string
 	{
 		return $this->name;
+	}
+
+
+	public function setModule(bool $module): void
+	{
+		$this->isModule = $module;
+	}
+
+
+	public function isModule(): bool
+	{
+		return $this->isModule;
 	}
 
 

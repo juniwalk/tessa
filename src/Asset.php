@@ -15,6 +15,8 @@ interface Asset
 	public function getFolder(): string;
 	public function getType(): string;
 	public function isTypeOf(string $type): bool;
+	public function setModule(bool $module): void;
+	public function isModule(): bool;
 	public function getContent(): string|false;
 	public function hasBeenModified(string $file, bool $checkLastModified): bool;
 }

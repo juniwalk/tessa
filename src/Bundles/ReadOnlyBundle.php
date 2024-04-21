@@ -16,6 +16,7 @@ final class ReadOnlyBundle implements Bundle
 	private ?string $cookieConsent;
 	private string $basePath;
 	private string $wwwDir;
+	private bool $isModule = false;
 	private bool $defer;
 	private bool $async;
 
@@ -33,6 +34,18 @@ final class ReadOnlyBundle implements Bundle
 	public function getName(): string
 	{
 		return $this->name;
+	}
+
+
+	public function setModule(bool $module): void
+	{
+		$this->isModule = $module;
+	}
+
+
+	public function isModule(): bool
+	{
+		return $this->isModule;
 	}
 
 

@@ -25,6 +25,10 @@ final class Storage
 		private bool $debugMode = false,
 	) {
 		$this->outputDir = rtrim($outputDir, '/');
+
+		if (!is_dir($this->outputDir) && !@mkdir($this->outputDir, 0755, true)) {
+			throw new \Exception;
+		}
 	}
 
 
@@ -67,17 +71,22 @@ final class Storage
 	/**
 	 * @throws AssetStoringFailedException
 	 */
-	public function store(string $name, Asset $asset): Asset
+	public function store(Asset $asset, ?string $prefix = null): Asset
 	{
-		$checkLastModified = $this->checkLastModified || $this->debugMode;
-		$file = $this->outputDir.'/'.$name;
-
 		if ($asset instanceof HttpAsset) {
 			return $asset;
 		}
 
-		if (!$asset->hasBeenModified($file, $checkLastModified)) {
-			return new FileAsset($file);
+		if (isset($prefix)) {
+			$prefix = rtrim($prefix, '-').'-';
+		}
+
+		$file = $this->outputDir.'/'.$prefix.$asset->getName();
+		$stub = new FileAsset($file, $asset->getType());
+		$stub->setModule($asset->isModule());
+
+		if (!$asset->hasBeenModified($file, $this->checkLastModified || $this->debugMode)) {
+			return $stub;
 		}
 
 		$content = $asset->getContent();
@@ -90,6 +99,6 @@ final class Storage
 			throw AssetStoringFailedException::fromFile($file);
 		}
 
-		return new FileAsset($file);
+		return $stub;
 	}
 }

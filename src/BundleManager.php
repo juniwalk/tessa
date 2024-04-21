@@ -65,9 +65,10 @@ final class BundleManager
 	 * @throws BundleRecursionException
 	 * @throws ReadOnlyBundleException
 	 */
-	public function compile(string $bundle, string $type): Bundle
+	public function compile(string $bundleName, string $type): Bundle
 	{
-		$bundle = $this->getBundle($bundle);
+		$bundle = $this->getBundle($bundleName);
+		$bundleName = $bundleName.$type;
 		$assets = [];
 
 		if ($bundle instanceof ReadOnlyBundle) {
@@ -81,7 +82,7 @@ final class BundleManager
 		}
 
 		if ($extend = $bundle->getExtendBundle()) {
-			$assets += $this->compile($extend, $type)->getAssets();
+			$assets = $this->compile($extend, $type)->getAssets();
 		}
 
 		foreach ($bundle->getAssets() as $asset) {
@@ -89,17 +90,17 @@ final class BundleManager
 				continue;
 			}
 
-			$name = implode('-', array_filter([
-				$bundle->getName().$type,
-				$asset->getName(),
-			]));
+			if (!$asset->isModule() && !$bundle->isModule()) {
+				$asset = $this->storage->store($asset, $bundleName);
+			}
 
-			$assets[] = $this->storage->store($name, $asset);
+			$assets[] = $asset;
 		}
 
-		$output = new ReadOnlyBundle($bundle->getName().$type, ...$assets);
+		$output = new ReadOnlyBundle($bundleName, ...$assets);
 		$output->setCookieConsent($bundle->getCookieConsent());
 		$output->setDeferred($bundle->isDeferred());
+		$output->setModule($bundle->isModule());
 		$output->setAsync($bundle->isAsync());
 		$output->setBasePath($this->basePath);
 		$output->setWwwDir($this->wwwDir);

@@ -10,6 +10,8 @@ namespace JuniWalk\Tessa;
 interface Bundle
 {
 	public function getName(): string;
+	public function setModule(bool $module): void;
+	public function isModule(): bool;
 	public function setCookieConsent(?string $cookieConsent): void;
 	public function getCookieConsent(): ?string;
 	public function setDeferred(bool $defer = true): void;

@@ -12,6 +12,8 @@ use JuniWalk\Tessa\Exceptions\AssetTypeException;
 
 abstract class AbstractAsset implements Asset
 {
+	protected bool $isModule = false;
+
 	/**
 	 * @throws AssetTypeException
 	 */
@@ -21,6 +23,11 @@ abstract class AbstractAsset implements Asset
 	) {
 		if (!$type && !$type = pathinfo($file, PATHINFO_EXTENSION)) {
 			throw AssetTypeException::fromFile($file);
+		}
+
+		if ($type === 'mjs') {
+			$this->isModule = true;
+			$type = 'js';
 		}
 
 		$this->type = $type;
@@ -54,6 +61,18 @@ abstract class AbstractAsset implements Asset
 	public function isTypeOf(string $type): bool
 	{
 		return $this->type == $type;
+	}
+
+
+	public function setModule(bool $module): void
+	{
+		$this->isModule = $module;
+	}
+
+
+	public function isModule(): bool
+	{
+		return $this->isModule;
 	}
 
 

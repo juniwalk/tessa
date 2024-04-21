@@ -13,6 +13,7 @@ use JuniWalk\Tessa\Bundle;
 final class CombinedBundle implements Asset, Bundle
 {
 	private ?string $cookieConsent = null;
+	private bool $isModule = false;
 	private bool $defer = false;
 	private bool $async = false;
 	private string $type;
@@ -56,6 +57,18 @@ final class CombinedBundle implements Asset, Bundle
 	public function isTypeOf(string $type): bool
 	{
 		return $this->type == $type;
+	}
+
+
+	public function setModule(bool $module): void
+	{
+		$this->isModule = $module;
+	}
+
+
+	public function isModule(): bool
+	{
+		return $this->isModule;
 	}
 
 
