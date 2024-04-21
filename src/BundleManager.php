@@ -18,6 +18,8 @@ use Nette\Http\IRequest;
 final class BundleManager
 {
 	private string $basePath;
+
+	/** @var array<string, Bundle> */
 	private array $bundles = [];
 
 	public function __construct(
@@ -49,6 +51,9 @@ final class BundleManager
 	}
 
 
+	/**
+	 * @return string[]
+	 */
 	public function getBundles(): array
 	{
 		return array_keys($this->bundles);
@@ -104,6 +109,8 @@ final class BundleManager
 
 
 	/**
+	 * @param  array<string, bool> $history
+	 * @return array<string, bool>
 	 * @throws BundleRecursionException
 	 */
 	private function detectRecursion(Bundle $bundle, array $history = []): array

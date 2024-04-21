@@ -58,6 +58,10 @@ final class AssetBundle extends AbstractBundle
 		$params = $this->parseParams($file);
 		$type = $params['type'] ?? null;
 
+		if (!is_string($type)) {
+			$type = null;
+		}
+
 		switch(true) {
 			case Assets\HttpAsset::match($file):
 				$asset = new Assets\HttpAsset($file, $type);
@@ -98,11 +102,14 @@ final class AssetBundle extends AbstractBundle
 			$assets[] = $asset;
 		}
 
-		$bundle->addAsset(new CombinedBundle($name, ... $assets));
+		$bundle->addAsset(new CombinedBundle($name, ...$assets));
 		return $bundle;
 	}
 
 
+	/**
+	 * @return array<int|string, mixed>
+	 */
 	private function parseParams(string $file): array
 	{
 		if (!$query = parse_url($file, PHP_URL_QUERY)) {

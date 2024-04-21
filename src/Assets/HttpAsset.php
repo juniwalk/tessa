@@ -21,7 +21,7 @@ class HttpAsset extends AbstractAsset
 	}
 
 
-	public function getContent(): string
+	public function getContent(): string|false
 	{
 		return file_get_contents($this->file);
 	}

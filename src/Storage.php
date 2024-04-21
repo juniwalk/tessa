@@ -16,6 +16,8 @@ use JuniWalk\Tessa\Filter;
 final class Storage
 {
 	private bool $checkLastModified = true;
+
+	/** @var Filter[] */
 	private array $filters = [];
 
 	public function __construct(

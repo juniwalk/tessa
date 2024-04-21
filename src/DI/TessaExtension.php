@@ -12,39 +12,39 @@ use JuniWalk\Tessa\Bundles\AssetBundle;
 use JuniWalk\Tessa\Commands\TessaWarmUpCommand;
 use JuniWalk\Tessa\Storage;
 use Nette\DI\CompilerExtension;
+use Nette\DI\Definitions\Statement;
+use Nette\DI\InvalidConfigurationException;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
-use Nette\Utils\ArrayHash;
 
 final class TessaExtension extends CompilerExtension
 {
 	public function getConfigSchema(): Schema
 	{
-		return Expect::structure([
-			'outputDir' => Expect::string()->required(),
-			'checkLastModified' => Expect::bool(true),
-			'debugMode' => Expect::bool(false),
-			'filters' => Expect::list(),
+		return Expect::from(new Config, [
+			'filters' => Expect::listOf(
+				Expect::string()->dynamic()->transform(fn($stmt) => match (true) {
+					$stmt instanceof Statement => $stmt,
+					default => new Statement($stmt),
+				})
+			),
 		])
 
-		->otherItems(Expect::structure([
-			'cookieConsent' => Expect::string(),
-			'joinFiles' => Expect::bool(false),
-			'defer' => Expect::bool(false),
-			'async' => Expect::bool(false),
-			'extend' => Expect::string(),
-			'assets' => Expect::list(),
-		]));
+		->otherItems(Expect::from(new Bundle))
+		->skipDefaults();
 	}
 
 
+	/**
+	 * @throws InvalidConfigurationException
+	 */
 	public function loadConfiguration(): void
 	{
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig();
 
-		if (!is_object($config)) {
-			$config = ArrayHash::from($config);
+		if (!$config instanceof Config) {
+			throw new InvalidConfigurationException('Config must be instance of '.Config::class);
 		}
 
 		$storage = $builder->addDefinition($this->prefix('storage'))
@@ -59,14 +59,7 @@ final class TessaExtension extends CompilerExtension
 		$manager = $builder->addDefinition($this->prefix('manager'))
 			->setFactory(BundleManager::class, [$builder->parameters['wwwDir']]);
 
-		$bundles = array_diff_key((array) $config, [
-			'outputDir' => null,
-			'checkLastModified' => null,
-			'debugMode' => null,
-			'filters' => null,
-		]);
-
-		foreach ($bundles as $name => $params) {
+		foreach ($config->bundles as $name => $params) {
 			$bundle = $builder->addDefinition($this->prefix('bundle.'.$name))
 				->setFactory(AssetBundle::class, [$name])
 				->addSetup('setExtendBundle', [$params->extend ?? null])

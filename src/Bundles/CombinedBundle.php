@@ -12,15 +12,17 @@ use JuniWalk\Tessa\Bundle;
 
 final class CombinedBundle implements Asset, Bundle
 {
-	private string $type;
-	private array $assets;
 	private ?string $cookieConsent = null;
 	private bool $defer = false;
 	private bool $async = false;
+	private string $type;
+
+	/** @var Asset[] */
+	private array $assets;
 
 	public function __construct(
 		private readonly string $name,
-		?Asset ...$assets,
+		Asset ...$assets,
 	) {
 		$this->type = pathinfo($name, PATHINFO_EXTENSION);
 		$this->assets = $assets;
@@ -45,6 +47,12 @@ final class CombinedBundle implements Asset, Bundle
 	}
 
 
+	public function getFolder(): string
+	{
+		return '';
+	}
+
+
 	public function isTypeOf(string $type): bool
 	{
 		return $this->type == $type;
@@ -59,11 +67,11 @@ final class CombinedBundle implements Asset, Bundle
 
 	public function getCrc32(): string
 	{
-		return hash('crc32b', $this->getContent());
+		return hash('crc32b', $this->getContent() ?: '');
 	}
 
 
-	public function getContent(): string
+	public function getContent(): string|false
 	{
 		$content = '';
 
@@ -72,6 +80,20 @@ final class CombinedBundle implements Asset, Bundle
 		}
 
 		return $content;
+	}
+
+
+	public function hasBeenModified(string $file, bool $checkLastModified): bool
+	{
+		foreach ($this->assets as $asset) {
+			if (!$asset->hasBeenModified($file, $checkLastModified)) {
+				continue;
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 
@@ -84,6 +106,12 @@ final class CombinedBundle implements Asset, Bundle
 	public function isDeferred(): bool
 	{
 		return $this->defer;
+	}
+
+
+	public function setExtendBundle(?string $extend): void {}
+	public function getExtendBundle(): ?string {
+		return null;
 	}
 
 
@@ -117,6 +145,9 @@ final class CombinedBundle implements Asset, Bundle
 	}
 
 
+	/**
+	 * @return Asset[]
+	 */
 	public function getAssets(): array
 	{
 		return [$this];

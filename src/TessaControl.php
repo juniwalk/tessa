@@ -8,14 +8,18 @@
 namespace JuniWalk\Tessa;
 
 use JuniWalk\Tessa\Attributes\AssetBundle;
+use JuniWalk\Tessa\Bundles\ReadOnlyBundle;
 use JuniWalk\Tessa\Exceptions\AssetTypeException;
+use Nette\ComponentModel\IComponent as Component;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Presenter;
 use Nette\Utils\Html;
+use ReflectionAttribute;
 use ReflectionClass;
 
 final class TessaControl extends Control
 {
+	/** @var array<string, bool> */
 	private array $history = [];
 
 	public function __construct(
@@ -30,7 +34,11 @@ final class TessaControl extends Control
 		$output = '';
 
 		foreach ($bundle->getAssets() as $asset) {
-			$file = $bundle->createPublicPath($asset);
+			$file = $asset->getFile();
+
+			if ($bundle instanceof ReadOnlyBundle) {
+				$file = $bundle->createPublicPath($asset);
+			}
 
 			if (isset($this->history[$file])) {
 				continue;
@@ -53,7 +61,11 @@ final class TessaControl extends Control
 		$output = '';
 
 		foreach ($bundle->getAssets() as $asset) {
-			$file = $bundle->createPublicPath($asset);
+			$file = $asset->getFile();
+
+			if ($bundle instanceof ReadOnlyBundle) {
+				$file = $bundle->createPublicPath($asset);
+			}
 
 			if (isset($this->history[$file])) {
 				continue;
@@ -108,7 +120,10 @@ final class TessaControl extends Control
 	}
 
 
-	private function findAssetBundles(Control $control): array
+	/**
+	 * @return ReflectionAttribute<AssetBundle>[]
+	 */
+	private function findAssetBundles(Component $control): array
 	{
 		$class = new ReflectionClass($control);
 		$bundles = $class->getAttributes(AssetBundle::class);
@@ -117,7 +132,7 @@ final class TessaControl extends Control
 			$bundles = array_merge($bundles, $parent->getAttributes(AssetBundle::class));
 		}
 
-		if ($class->isSubclassOf(Presenter::class) && $view = $control->getAction()) {
+		if ($control instanceof Presenter && $view = $control->getAction()) {
 			$viewAction = Presenter::formatActionMethod($view);
 			$viewRender = Presenter::formatRenderMethod($view);
 

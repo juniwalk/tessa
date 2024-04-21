@@ -17,6 +17,9 @@ final class ParamsFilter implements Filter
 {
     private const Pattern = '/(\%([A-Za-z][A-Za-z0-9\.]*[A-Za-z0-9])\%)/';
 
+	/**
+	 * @param mixed[] $params
+	 */
 	public function __construct(
 		private array $params = [],
 	) {
@@ -29,10 +32,10 @@ final class ParamsFilter implements Filter
 	}
 
 
-	public function apply(string $content, Asset $asset): string
+	public function apply(string|false $content, Asset $asset): string
 	{
-		if (!$asset->isTypeOf('js')) {
-			return $content;
+		if (!$content || !$asset->isTypeOf('js')) {
+			return $content ?: '';
 		}
 
 		$vars = Strings::matchAll($content, static::Pattern);
@@ -40,12 +43,17 @@ final class ParamsFilter implements Filter
 		foreach ($vars as $var) {
 			try {
 				$value = Helpers::expand($var[0], $this->params, true);
+				$value = json_encode($value);
 
 			} catch (InvalidArgumentException) {
 				continue;
 			}
 
-			$content = str_replace($var[0], json_encode($value), $content);
+			if (!is_string($value)) {
+				continue;
+			}
+
+			$content = str_replace($var[0], $value, $content);
 		}
 
 		return $content;

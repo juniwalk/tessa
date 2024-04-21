@@ -47,7 +47,7 @@ abstract class AbstractAsset implements Asset
 
 	public function getType(): string
 	{
-		return $this->type;
+		return $this->type ?? '';
 	}
 
 
@@ -59,11 +59,11 @@ abstract class AbstractAsset implements Asset
 
 	public function getCrc32(): string
 	{
-		return hash_file('crc32b', $this->file);
+		return hash_file('crc32b', $this->file) ?: '';
 	}
 
 
-	abstract public function getContent(): string;
+	abstract public function getContent(): string|false;
 
 
 	public function hasBeenModified(string $file, bool $checkLastModified): bool

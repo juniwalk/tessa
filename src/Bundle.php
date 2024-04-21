@@ -14,7 +14,13 @@ interface Bundle
 	public function getCookieConsent(): ?string;
 	public function setDeferred(bool $defer = true): void;
 	public function isDeferred(): bool;
+	public function setExtendBundle(?string $extend): void;
+	public function getExtendBundle(): ?string;
 	public function setAsync(bool $async = true): void;
 	public function isAsync(): bool;
+
+	/**
+	 * @return Asset[]
+	 */
 	public function getAssets(): array;
 }

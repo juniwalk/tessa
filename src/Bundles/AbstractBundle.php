@@ -14,11 +14,13 @@ abstract class AbstractBundle implements Bundle
 {
 	protected ?string $cookieConsent;
 	protected ?string $extend;
+
+	/** @var Asset[] */
 	protected array $assets;
 
 	public function __construct(
 		protected readonly string $name,
-		?Asset ...$assets,
+		Asset ...$assets,
 	) {
 		$this->assets = $assets;
 	}
@@ -66,6 +68,9 @@ abstract class AbstractBundle implements Bundle
 	}
 
 
+	/**
+	 * @return Asset[]
+	 */
 	public function getAssets(): array
 	{
 		return $this->assets;

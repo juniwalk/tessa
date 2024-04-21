@@ -46,10 +46,10 @@ final class UrlFixerFilter implements Filter
 	}
 
 
-	public function apply(string $content, Asset $asset): string
+	public function apply(string|false $content, Asset $asset): string
 	{
-		if (!$asset->isTypeOf('css')) {
-			return $content;
+		if (!$content || !$asset->isTypeOf('css')) {
+			return $content ?: '';
 		}
 
 		$urls = Strings::matchAll($content, static::Pattern);

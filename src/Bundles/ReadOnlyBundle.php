@@ -18,11 +18,13 @@ final class ReadOnlyBundle implements Bundle
 	private string $wwwDir;
 	private bool $defer;
 	private bool $async;
+
+	/** @var Asset[] */
 	private array $assets;
 
 	public function __construct(
 		private readonly string $name,
-		?Asset ...$assets,
+		Asset ...$assets,
 	) {
 		$this->assets = $assets;
 	}
@@ -70,6 +72,12 @@ final class ReadOnlyBundle implements Bundle
 	}
 
 
+	public function setExtendBundle(?string $extend): void {}
+	public function getExtendBundle(): ?string {
+		return null;
+	}
+
+
 	public function setAsync(bool $async = true): void
 	{
 		$this->async = $async;
@@ -82,6 +90,9 @@ final class ReadOnlyBundle implements Bundle
 	}
 
 
+	/**
+	 * @return Asset[]
+	 */
 	public function getAssets(): array
 	{
 		return $this->assets;

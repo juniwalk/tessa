@@ -21,13 +21,13 @@ class FileAsset extends AbstractAsset
 	}
 
 
-	public function getContent(): string
+	public function getContent(): string|false
 	{
-		return file_get_contents($this->file);
+		return file_get_contents($this->file) ?: '';
 	}
 
 
-	public function getLastModified(): int
+	public function getLastModified(): int|false
 	{
 		return filemtime($this->file);
 	}
