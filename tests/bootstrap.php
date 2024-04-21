@@ -5,7 +5,10 @@
  * @license   MIT License
  */
 
+use Nette\Bootstrap\Configurator;
+use Nette\DI\Container;
 use Tester\Environment;
+use Tester\Helpers;
 
 require __DIR__.'/../vendor/autoload.php';
 
@@ -21,7 +24,23 @@ $_SERVER = [
 ];
 
 const DocumentRoot = __DIR__.'/.documentRoot';
+const TemporaryDir = DocumentRoot.'/temp';
 const AssetsStorage = DocumentRoot.'/assets';
 const OutputStorage = DocumentRoot.'/static';
 
 Environment::setup();
+Helpers::purge(TemporaryDir);
+
+
+function createContainer(): Container
+{
+	$configurator = new Configurator;
+	$configurator->setDebugMode(true);
+	$configurator->setTempDirectory(TemporaryDir);
+	$configurator->addConfig(__DIR__.'/config.neon');
+	$configurator->addStaticParameters([
+		'wwwDir' => DocumentRoot,
+	]);
+
+	return $configurator->createContainer();
+}

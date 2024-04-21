@@ -1,0 +1,28 @@
+#
+# WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+# https://nette.org/security-warning
+#
+extensions:
+	tessa: JuniWalk\Tessa\DI\TessaExtension
+
+services:
+	urlFixerFilter: JuniWalk\Tessa\Filters\UrlFixerFilter(%wwwDir%)
+
+# JuniWalk \ Tessa
+tessa:
+	outputDir: %wwwDir%/static
+	checkLastModified: true
+	filters:
+		- @urlFixerFilter
+
+	default:
+		joinFiles: false
+		assets:
+			- %wwwDir%/assets/module.mjs
+			- %wwwDir%/assets/script.js
+
+	module:
+		isModule: true
+		assets:
+			- %wwwDir%/assets/module.mjs
+			- %wwwDir%/assets/script.js

@@ -6,8 +6,7 @@
  */
 
 use JuniWalk\Tessa\BundleManager;
-use JuniWalk\Tessa\Bundles\AssetBundle;
-use JuniWalk\Tessa\Storage;
+use Nette\DI\Container;
 use Tester\Assert;
 use Tester\Helpers;
 use Tester\TestCase;
@@ -20,24 +19,23 @@ require __DIR__.'/../bootstrap.php';
 final class CompileBundleTest extends TestCase
 {
 	private BundleManager $bundleManager;
+	private Container $container;
+
+	public function __construct()
+	{
+		$this->container = createContainer();
+	}
 
 	public function setUp()
 	{
-		$storage = new Storage(OutputStorage, true);
-		$bundleManager = new BundleManager($storage);
-
-		$bundle = new AssetBundle('default');
-		$bundle->discoverAsset(AssetsStorage.'/module.mjs');
-		$bundle->discoverAsset(AssetsStorage.'/script.js');
-
-		$bundleManager->addBundle($bundle);
-		$this->bundleManager = $bundleManager;
+		$this->bundleManager = $this->container->getByType(BundleManager::class);
 	}
 
 
 	public function testBundleCombinedCompilation(): void
 	{
 		$bundle = $this->bundleManager->compile('default', 'js');
+		Assert::same(null, $bundle->getAttribute('type'));
 
 		foreach ($bundle->getAssets() as $asset) {
 			$file = $asset->getFile();
@@ -50,8 +48,8 @@ final class CompileBundleTest extends TestCase
 
 	public function testBundleModuleCompilation(): void
 	{
-		$this->bundleManager->getBundle('default')->setAttribute('type', 'module');
-		$bundle = $this->bundleManager->compile('default', 'js');
+		$bundle = $this->bundleManager->compile('module', 'js');
+		Assert::same('module', $bundle->getAttribute('type'));
 
 		foreach ($bundle->getAssets() as $asset) {
 			$file = $asset->getFile();
@@ -65,7 +63,9 @@ final class CompileBundleTest extends TestCase
 	public function testBundleDirectLinkingCompilation(): void
 	{
 		$this->bundleManager->setDirectLinking(true);
+
 		$bundle = $this->bundleManager->compile('default', 'js');
+		Assert::same(null, $bundle->getAttribute('type'));
 
 		foreach ($bundle->getAssets() as $asset) {
 			$file = $asset->getFile();
