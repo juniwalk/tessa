@@ -78,12 +78,6 @@ final class CombinedBundle implements Asset, Bundle
 	}
 
 
-	public function getCrc32(): string
-	{
-		return hash('crc32b', $this->getContent() ?: '');
-	}
-
-
 	public function getContent(): string|false
 	{
 		$content = '';

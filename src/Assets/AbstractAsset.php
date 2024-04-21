@@ -76,12 +76,6 @@ abstract class AbstractAsset implements Asset
 	}
 
 
-	public function getCrc32(): string
-	{
-		return hash_file('crc32b', $this->file) ?: '';
-	}
-
-
 	abstract public function getContent(): string|false;
 
 
