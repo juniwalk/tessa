@@ -15,12 +15,6 @@ class HttpAsset extends AbstractAsset
 	}
 
 
-	public function getPath(): string
-	{
-		return $this->file;
-	}
-
-
 	public function getContent(): string|false
 	{
 		return file_get_contents($this->file);

@@ -48,6 +48,12 @@ final class CombinedBundle implements Asset, Bundle
 	}
 
 
+	public function getPath(): string
+	{
+		return $this->getFile();
+	}
+
+
 	public function getFolder(): string
 	{
 		return '';

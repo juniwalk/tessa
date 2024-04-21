@@ -114,12 +114,6 @@ final class ReadOnlyBundle implements Bundle
 
 	public function createPublicPath(Asset $asset): string
 	{
-		$path = str_replace($this->wwwDir, $this->basePath, $asset->getFile());
-
-		if ($asset instanceof FileAsset) {
-			$path .= '?'.$asset->getLastModified();
-		}
-
-		return $path;
+		return str_replace($this->wwwDir, $this->basePath, $asset->getPath());
 	}
 }

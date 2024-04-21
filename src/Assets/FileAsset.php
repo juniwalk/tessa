@@ -17,7 +17,7 @@ class FileAsset extends AbstractAsset
 
 	public function getPath(): string
 	{
-		return $this->file;
+		return $this->file.$this->getLastModified();
 	}
 
 
@@ -27,8 +27,12 @@ class FileAsset extends AbstractAsset
 	}
 
 
-	public function getLastModified(): int|false
+	private function getLastModified(): ?string
 	{
-		return filemtime($this->file);
+		if (!$lastModified = @filemtime($this->file)) {
+			return null;
+		}
+
+		return '?'.$lastModified;
 	}
 }

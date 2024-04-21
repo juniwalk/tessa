@@ -40,6 +40,12 @@ abstract class AbstractAsset implements Asset
 	}
 
 
+	public function getPath(): string
+	{
+		return $this->file;
+	}
+
+
 	public function getName(): string
 	{
 		return basename($this->file);
