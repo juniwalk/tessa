@@ -50,24 +50,25 @@ final class TessaExtension extends CompilerExtension
 		$storage = $builder->addDefinition($this->prefix('storage'))
 			->setFactory(Storage::class, [$config->outputDir])
 			->addSetup('setCheckLastModified', [$config->checkLastModified])
-			->addSetup('setDebugMode', [$config->debugMode ?? false]);
+			->addSetup('setDebugMode', [$config->debugMode]);
 
 		foreach ($config->filters as $filter) {
 			$storage->addSetup('addFilter', [$filter]);
 		}
 
 		$manager = $builder->addDefinition($this->prefix('manager'))
-			->setFactory(BundleManager::class, [$builder->parameters['wwwDir']]);
+			->setFactory(BundleManager::class, [$builder->parameters['wwwDir']])
+			->addSetup('setDirectLinking', [$config->directLinking]);
 
 		foreach ($config->bundles as $name => $params) {
 			$bundle = $builder->addDefinition($this->prefix('bundle.'.$name))
 				->setFactory(AssetBundle::class, [$name])
-				->addSetup('setExtendBundle', [$params->extend ?? null])
-				->addSetup('setCookieConsent', [$params->cookieConsent ?? null])
-				->addSetup('setJoinFiles', [$params->joinFiles ?? false])
-				->addSetup('setModule', [$params->isModule ?? false])
-				->addSetup('setDeferred', [$params->defer ?? false])
-				->addSetup('setAsync', [$params->async ?? false]);
+				->addSetup('setExtendBundle', [$params->extend])
+				->addSetup('setCookieConsent', [$params->cookieConsent])
+				->addSetup('setJoinFiles', [$params->joinFiles])
+				->addSetup('setModule', [$params->isModule])
+				->addSetup('setDeferred', [$params->defer])
+				->addSetup('setAsync', [$params->async]);
 
 			foreach ($params->assets as $file) {
 				$bundle->addSetup('discoverAsset', [$file]);

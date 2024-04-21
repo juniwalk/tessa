@@ -64,6 +64,20 @@ final class CompileBundleTest extends TestCase
 	}
 
 
+	public function testBundleDirectLinkingCompilation(): void
+	{
+		$this->bundleManager->setDirectLinking(true);
+		$bundle = $this->bundleManager->compile('default', 'js');
+
+		foreach ($bundle->getAssets() as $asset) {
+			$file = $asset->getFile();
+
+			Assert::match('#/(assets)/#i', $file);
+			Assert::true(is_file($file));
+		}
+	}
+
+
 	public function tearDown()
 	{
 		Helpers::purge(OutputStorage);

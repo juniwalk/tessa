@@ -18,6 +18,7 @@ use Nette\Http\IRequest;
 final class BundleManager
 {
 	private string $basePath;
+	private bool $directLinking = false;
 
 	/** @var array<string, Bundle> */
 	private array $bundles = [];
@@ -29,6 +30,18 @@ final class BundleManager
 	) {
 		$this->basePath = $httpRequest->getUrl()->getBasePath();
 		$this->wwwDir = rtrim($wwwDir, '/').'/';
+	}
+
+
+	public function setDirectLinking(bool $directLinking): void
+	{
+		$this->directLinking = $directLinking;
+	}
+
+
+	public function isDirectLinking(): bool
+	{
+		return $this->directLinking;
 	}
 
 
@@ -90,7 +103,7 @@ final class BundleManager
 				continue;
 			}
 
-			if (!$asset->isModule() && !$bundle->isModule()) {
+			if (!$this->directLinking && !$asset->isModule() && !$bundle->isModule()) {
 				$asset = $this->storage->store($asset, $bundleName);
 			}
 

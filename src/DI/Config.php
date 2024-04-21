@@ -11,6 +11,7 @@ class Config
 {
 	public string $outputDir;
 	public bool $checkLastModified = true;
+	public bool $directLinking = false;
 	public bool $debugMode = false;
 
 	/** @var string[] */
