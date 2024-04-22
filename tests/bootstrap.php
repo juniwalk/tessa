@@ -23,6 +23,7 @@ const AssetsStorage = DocumentRoot.'/assets';
 const OutputStorage = DocumentRoot.'/static';
 
 Environment::setup();
+Helpers::purge(DocumentRoot.'/log');
 Helpers::purge(TemporaryDir);
 
 
@@ -30,6 +31,7 @@ function createContainer(): Container
 {
 	$configurator = new Configurator;
 	$configurator->setDebugMode(true);
+	$configurator->enableTracy(DocumentRoot.'/log');
 	$configurator->setTempDirectory(TemporaryDir);
 	$configurator->addConfig(__DIR__.'/config.neon');
 	$configurator->addStaticParameters([

@@ -17,6 +17,6 @@ final class AssetTypeException extends TessaException
 
 	public static function fromType(string $type): self
 	{
-		return new static('Unknown type of '.$type, 500);
+		return new static('Unknown type of "'.$type.'"', 500);
 	}
 }

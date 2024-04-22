@@ -35,6 +35,12 @@ final class TessaControl extends Control
 	}
 
 
+	public function clearHistory(): void
+	{
+		$this->history = [];
+	}
+
+
 	public function renderCss(string $bundle = 'default'): void
 	{
 		$bundle = $this->bundleManager->compile($bundle, 'css');
@@ -54,7 +60,7 @@ final class TessaControl extends Control
 			$output .= $html.PHP_EOL;
 		}
 
-		echo trim($output);
+		echo $output;
 	}
 
 
@@ -87,7 +93,7 @@ final class TessaControl extends Control
 			$output .= $html.PHP_EOL;
 		}
 
-		echo trim($output);
+		echo $output;
 	}
 
 

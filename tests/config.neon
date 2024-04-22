@@ -26,3 +26,8 @@ tessa:
 		assets:
 			- %wwwDir%/assets/module.mjs
 			- %wwwDir%/assets/script.js
+
+	calendar:
+		isModule: true
+		assets:
+			- %wwwDir%/assets/fullcalendar.mjs
