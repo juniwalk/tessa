@@ -16,23 +16,16 @@ final class BundleManager
 {
 	/** @var array<string, Bundle> */
 	private array $bundles = [];
-	private bool $directLinking = false;
 
 	public function __construct(
-		private readonly Storage $storage,
+		private ?Storage $storage = null,
 	) {
 	}
 
 
-	public function setDirectLinking(bool $directLinking): void
+	public function setStorage(?Storage $storage): void
 	{
-		$this->directLinking = $directLinking;
-	}
-
-
-	public function isDirectLinking(): bool
-	{
-		return $this->directLinking;
+		$this->storage = $storage;
 	}
 
 
@@ -90,8 +83,8 @@ final class BundleManager
 				continue;
 			}
 
-			if (!$this->directLinking && $bundleType <> 'module' && !$asset->isModule()) {
-				$asset = $this->storage->store($asset, $bundleName);
+			if (!$asset->isModule() && $bundleType <> 'module') {
+				$asset = $this->storage?->store($asset, $bundleName) ?? $asset;
 			}
 
 			$assets[] = $asset;

@@ -41,12 +41,19 @@ final class CompileBundleTest extends TestCase
 	public function testBundleCombinedCompilation(): void
 	{
 		$bundle = $this->bundleManager->compile('default', 'js');
+		$patterns = [
+			'defaultjs-script.js' => '#/static/defaultjs-script.js$#i',
+			'module.mjs' => '#/assets/module.mjs$#i',
+		];
+
 		Assert::same(null, $bundle->getAttribute('type'));
 
 		foreach ($bundle->getAssets() as $asset) {
 			$file = $asset->getFile();
+			$name = $asset->getName();
 
-			Assert::match('#/(assets|static)/#i', $file);
+			Assert::hasKey($name, $patterns);
+			Assert::match($patterns[$name], $file);
 			Assert::true(is_file($file));
 		}
 	}
@@ -55,12 +62,19 @@ final class CompileBundleTest extends TestCase
 	public function testBundleModuleCompilation(): void
 	{
 		$bundle = $this->bundleManager->compile('module', 'js');
+		$patterns = [
+			'script.js' => '#/assets/script.js$#i',
+			'module.mjs' => '#/assets/module.mjs$#i',
+		];
+
 		Assert::same('module', $bundle->getAttribute('type'));
 
 		foreach ($bundle->getAssets() as $asset) {
 			$file = $asset->getFile();
+			$name = $asset->getName();
 
-			Assert::match('#/(assets)/#i', $file);
+			Assert::hasKey($name, $patterns);
+			Assert::match($patterns[$name], $file);
 			Assert::true(is_file($file));
 		}
 	}
@@ -68,15 +82,22 @@ final class CompileBundleTest extends TestCase
 
 	public function testBundleDirectLinkingCompilation(): void
 	{
-		$this->bundleManager->setDirectLinking(true);
+		$this->bundleManager->setStorage(null);
 
 		$bundle = $this->bundleManager->compile('default', 'js');
+		$patterns = [
+			'script.js' => '#/assets/script.js$#i',
+			'module.mjs' => '#/assets/module.mjs$#i',
+		];
+
 		Assert::same(null, $bundle->getAttribute('type'));
 
 		foreach ($bundle->getAssets() as $asset) {
 			$file = $asset->getFile();
+			$name = $asset->getName();
 
-			Assert::match('#/(assets)/#i', $file);
+			Assert::hasKey($name, $patterns);
+			Assert::match($patterns[$name], $file);
 			Assert::true(is_file($file));
 		}
 	}
