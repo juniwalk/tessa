@@ -21,6 +21,9 @@ final class Storage
 	/** @var Filter[] */
 	private array $filters = [];
 
+	/**
+	 * @throws AssetStoringFailedException
+	 */
 	public function __construct(
 		private string $outputDir,
 		private bool $debugMode = false,
@@ -28,7 +31,7 @@ final class Storage
 		$this->outputDir = rtrim($outputDir, '/');
 
 		if (!is_dir($this->outputDir) && !@mkdir($this->outputDir, 0755, true)) {
-			throw new \Exception;
+			throw AssetStoringFailedException::fromOutputDir($this->outputDir);
 		}
 	}
 

@@ -13,4 +13,10 @@ final class AssetStoringFailedException extends TessaException
 	{
 		return new static('Failed to store asset to file '.$file, 500);
 	}
+
+
+	public static function fromOutputDir(string $dir): self
+	{
+		return new static('Failed to create output dir '.$dir, 500);
+	}
 }
