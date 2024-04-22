@@ -80,10 +80,10 @@ final class CombinedBundle extends AbstractBundle implements Asset
 	}
 
 
-	public function hasBeenModified(string $file, bool $checkLastModified): bool
+	public function isOutOfDate(string $file, bool $checkLastModified): bool
 	{
 		foreach ($this->assets as $asset) {
-			if (!$asset->hasBeenModified($file, $checkLastModified)) {
+			if (!$asset->isOutOfDate($file, $checkLastModified)) {
 				continue;
 			}
 

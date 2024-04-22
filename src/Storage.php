@@ -85,7 +85,7 @@ final class Storage
 		$temp = new FileAsset($file, $asset->getType());
 		$temp->setModule($asset->isModule());
 
-		if (!$asset->hasBeenModified($file, $this->checkLastModified || $this->debugMode)) {
+		if (!$asset->isOutOfDate($file, $this->checkLastModified || $this->debugMode)) {
 			return $temp;
 		}
 

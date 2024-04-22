@@ -10,13 +10,17 @@ namespace JuniWalk\Tessa;
 interface Asset
 {
 	public static function match(string $file): bool;
+
 	public function getName(): string;
 	public function getType(): string;
 	public function getFile(): string;
 	public function getPath(): string;
-	public function isTypeOf(string $type): bool;
+
 	public function setModule(bool $module): void;
 	public function isModule(): bool;
+
 	public function getContent(): string|false;
-	public function hasBeenModified(string $file, bool $checkLastModified): bool;
+
+	public function isTypeOf(string $type): bool;
+	public function isOutOfDate(string $file, bool $checkLastModified): bool;
 }

@@ -34,21 +34,15 @@ abstract class AbstractBundle implements Bundle
 	}
 
 
-	/**
-	 * @return array<string, mixed>
-	 */
-	public function getAttributes(): array
+	public function setExtendBundle(?string $extend): void
 	{
-		return $this->attributes;
+		$this->extend = $extend;
 	}
 
 
-	/**
-	 * @param array<string, mixed> $attributes
-	 */
-	public function setAttributes(array $attributes): void
+	public function getExtendBundle(): ?string
 	{
-		$this->attributes = $attributes;
+		return $this->extend;
 	}
 
 
@@ -64,15 +58,21 @@ abstract class AbstractBundle implements Bundle
 	}
 
 
-	public function setExtendBundle(?string $extend): void
+	/**
+	 * @param array<string, mixed> $attributes
+	 */
+	public function setAttributes(array $attributes): void
 	{
-		$this->extend = $extend;
+		$this->attributes = $attributes;
 	}
 
 
-	public function getExtendBundle(): ?string
+	/**
+	 * @return array<string, mixed>
+	 */
+	public function getAttributes(): array
 	{
-		return $this->extend;
+		return $this->attributes;
 	}
 
 

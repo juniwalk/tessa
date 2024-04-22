@@ -76,7 +76,7 @@ final class TessaExtension extends CompilerExtension
 			$stmt->addSetup('setAttribute', ['defer', $bundle->defer]);
 
 			foreach ($bundle->assets as $file) {
-				$stmt->addSetup('discoverAsset', [$file]);
+				$stmt->addSetup('addAssetFrom', [$file]);
 			}
 
 			$manager->addSetup('addBundle', [$stmt]);

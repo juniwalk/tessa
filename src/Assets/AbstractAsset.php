@@ -58,12 +58,6 @@ abstract class AbstractAsset implements Asset
 	}
 
 
-	public function isTypeOf(string $type): bool
-	{
-		return $this->type == $type;
-	}
-
-
 	public function setModule(bool $module): void
 	{
 		$this->isModule = $module;
@@ -79,14 +73,20 @@ abstract class AbstractAsset implements Asset
 	abstract public function getContent(): string|false;
 
 
-	public function hasBeenModified(string $file, bool $checkLastModified): bool
+	public function isTypeOf(string $type): bool
 	{
-		if (!file_exists($file)) {
-			return true;
-		}
+		return $this->type == $type;
+	}
 
+
+	public function isOutOfDate(string $file, bool $checkLastModified): bool
+	{
 		if (!$checkLastModified) {
 			return false;
+		}
+
+		if (!file_exists($file)) {
+			return true;
 		}
 
 		return filemtime($this->file) > filemtime($file);

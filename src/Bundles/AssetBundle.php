@@ -27,7 +27,7 @@ final class AssetBundle extends AbstractBundle
 	}
 
 
-	public function discoverAsset(string $file): void
+	public function addAssetFrom(string $file): void
 	{
 		$params = $this->parseParams($file);
 		$type = $params['type'] ?? null;
