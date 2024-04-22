@@ -36,11 +36,11 @@ final class UrlFixerFilter implements Filter
 		\)                                        ## )
 	~xs';
 
-	private string $basePath;
+	private readonly string $basePath;
 
 	public function __construct(
 		private readonly string $docRoot,
-		IRequest $http
+		IRequest $http,
 	) {
 		$this->basePath = $http->getUrl()->getBasePath();
 	}
@@ -53,9 +53,10 @@ final class UrlFixerFilter implements Filter
 		}
 
 		$urls = Strings::matchAll($content, static::Pattern);
+		$path = dirname($asset->getFile());
 
 		foreach ($urls as $url) {
-			$absoluteUrl = $this->absolutizeUrl($url[2], $asset);
+			$absoluteUrl = $this->absolutizeUrl($url[2], $path);
 			$absoluteUrl = 'url('.$url[1].$absoluteUrl.$url[1].')';
 
 			$content = str_replace($url[0], $absoluteUrl, $content);
@@ -65,13 +66,11 @@ final class UrlFixerFilter implements Filter
 	}
 
 
-	public function absolutizeUrl(string $url, Asset $asset): string
+	public function absolutizeUrl(string $url, string $path): string
 	{
 		if (preg_match('/^([a-z]+:|\/)/i', $url)) {
 			return $url;
 		}
-
-		$path = $asset->getFolder();
 
 		if (strncmp($path, $this->docRoot, strlen($this->docRoot)) === 0) {
 			$path = $this->basePath.str_replace($this->docRoot, '', $path).'/'.$url;

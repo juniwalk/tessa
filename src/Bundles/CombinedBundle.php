@@ -56,12 +56,6 @@ final class CombinedBundle extends AbstractBundle implements Asset
 	}
 
 
-	public function getFolder(): string
-	{
-		return '';
-	}
-
-
 	public function isTypeOf(string $type): bool
 	{
 		return $this->type == $type;

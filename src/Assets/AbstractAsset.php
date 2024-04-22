@@ -52,12 +52,6 @@ abstract class AbstractAsset implements Asset
 	}
 
 
-	public function getFolder(): string
-	{
-		return dirname($this->file);
-	}
-
-
 	public function getType(): string
 	{
 		return $this->type ?? '';
