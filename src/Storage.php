@@ -82,11 +82,11 @@ final class Storage
 		}
 
 		$file = $this->outputDir.'/'.$prefix.$asset->getName();
-		$stub = new FileAsset($file, $asset->getType());
-		$stub->setModule($asset->isModule());
+		$temp = new FileAsset($file, $asset->getType());
+		$temp->setModule($asset->isModule());
 
 		if (!$asset->hasBeenModified($file, $this->checkLastModified || $this->debugMode)) {
-			return $stub;
+			return $temp;
 		}
 
 		$content = $asset->getContent();
@@ -99,6 +99,6 @@ final class Storage
 			throw AssetStoringFailedException::fromFile($file);
 		}
 
-		return $stub;
+		return $temp;
 	}
 }
