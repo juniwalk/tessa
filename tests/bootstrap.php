@@ -10,13 +10,15 @@ use Nette\DI\Container;
 use Tester\Environment;
 use Tester\Helpers;
 
+define('ProcessId', getmypid());
+
 if (@!include __DIR__.'/../vendor/autoload.php') {
 	echo 'Install Nette Tester using `composer install`';
 	exit(1);
 }
 
 const DocumentRoot = __DIR__.'/.documentRoot';
-const TemporaryDir = DocumentRoot.'/temp';
+const TemporaryDir = DocumentRoot.'/temp/'.ProcessId;
 const AssetsStorage = DocumentRoot.'/assets';
 const OutputStorage = DocumentRoot.'/static';
 
@@ -32,6 +34,7 @@ function createContainer(): Container
 	$configurator->addConfig(__DIR__.'/config.neon');
 	$configurator->addStaticParameters([
 		'wwwDir' => DocumentRoot,
+		'pid' => ProcessId,
 	]);
 
 	return $configurator->createContainer();

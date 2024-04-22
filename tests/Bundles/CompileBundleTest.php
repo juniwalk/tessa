@@ -31,6 +31,12 @@ final class CompileBundleTest extends TestCase
 		$this->bundleManager = $this->container->getByType(BundleManager::class);
 	}
 
+	public function tearDown()
+	{
+		Helpers::purge(OutputStorage);
+		unset($this->bundleManager);
+	}
+
 
 	public function testBundleCombinedCompilation(): void
 	{
@@ -73,13 +79,6 @@ final class CompileBundleTest extends TestCase
 			Assert::match('#/(assets)/#i', $file);
 			Assert::true(is_file($file));
 		}
-	}
-
-
-	public function tearDown()
-	{
-		Helpers::purge(OutputStorage);
-		unset($this->bundleManager);
 	}
 }
 
