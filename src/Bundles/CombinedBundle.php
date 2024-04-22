@@ -8,20 +8,13 @@
 namespace JuniWalk\Tessa\Bundles;
 
 use JuniWalk\Tessa\Asset;
-use JuniWalk\Tessa\Bundle;
 
-final class CombinedBundle implements Asset, Bundle
+final class CombinedBundle extends AbstractBundle implements Asset
 {
 	private string $type;
 
-	/** @var array<string, mixed> */
-	private array $attributes = [];
-
-	/** @var Asset[] */
-	private array $assets;
-
 	public function __construct(
-		private readonly string $name,
+		protected readonly string $name,
 		Asset ...$assets,
 	) {
 		$this->type = pathinfo($name, PATHINFO_EXTENSION);
@@ -29,10 +22,8 @@ final class CombinedBundle implements Asset, Bundle
 	}
 
 
-	public function getName(): string
-	{
-		return $this->name;
-	}
+	public function setExtendBundle(?string $extend): void {}
+	public function getExtendBundle(): ?string { return null; }
 
 
 	public function setModule(bool $module): void
@@ -44,27 +35,6 @@ final class CombinedBundle implements Asset, Bundle
 	public function isModule(): bool
 	{
 		return $this->getAttribute('type') === 'module';
-	}
-
-
-	/**
-	 * @return array<string, mixed>
-	 */
-	public function getAttributes(): array
-	{
-		return $this->attributes;
-	}
-
-
-	public function setAttribute(string $name, mixed $value): void
-	{
-		$this->attributes[$name] = $value;
-	}
-
-
-	public function getAttribute(string $name): mixed
-	{
-		return $this->attributes[$name] ?? null;
 	}
 
 
@@ -127,26 +97,5 @@ final class CombinedBundle implements Asset, Bundle
 		}
 
 		return false;
-	}
-
-
-	public function setExtendBundle(?string $extend): void {}
-	public function getExtendBundle(): ?string {
-		return null;
-	}
-
-
-	public function addAsset(Asset $asset): void
-	{
-		$this->assets[] = $asset;
-	}
-
-
-	/**
-	 * @return Asset[]
-	 */
-	public function getAssets(): array
-	{
-		return [$this];
 	}
 }
