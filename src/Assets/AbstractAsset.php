@@ -8,6 +8,7 @@
 namespace JuniWalk\Tessa\Assets;
 
 use JuniWalk\Tessa\Asset;
+use JuniWalk\Tessa\Exceptions\AssetContentException;
 use JuniWalk\Tessa\Exceptions\AssetTypeException;
 
 abstract class AbstractAsset implements Asset
@@ -70,7 +71,17 @@ abstract class AbstractAsset implements Asset
 	}
 
 
-	abstract public function getContent(): string|false;
+	/**
+	 * @throws AssetContentException
+	 */
+	public function getContent(): string
+	{
+		if (!$content = @file_get_contents($this->file)) {
+			throw AssetContentException::fromLastError($this->file);
+		}
+
+		return $content;
+	}
 
 
 	public function isTypeOf(string $type): bool

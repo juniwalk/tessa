@@ -13,10 +13,4 @@ class HttpAsset extends AbstractAsset
 	{
 		return (bool) preg_match('/^https?/i', $file);
 	}
-
-
-	public function getContent(): string|false
-	{
-		return file_get_contents($this->file);
-	}
 }

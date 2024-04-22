@@ -19,7 +19,7 @@ interface Asset
 	public function setModule(bool $module): void;
 	public function isModule(): bool;
 
-	public function getContent(): string|false;
+	public function getContent(): string;
 
 	public function isTypeOf(string $type): bool;
 	public function isOutOfDate(string $file, bool $checkLastModified): bool;

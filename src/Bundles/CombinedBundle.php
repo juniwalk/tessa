@@ -8,6 +8,7 @@
 namespace JuniWalk\Tessa\Bundles;
 
 use JuniWalk\Tessa\Asset;
+use JuniWalk\Tessa\Exceptions\AssetContentException;
 
 final class CombinedBundle extends AbstractBundle implements Asset
 {
@@ -68,7 +69,10 @@ final class CombinedBundle extends AbstractBundle implements Asset
 	}
 
 
-	public function getContent(): string|false
+	/**
+	 * @throws AssetContentException
+	 */
+	public function getContent(): string
 	{
 		$content = '';
 

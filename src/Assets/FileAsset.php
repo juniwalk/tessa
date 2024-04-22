@@ -21,12 +21,6 @@ class FileAsset extends AbstractAsset
 	}
 
 
-	public function getContent(): string|false
-	{
-		return file_get_contents($this->file) ?: '';
-	}
-
-
 	private function getLastModified(): ?string
 	{
 		if (!$lastModified = @filemtime($this->file)) {
