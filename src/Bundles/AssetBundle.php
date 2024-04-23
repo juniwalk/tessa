@@ -7,8 +7,11 @@
 
 namespace JuniWalk\Tessa\Bundles;
 
-use JuniWalk\Tessa\Assets;
+use JuniWalk\Tessa\Assets\FileAsset;
+use JuniWalk\Tessa\Assets\HttpAsset;
+use JuniWalk\Tessa\Assets\ScssAsset;
 use JuniWalk\Tessa\Bundle;
+use JuniWalk\Tessa\Exceptions\AssetTypeException;
 
 final class AssetBundle extends AbstractBundle
 {
@@ -27,24 +30,6 @@ final class AssetBundle extends AbstractBundle
 	}
 
 
-	public function addAssetFrom(string $file): void
-	{
-		$params = $this->parseParams($file);
-		$type = $params['type'] ?? null;
-
-		if (!is_string($type)) {
-			$type = null;
-		}
-
-		$this->assets[] = match (true) {
-			Assets\HttpAsset::match($file) => new Assets\HttpAsset($file, $type),
-			Assets\ScssAsset::match($file) => new Assets\ScssAsset($file, $type),
-
-			default => new Assets\FileAsset($file, $type),
-		};
-	}
-
-
 	public function getCombinedBy(string $type): Bundle
 	{
 		$bundle = new AssetBundle($this->name);
@@ -52,7 +37,7 @@ final class AssetBundle extends AbstractBundle
 		$assets = [];
 
 		foreach ($this->getAssets($type) as $asset) {
-			if ($asset instanceof Assets\HttpAsset) {
+			if ($asset instanceof HttpAsset) {
 				$bundle->addAsset($asset);
 				continue;
 			}
@@ -62,6 +47,30 @@ final class AssetBundle extends AbstractBundle
 
 		$bundle->addAsset(new CombinedBundle($this->name.'.'.$type, ...$assets));
 		return $bundle;
+	}
+
+
+	/**
+	 * @throws AssetTypeException
+	 */
+	public function addAssetFrom(string $file): void
+	{
+		// TODO: Detect type using schema? Example: js://, mjs://, css://
+		// TODO: Remote files will have double schema: mjs://https://cdn.io/jquery-v4.0.0.js
+		$params = $this->parseParams($file);
+		$type = $params['type'] ?? null;
+
+		if (!is_string($type)) {
+			$type = null;
+		}
+
+		$this->assets[] = match (true) {
+			ScssAsset::match($file) => new ScssAsset($file, $type),
+			HttpAsset::match($file) => new HttpAsset($file, $type),
+			FileAsset::match($file) => new FileAsset($file, $type),
+
+			default => throw AssetTypeException::fromFile($file),
+		};
 	}
 
 
