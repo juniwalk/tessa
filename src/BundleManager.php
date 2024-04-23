@@ -78,11 +78,7 @@ final class BundleManager
 			$assets = $this->compile($extend, $type)->getAssets();
 		}
 
-		foreach ($bundle->getAssets() as $asset) {
-			if (!$asset->isTypeOf($type)) {
-				continue;
-			}
-
+		foreach ($bundle->getAssets($type) as $asset) {
 			if (!$asset->isModule() && $bundleType <> 'module') {
 				$asset = $this->storage?->store($asset, $bundleName) ?? $asset;
 			}

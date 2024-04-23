@@ -20,6 +20,7 @@ tessa:
 		assets:
 			- %wwwDir%/assets/module.mjs
 			- %wwwDir%/assets/script.js
+			- %wwwDir%/assets/style.css
 
 	module:
 		isModule: true

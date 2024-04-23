@@ -85,8 +85,8 @@ abstract class AbstractBundle implements Bundle
 	/**
 	 * @return Asset[]
 	 */
-	public function getAssets(): array
+	public function getAssets(?string $type = null): array
 	{
-		return $this->assets;
+		return array_filter($this->assets, fn($a) => !$type || $a->isTypeOf($type));
 	}
 }

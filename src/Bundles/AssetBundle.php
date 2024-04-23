@@ -51,11 +51,7 @@ final class AssetBundle extends AbstractBundle
 		$bundle->setAttributes($this->attributes);
 		$assets = [];
 
-		foreach ($this->assets as $asset) {
-			if (!$asset->isTypeOf($type)) {
-				continue;
-			}
-
+		foreach ($this->getAssets($type) as $asset) {
 			if ($asset instanceof Assets\HttpAsset) {
 				$bundle->addAsset($asset);
 				continue;

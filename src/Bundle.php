@@ -23,6 +23,6 @@ interface Bundle
 	/**
 	 * @return Asset[]
 	 */
-	public function getAssets(): array;
+	public function getAssets(?string $type = null): array;
 	public function addAsset(Asset $asset): void;
 }
