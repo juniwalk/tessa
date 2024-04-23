@@ -70,10 +70,6 @@ final class BundleManager
 
 		$this->detectRecursion($bundle);
 
-		if ($bundle instanceof AssetBundle && $bundle->isJoinFiles()) {
-			$bundle = $bundle->getCombinedBy($type);
-		}
-
 		if ($extend = $bundle->getExtendBundle()) {
 			$assets = $this->compile($extend, $type)->getAssets();
 		}

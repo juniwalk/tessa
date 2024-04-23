@@ -67,8 +67,7 @@ final class TessaExtension extends CompilerExtension
 		foreach ($config->bundles as $bundleName => $bundle) {
 			$stmt = $builder->addDefinition($this->prefix('bundle.'.$bundleName))
 				->setFactory(AssetBundle::class, [$bundleName])
-				->addSetup('setExtendBundle', [$bundle->extend])
-				->addSetup('setJoinFiles', [$bundle->joinFiles]);
+				->addSetup('setExtendBundle', [$bundle->extend]);
 
 			if ($bundle->isModule) {
 				$stmt->addSetup('setAttribute', ['type', 'module']);

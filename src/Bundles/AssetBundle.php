@@ -7,46 +7,82 @@
 
 namespace JuniWalk\Tessa\Bundles;
 
+use JuniWalk\Tessa\Asset;
 use JuniWalk\Tessa\Assets\FileAsset;
 use JuniWalk\Tessa\Assets\HttpAsset;
 use JuniWalk\Tessa\Assets\ScssAsset;
 use JuniWalk\Tessa\Bundle;
 use JuniWalk\Tessa\Exceptions\AssetTypeException;
 
-final class AssetBundle extends AbstractBundle
+class AssetBundle implements Bundle
 {
-	private bool $joinFiles = false;
+	/** @var array<string, mixed> */
+	protected array $attributes = [];
 
+	protected ?string $extend = null;
 
-	public function setJoinFiles(bool $joinFiles = true): void
-	{
-		$this->joinFiles = $joinFiles;
+	/** @var Asset[] */
+	protected array $assets;
+
+	public function __construct(
+		protected readonly string $name,
+		Asset ...$assets,
+	) {
+		$this->assets = $assets;
 	}
 
 
-	public function isJoinFiles(): bool
+	public function getName(): string
 	{
-		return $this->joinFiles;
+		return $this->name;
 	}
 
 
-	public function getCombinedBy(string $type): Bundle
+	public function setExtendBundle(?string $extend): void
 	{
-		$bundle = new AssetBundle($this->name);
-		$bundle->setAttributes($this->attributes);
-		$assets = [];
+		$this->extend = $extend;
+	}
 
-		foreach ($this->getAssets($type) as $asset) {
-			if ($asset instanceof HttpAsset) {
-				$bundle->addAsset($asset);
-				continue;
-			}
 
-			$assets[] = $asset;
-		}
+	public function getExtendBundle(): ?string
+	{
+		return $this->extend;
+	}
 
-		$bundle->addAsset(new CombinedBundle($this->name.'.'.$type, ...$assets));
-		return $bundle;
+
+	public function setAttribute(string $name, mixed $value): void
+	{
+		$this->attributes[$name] = $value;
+	}
+
+
+	public function getAttribute(string $name): mixed
+	{
+		return $this->attributes[$name] ?? null;
+	}
+
+
+	/**
+	 * @param array<string, mixed> $attributes
+	 */
+	public function setAttributes(array $attributes): void
+	{
+		$this->attributes = $attributes;
+	}
+
+
+	/**
+	 * @return array<string, mixed>
+	 */
+	public function getAttributes(): array
+	{
+		return $this->attributes;
+	}
+
+
+	public function addAsset(Asset $asset): void
+	{
+		$this->assets[] = $asset;
 	}
 
 
@@ -71,6 +107,15 @@ final class AssetBundle extends AbstractBundle
 
 			default => throw AssetTypeException::fromFile($file),
 		};
+	}
+
+
+	/**
+	 * @return Asset[]
+	 */
+	public function getAssets(?string $type = null): array
+	{
+		return array_filter($this->assets, fn($x) => !$type || $x->isTypeOf($type));
 	}
 
 

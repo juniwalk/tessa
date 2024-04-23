@@ -16,7 +16,6 @@ tessa:
 		- @urlFixerFilter
 
 	default:
-		joinFiles: false
 		assets:
 			- %wwwDir%/assets/module.mjs
 			- %wwwDir%/assets/script.js
