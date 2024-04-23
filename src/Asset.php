@@ -22,5 +22,5 @@ interface Asset
 	public function getContent(): string;
 
 	public function isTypeOf(string $type): bool;
-	public function isOutOfDate(string $file, bool $checkLastModified): bool;
+	public function isOutOfDate(string $file): bool;
 }

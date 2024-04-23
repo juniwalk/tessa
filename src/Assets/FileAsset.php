@@ -97,17 +97,9 @@ class FileAsset implements Asset
 	}
 
 
-	public function isOutOfDate(string $file, bool $checkLastModified): bool
+	public function isOutOfDate(string $file): bool
 	{
-		if (!$checkLastModified) {
-			return false;
-		}
-
-		if (!file_exists($file)) {
-			return true;
-		}
-
-		return filemtime($this->file) > filemtime($file);
+		return !is_file($file) || filemtime($this->file) > filemtime($file);
 	}
 
 
