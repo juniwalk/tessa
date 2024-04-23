@@ -11,6 +11,6 @@ class HttpAsset extends FileAsset
 {
 	public static function match(string $file): bool
 	{
-		return (bool) preg_match('/^https?/i', $file);
+		return str_starts_with($file, 'http');
 	}
 }

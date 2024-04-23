@@ -15,7 +15,7 @@ class ScssAsset extends FileAsset
 			return false;
 		}
 
-		return str_ends_with('.scss', $file);
+		return str_ends_with($file, '.scss');
 	}
 
 
