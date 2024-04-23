@@ -179,6 +179,6 @@ final class TessaRenderer extends Control
 			}
 		}
 
-		return array_map(fn($a) => $a->newInstance(), $attributes);
+		return array_map(fn($x) => $x->newInstance(), $attributes);
 	}
 }
