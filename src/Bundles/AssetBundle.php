@@ -16,10 +16,10 @@ use JuniWalk\Tessa\Exceptions\AssetTypeException;
 
 class AssetBundle implements Bundle
 {
+	protected ?string $extend = null;
+
 	/** @var array<string, mixed> */
 	protected array $attributes = [];
-
-	protected ?string $extend = null;
 
 	/** @var Asset[] */
 	protected array $assets;
