@@ -14,7 +14,6 @@ use Nette\Application\UI\Control;
 use Nette\Application\UI\Presenter;
 use Nette\Http\IRequest as HttpRequest;
 use Nette\Utils\Html;
-use ReflectionAttribute;
 use ReflectionClass;
 
 final class TessaControl extends Control
@@ -43,57 +42,13 @@ final class TessaControl extends Control
 
 	public function renderCss(string $bundle = 'default'): void
 	{
-		$bundle = $this->bundleManager->compile($bundle, 'css');
-		$output = '';
-
-		foreach ($bundle->getAssets() as $asset) {
-			$file = $this->createPath($asset);
-
-			if ($this->history[$file] ?? false) {
-				continue;
-			}
-
-			$html = Html::el('link rel="stylesheet"')
-				->setHref($file);
-
-			$this->history[$file] = true;
-			$output .= $html.PHP_EOL;
-		}
-
-		echo $output;
+		echo implode(PHP_EOL, $this->compile($bundle, 'css'));
 	}
 
 
 	public function renderJs(string $bundle = 'default'): void
 	{
-		$bundle = $this->bundleManager->compile($bundle, 'js');
-		$bundleType = $bundle->getAttribute('type');
-		$output = '';
-
-		foreach ($bundle->getAssets() as $asset) {
-			$file = $this->createPath($asset);
-
-			if ($this->history[$file] ?? false) {
-				continue;
-			}
-
-			$html = Html::el('script type="text/javascript"')
-				->addAttributes($bundle->getAttributes())
-				->setSrc($file);
-
-			if ($bundle->getAttribute('cookie-consent')) {
-				$html->setAttribute('type', 'text/plain');
-			}
-
-			if ($asset->isModule() || $bundleType == 'module') {
-				$html->setAttribute('type', 'module');
-			}
-
-			$this->history[$file] = true;
-			$output .= $html.PHP_EOL;
-		}
-
-		echo $output;
+		echo implode(PHP_EOL, $this->compile($bundle, 'js'));
 	}
 
 
@@ -103,35 +58,106 @@ final class TessaControl extends Control
 	public function render(string $type): void
 	{
 		$control = $this->getPresenter();
-		$renderMethod = match ($type) {
-			'css' => $this->renderCss(...),
-			'js' => $this->renderJs(...),
-
-			default => throw AssetTypeException::fromType($type),
-		};
-
-		$bundles = $this->findAssetBundles($control);
+		$attributes = $this->findAssetAttributes($control);
 
 		foreach ($control->getComponents() as $component) {
-			$bundles += $this->findAssetBundles($component);
+			$attributes += $this->findAssetAttributes($component);
 		}
 
-		foreach ($bundles as $bundle) {
-			$renderMethod($bundle->newInstance()->bundleName);
+		$output = [];
+
+		foreach ($attributes as $attribute) {
+			$bundle = $this->compile($attribute->bundleName, $type);
+			$output = array_merge($output, $bundle);
 		}
+
+		echo implode(PHP_EOL, $output);
 	}
 
 
 	/**
-	 * @return ReflectionAttribute<AssetBundle>[]
+	 * @return Html[]
+	 * @throws AssetTypeException
 	 */
-	private function findAssetBundles(Component $control): array
+	private function compile(string $bundle, string $type): array
+	{
+		$bundle = $this->bundleManager->compile($bundle, $type);
+		$create = match ($type) {
+			'css' => $this->createStyle(...),
+			'js' => $this->createScript(...),
+
+			default => throw AssetTypeException::fromType($type),
+		};
+
+		$output = [];
+
+		foreach ($bundle->getAssets() as $asset) {
+			$output[] = $create($asset, $bundle);
+		}
+
+		return array_filter($output);
+	}
+
+
+	private function createStyle(Asset $asset, Bundle $bundle): ?Html
+	{
+		$path = $this->createFilePath($asset);
+
+		if ($this->history[$path] ?? false) {
+			return null;
+		}
+
+		$html = Html::el('link rel="stylesheet"')
+			->setHref($path);
+
+		$this->history[$path] = true;
+		return $html;
+	}
+
+
+	private function createScript(Asset $asset, Bundle $bundle): ?Html
+	{
+		$path = $this->createFilePath($asset);
+		$type = $bundle->getAttribute('type');
+
+		if ($this->history[$path] ?? false) {
+			return null;
+		}
+
+		$html = Html::el('script type="text/javascript"')
+			->addAttributes($bundle->getAttributes())
+			->setSrc($path);
+
+		if ($bundle->getAttribute('cookie-consent')) {
+			$html->setAttribute('type', 'text/plain');
+		}
+
+		if ($asset->isModule() || $type === 'module') {
+			$html->setAttribute('type', 'module');
+		}
+
+		$this->history[$path] = true;
+		return $html;
+	}
+
+
+	private function createFilePath(Asset $asset): string
+	{
+		return str_replace($this->wwwDir, $this->basePath, $asset->getPath());
+	}
+
+
+	/**
+	 * @return AssetBundle[]
+	 */
+	private function findAssetAttributes(Component $control): array
 	{
 		$class = new ReflectionClass($control);
-		$bundles = $class->getAttributes(AssetBundle::class);
+		$attributes = $class->getAttributes(AssetBundle::class);
 
 		if ($parent = $class->getParentClass()) {
-			$bundles = array_merge($bundles, $parent->getAttributes(AssetBundle::class));
+			$items = $parent->getAttributes(AssetBundle::class);
+			$attributes = array_merge($attributes, $items);
 		}
 
 		if ($control instanceof Presenter && $view = $control->getAction()) {
@@ -139,20 +165,16 @@ final class TessaControl extends Control
 			$viewRender = Presenter::formatRenderMethod($view);
 
 			if ($class->hasMethod($viewAction)) {
-				$bundles = array_merge($bundles, $class->getMethod($viewAction)->getAttributes(AssetBundle::class));
+				$items = $class->getMethod($viewAction)->getAttributes(AssetBundle::class);
+				$attributes = array_merge($attributes, $items);
 			}
 
 			if ($class->hasMethod($viewRender)) {
-				$bundles = array_merge($bundles, $class->getMethod($viewRender)->getAttributes(AssetBundle::class));
+				$items = $class->getMethod($viewRender)->getAttributes(AssetBundle::class);
+				$attributes = array_merge($attributes, $items);
 			}
 		}
 
-		return $bundles;
-	}
-
-
-	private function createPath(Asset $asset): string
-	{
-		return str_replace($this->wwwDir, $this->basePath, $asset->getPath());
+		return array_map(fn($a) => $a->newInstance(), $attributes);
 	}
 }
