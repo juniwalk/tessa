@@ -13,4 +13,10 @@ class HttpAsset extends FileAsset
 	{
 		return str_starts_with($file, 'http');
 	}
+
+
+	public function getPath(): string
+	{
+		return $this->file;
+	}
 }
