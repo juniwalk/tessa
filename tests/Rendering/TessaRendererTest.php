@@ -56,11 +56,10 @@ final class TessaRendererTest extends TestCase
 	}
 
 	public function tearDown() {
-		FileSystem::purge(OutputStorage);
-
 		$presenter = $this->tessa->getParent();
 		$presenter?->removeComponent($this->tessa);
 
+		FileSystem::purge(OutputStorage);
 		unset($this->tessa);
 	}
 

@@ -8,7 +8,7 @@
 use JuniWalk\Tessa\BundleManager;
 use Nette\DI\Container;
 use Tester\Assert;
-use Tester\Helpers;
+use Tester\Helpers as FileSystem;
 use Tester\TestCase;
 
 require __DIR__.'/../bootstrap.php';
@@ -21,19 +21,16 @@ final class CompileBundleTest extends TestCase
 	private BundleManager $bundleManager;
 	private Container $container;
 
-	public function __construct()
-	{
+	public function __construct() {
 		$this->container = createContainer();
 	}
 
-	public function setUp()
-	{
+	public function setUp() {
 		$this->bundleManager = $this->container->getByType(BundleManager::class);
 	}
 
-	public function tearDown()
-	{
-		Helpers::purge(OutputStorage);
+	public function tearDown() {
+		FileSystem::purge(OutputStorage);
 		unset($this->bundleManager);
 	}
 
