@@ -35,7 +35,7 @@ final class CompileBundleTest extends TestCase
 	}
 
 
-	public function testBundleCombinedCompilation(): void
+	public function testBundleStandardCompilation(): void
 	{
 		$bundle = $this->bundleManager->compile('default', 'js');
 		$patterns = [
