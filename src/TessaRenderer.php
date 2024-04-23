@@ -16,7 +16,7 @@ use Nette\Http\IRequest as HttpRequest;
 use Nette\Utils\Html;
 use ReflectionClass;
 
-final class TessaControl extends Control
+final class TessaRenderer extends Control
 {
 	private readonly string $basePath;
 	private readonly string $wwwDir;

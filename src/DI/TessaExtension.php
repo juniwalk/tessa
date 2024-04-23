@@ -11,7 +11,7 @@ use JuniWalk\Tessa\BundleManager;
 use JuniWalk\Tessa\Bundles\AssetBundle;
 use JuniWalk\Tessa\Commands\TessaWarmUpCommand;
 use JuniWalk\Tessa\Storage;
-use JuniWalk\Tessa\TessaControl;
+use JuniWalk\Tessa\TessaRenderer;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\Statement;
 use Nette\DI\InvalidConfigurationException;
@@ -85,8 +85,8 @@ final class TessaExtension extends CompilerExtension
 			$manager->addSetup('addBundle', [$stmt]);
 		}
 
-		$builder->addDefinition($this->prefix('control'))
-			->setFactory(TessaControl::class, [$builder->parameters['wwwDir']]);
+		$builder->addDefinition($this->prefix('renderer'))
+			->setFactory(TessaRenderer::class, [$builder->parameters['wwwDir']]);
 
 		$builder->addDefinition($this->prefix('warmUp'))
 			->setFactory(TessaWarmUpCommand::class);
