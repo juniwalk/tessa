@@ -103,13 +103,13 @@ final class BundleManager
 		$history[$bundle->getName()] = true;
 
 		if ($extend = $bundle->getExtendBundle()) {
-			if (isset($history[$extend])) {
+			if ($history[$extend] ?? false) {
 				throw BundleRecursionException::fromBundle($bundle, $extend);
 			}
 
 			$history = $this->detectRecursion(
 				$this->getBundle($extend),
-				$history
+				$history,
 			);
 		}
 

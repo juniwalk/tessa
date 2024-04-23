@@ -77,6 +77,29 @@ final class CompileBundleTest extends TestCase
 	}
 
 
+	public function testBundleExtendedCompilation(): void
+	{
+		$bundle = $this->bundleManager->compile('extended', 'js');
+		$patterns = [
+			'defaultjs-script.js'	=> '#/static/defaultjs-script.js$#i',
+			'module.mjs'			=> '#/assets/module.mjs$#i',
+			'fullcalendar.mjs'		=> '#/assets/fullcalendar.mjs$#i',
+			'extendedjs-form.js'	=> '#/static/extendedjs-form.js$#i',
+		];
+
+		Assert::same(null, $bundle->getAttribute('type'));
+
+		foreach ($bundle->getAssets() as $asset) {
+			$file = $asset->getFile();
+			$name = $asset->getName();
+
+			Assert::hasKey($name, $patterns);
+			Assert::match($patterns[$name], $file);
+			Assert::true(is_file($file));
+		}
+	}
+
+
 	public function testBundleDirectLinkingCompilation(): void
 	{
 		$this->bundleManager->setStorage(null);
