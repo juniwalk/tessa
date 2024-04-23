@@ -14,6 +14,7 @@ class AssetBundle
 {
 	public function __construct(
 		public readonly string $bundleName,
+		public readonly bool $clearPrevious = false,
 	) {
 	}
 }

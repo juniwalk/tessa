@@ -67,6 +67,10 @@ final class TessaRenderer extends Control
 		$output = [];
 
 		foreach ($attributes as $attribute) {
+			if ($attribute->clearPrevious) {
+				$output = [];
+			}
+
 			$bundle = $this->compile($attribute->bundleName, $type);
 			$output = array_merge($output, $bundle);
 		}

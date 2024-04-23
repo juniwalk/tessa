@@ -23,11 +23,13 @@ class TessaPresenter extends Presenter
 	public function __construct(
 		private readonly TessaRenderer $tessaRenderer,
 	) {
-		$this->changeAction('default');
 	}
 
 	#[AssetBundle('calendar')]
 	public function actionDefault(): void {}
+
+	#[AssetBundle('calendar', true)]
+	public function actionPartial(): void {}
 
 	protected function createComponentTessa(): TessaRenderer {
 		return $this->tessaRenderer;
@@ -74,11 +76,23 @@ final class TessaRendererTest extends TestCase
 
 	public function testRenderAutoAssets(): void
 	{
+		$this->tessa->getPresenter()->changeAction('default');
 		$output = Output::capture(fn() => $this->tessa->render('js'));
 
 		Assert::contains('/static/defaultjs-script.js', $output);
-		Assert::contains('/assets/fullcalendar.mjs', $output);
 		Assert::contains('/assets/module.mjs', $output);
+		Assert::contains('/assets/fullcalendar.mjs', $output);
+	}
+
+
+	public function testRenderClearPreviousAssets(): void
+	{
+		$this->tessa->getPresenter()->changeAction('partial');
+		$output = Output::capture(fn() => $this->tessa->render('js'));
+
+		Assert::notContains('/static/defaultjs-script.js', $output);
+		Assert::notContains('/assets/module.mjs', $output);
+		Assert::contains('/assets/fullcalendar.mjs', $output);
 	}
 
 
