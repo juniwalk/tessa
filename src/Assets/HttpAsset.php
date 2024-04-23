@@ -7,7 +7,7 @@
 
 namespace JuniWalk\Tessa\Assets;
 
-class HttpAsset extends AbstractAsset
+class HttpAsset extends FileAsset
 {
 	public static function match(string $file): bool
 	{

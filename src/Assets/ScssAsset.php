@@ -11,7 +11,11 @@ class ScssAsset extends FileAsset
 {
 	public static function match(string $file): bool
 	{
-		return (bool) preg_match('/\.scss$/i', $file);
+		if (!parent::match($file)) {
+			return false;
+		}
+
+		return str_ends_with('.scss', $file);
 	}
 
 
