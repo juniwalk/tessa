@@ -7,6 +7,8 @@
 
 namespace JuniWalk\Tessa\Exceptions;
 
-class TessaException extends \RuntimeException
+use RuntimeException;
+
+abstract class TessaException extends RuntimeException
 {
 }
