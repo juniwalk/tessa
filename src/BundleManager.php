@@ -80,6 +80,7 @@ final class BundleManager
 	/**
 	 * @param  array<string, bool> $history
 	 * @return array<string, bool>
+	 * @throws BundleNotFoundException
 	 * @throws BundleRecursionException
 	 */
 	private function detectRecursion(Bundle $bundle, array $history = []): array
