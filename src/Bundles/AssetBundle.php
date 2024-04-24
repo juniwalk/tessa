@@ -19,6 +19,7 @@ use JuniWalk\Utils\Strings;
 class AssetBundle implements Bundle
 {
 	protected ?string $extend = null;
+	protected bool $directLink = false;
 
 	/** @var array<string, mixed> */
 	protected array $attributes = [];
@@ -37,6 +38,18 @@ class AssetBundle implements Bundle
 	public function getName(): string
 	{
 		return $this->name;
+	}
+
+
+	public function setDirectLink(bool $directLink): void
+	{
+		$this->directLink = $directLink;
+	}
+
+
+	public function isDirectLink(): bool
+	{
+		return $this->directLink || $this->getAttribute('type') == 'module';
 	}
 
 

@@ -43,7 +43,6 @@ final class CompileBundleTest extends TestCase
 		$patterns = [
 			'defaultjs-script.js'	=> '#/static/defaultjs-script.js$#i',
 			'module.mjs'			=> '#/assets/module.mjs$#i',
-			// 'api.js'				=> '#/recaptcha/api.js$#i',
 		];
 
 		Assert::same(null, $bundle->getAttribute('type'));
@@ -91,7 +90,6 @@ final class CompileBundleTest extends TestCase
 			'module.mjs'			=> '#/assets/module.mjs$#i',
 			'fullcalendar.mjs'		=> '#/assets/fullcalendar.mjs$#i',
 			'extendedjs-form.js'	=> '#/static/extendedjs-form.js$#i',
-			// 'api.js'				=> '#/recaptcha/api.js$#i',
 		];
 
 		Assert::same(null, $bundle->getAttribute('type'));
@@ -112,16 +110,16 @@ final class CompileBundleTest extends TestCase
 
 	public function testBundleDirectLinkingCompilation(): void
 	{
-		$this->bundleManager->setStorage(null);
+		$this->bundleManager->getBundle('default')->setDirectLink(true);
 
 		$bundle = $this->bundleManager->compile('default', Type::JavaScript);
 		$patterns = [
 			'script.js'		=> '#/assets/script.js$#i',
 			'module.mjs'	=> '#/assets/module.mjs$#i',
-			// 'api.js'		=> '#/recaptcha/api.js$#i',
 		];
 
 		Assert::same(null, $bundle->getAttribute('type'));
+		Assert::true($bundle->isDirectLink());
 
 		foreach ($bundle->getAssets() as $asset) {
 			$file = $asset->getFile();

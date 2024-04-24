@@ -60,13 +60,10 @@ final class TessaExtension extends CompilerExtension
 		$manager = $builder->addDefinition($this->prefix('manager'))
 			->setFactory(BundleManager::class);
 
-		if ($config->directLinking) {
-			$manager->addSetup('setStorage', [null]);
-		}
-
 		foreach ($config->bundles as $bundleName => $bundle) {
 			$stmt = $builder->addDefinition($this->prefix('bundle.'.$bundleName))
 				->setFactory(AssetBundle::class, [$bundleName])
+				->addSetup('setDirectLink', [$bundle->directLink || $config->directLink])
 				->addSetup('setExtendBundle', [$bundle->extend]);
 
 			if ($bundle->isModule) {

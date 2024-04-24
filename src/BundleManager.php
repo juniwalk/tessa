@@ -19,14 +19,8 @@ final class BundleManager
 	private array $bundles = [];
 
 	public function __construct(
-		private ?Storage $storage = null,
+		private readonly Storage $storage,
 	) {
-	}
-
-
-	public function setStorage(?Storage $storage): void
-	{
-		$this->storage = $storage;
 	}
 
 
@@ -62,11 +56,10 @@ final class BundleManager
 	 * @throws BundleNotFoundException
 	 * @throws BundleRecursionException
 	 */
-	public function compile(string $bundleName, Type $type): Bundle
+	public function compile(string $name, Type $type): Bundle
 	{
-		$bundle = $this->getBundle($bundleName);
-		$bundleType = $bundle->getAttribute('type');
-		$bundleName = $bundleName.$type->value;
+		$bundle = $this->getBundle($name);
+		$name = $name.$type->value;
 		$assets = [];
 
 		$this->detectRecursion($bundle);
@@ -76,15 +69,16 @@ final class BundleManager
 		}
 
 		foreach ($bundle->getAssets($type) as $asset) {
-			if (!$asset->isModule() && $bundleType <> 'module') {
-				$asset = $this->storage?->store($asset, $bundleName) ?? $asset;
+			if (!$asset->isModule() && !$bundle->isDirectLink()) {
+				$asset = $this->storage->store($asset, $name);
 			}
 
 			$assets[] = $asset;
 		}
 
-		$output = new AssetBundle($bundleName, ...$assets);
+		$output = new AssetBundle($name, ...$assets);
 		$output->setAttributes($bundle->getAttributes());
+		$output->setDirectLink($bundle->isDirectLink());
 
 		return $output;
 	}

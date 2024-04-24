@@ -12,6 +12,8 @@ use JuniWalk\Tessa\Enums\Type;
 interface Bundle
 {
 	public function getName(): string;
+	public function setDirectLink(bool $directLink): void;
+	public function isDirectLink(): bool;
 	public function setExtendBundle(?string $extend): void;
 	public function getExtendBundle(): ?string;
 

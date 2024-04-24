@@ -11,6 +11,7 @@ class Bundle
 {
 	public ?string $cookieConsent = null;
 	public ?string $extend = null;
+	public bool $directLink = false;
 	public bool $isModule = false;
 	public bool $defer = false;
 	public bool $async = false;
