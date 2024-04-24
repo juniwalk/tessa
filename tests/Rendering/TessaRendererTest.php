@@ -9,6 +9,7 @@ use JuniWalk\Tessa\Attributes\AssetBundle;
 use JuniWalk\Tessa\Enums\Type;
 use JuniWalk\Tessa\Exceptions\AssetTypeException;
 use JuniWalk\Tessa\TessaRenderer;
+use JuniWalk\Tessa\Traits\AssetManager;
 use Nette\Application\UI\Presenter;
 use Nette\DI\Container;
 use Tester\Assert;
@@ -21,20 +22,13 @@ require __DIR__.'/../bootstrap.php';
 #[AssetBundle('default')]
 class TessaPresenter extends Presenter
 {
-	public function __construct(
-		private readonly TessaRenderer $tessaRenderer,
-	) {
-	}
+	use AssetManager;
 
 	#[AssetBundle('calendar')]
 	public function actionDefault(): void {}
 
 	#[AssetBundle('calendar', true)]
 	public function actionPartial(): void {}
-
-	protected function createComponentTessa(): TessaRenderer {
-		return $this->tessaRenderer;
-	}
 }
 
 /**
@@ -51,6 +45,7 @@ final class TessaRendererTest extends TestCase
 
 	public function setUp() {
 		$presenter = $this->container->createInstance(TessaPresenter::class);
+		$this->container->callInjects($presenter);
 
 		$this->tessa = $presenter->getComponent('tessa');
 		$this->tessa->clearHistory();
