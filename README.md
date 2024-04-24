@@ -48,6 +48,9 @@ tessa:
 Include `AssetManager` trait to get access to Tessa component.
 
 ```php
+use JuniWalk\Tessa\Attributes\AssetBundle;
+use JuniWalk\Tessa\Traits\AssetManager;
+
 #[AssetBundle('frontend')]
 class TessaPresenter extends Presenter
 {
