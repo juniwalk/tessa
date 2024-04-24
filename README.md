@@ -22,11 +22,11 @@ tessa:
 	default:
 		defer: true
 		assets:
-			- %wwwDir%/vendor/font-awesome/css/font-awesome.min.css
-			- %wwwDir%/vendor/jquery/dist/jquery.min.js
-			- %wwwDir%/vendor/bootstrap/dist/css/bootstrap.min.css
-			- %wwwDir%/vendor/bootstrap/dist/js/bootstrap.min.js
-			- %wwwDir%/vendor/nette-forms/src/assets/netteForms.min.js
+			- %moduleDir%/font-awesome/css/font-awesome.min.css
+			- %moduleDir%/jquery/dist/jquery.min.js
+			- %moduleDir%/bootstrap/dist/css/bootstrap.min.css
+			- %moduleDir%/bootstrap/dist/js/bootstrap.min.js
+			- %moduleDir%/nette-forms/src/assets/netteForms.min.js
 			- %wwwDir%/assets/style.css
 			- %wwwDir%/assets/index.js
 
@@ -42,7 +42,7 @@ tessa:
 	fullcalendar:
 		defer: true
 		assets:
-			- %wwwDir%/vendor/fullcalendar/index.global.min.js
+			- %moduleDir%/fullcalendar/index.global.min.js
 ```
 
 Include `AssetManager` trait to get access to Tessa component.
