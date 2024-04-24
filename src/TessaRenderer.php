@@ -50,7 +50,7 @@ final class TessaRenderer extends Control
 			return;
 		}
 
-		echo implode(PHP_EOL, $this->compile($bundle, $type));
+		echo implode(PHP_EOL, $this->compile($bundle, $type)).PHP_EOL;
 	}
 
 
@@ -63,7 +63,7 @@ final class TessaRenderer extends Control
 			return;
 		}
 
-		echo implode(PHP_EOL, $this->compile($bundle, $type));
+		echo implode(PHP_EOL, $this->compile($bundle, $type)).PHP_EOL;
 	}
 
 
@@ -96,7 +96,7 @@ final class TessaRenderer extends Control
 			$output = array_merge($output, $bundle);
 		}
 
-		echo implode(PHP_EOL, $output);
+		echo implode(PHP_EOL, $output).PHP_EOL;
 	}
 
 
