@@ -14,15 +14,15 @@ use JuniWalk\Tessa\Assets\ScssAsset;
 use JuniWalk\Tessa\Bundle;
 use JuniWalk\Tessa\Enums\Type;
 use JuniWalk\Tessa\Exceptions\AssetTypeException;
+use JuniWalk\Tessa\Traits\Attributes;
 use JuniWalk\Utils\Strings;
 
 class AssetBundle implements Bundle
 {
+	use Attributes;
+
 	protected ?string $extend = null;
 	protected bool $directLink = false;
-
-	/** @var array<string, mixed> */
-	protected array $attributes = [];
 
 	/** @var Asset[] */
 	protected array $assets;
@@ -62,36 +62,6 @@ class AssetBundle implements Bundle
 	public function getExtendBundle(): ?string
 	{
 		return $this->extend;
-	}
-
-
-	public function setAttribute(string $name, mixed $value): void
-	{
-		$this->attributes[$name] = $value;
-	}
-
-
-	public function getAttribute(string $name): mixed
-	{
-		return $this->attributes[$name] ?? null;
-	}
-
-
-	/**
-	 * @param array<string, mixed> $attributes
-	 */
-	public function setAttributes(array $attributes): void
-	{
-		$this->attributes = $attributes;
-	}
-
-
-	/**
-	 * @return array<string, mixed>
-	 */
-	public function getAttributes(): array
-	{
-		return $this->attributes;
 	}
 
 

@@ -66,6 +66,8 @@ final class TessaRendererTest extends TestCase
 
 		Assert::contains('/static/defaultjs-script.js', $output);
 		Assert::contains('/assets/module.mjs', $output);
+
+		Assert::notContains('defer', $output);
 	}
 
 
@@ -88,6 +90,8 @@ final class TessaRendererTest extends TestCase
 		Assert::notContains('/static/defaultjs-script.js', $output);
 		Assert::notContains('/assets/module.mjs', $output);
 		Assert::contains('/assets/fullcalendar.mjs', $output);
+
+		Assert::contains('defer', $output);
 	}
 
 

@@ -9,9 +9,12 @@ namespace JuniWalk\Tessa\Assets;
 
 use JuniWalk\Tessa\Asset;
 use JuniWalk\Tessa\Exceptions\AssetContentException;
+use JuniWalk\Tessa\Traits\Attributes;
 
 class FileAsset implements Asset
 {
+	use Attributes;
+
 	protected string $file;
 	protected string $ext;
 	protected bool $isModule = false;

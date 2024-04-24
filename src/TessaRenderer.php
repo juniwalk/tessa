@@ -106,7 +106,7 @@ final class TessaRenderer extends Control
 	 */
 	private function compile(string $bundle, Type $type): array
 	{
-		$bundle = $this->bundleManager->compile($bundle, $type);
+		$assets = $this->bundleManager->compile($bundle, $type);
 		$create = match ($type) {
 			Type::StyleSheet => $this->createStyleSheet(...),
 			Type::JavaScript => $this->createJavaScript(...),
@@ -116,15 +116,15 @@ final class TessaRenderer extends Control
 
 		$output = [];
 
-		foreach ($bundle->getAssets() as $asset) {
-			$output[] = $create($asset, $bundle);
+		foreach ($assets as $asset) {
+			$output[] = $create($asset);
 		}
 
 		return array_filter($output);
 	}
 
 
-	private function createStyleSheet(Asset $asset, Bundle $bundle): ?Html
+	private function createStyleSheet(Asset $asset): ?Html
 	{
 		$path = $this->createFilePath($asset);
 
@@ -140,20 +140,20 @@ final class TessaRenderer extends Control
 	}
 
 
-	private function createJavaScript(Asset $asset, Bundle $bundle): ?Html
+	private function createJavaScript(Asset $asset): ?Html
 	{
 		$path = $this->createFilePath($asset);
-		$type = $bundle->getAttribute('type');
+		$type = $asset->getAttribute('type');
 
 		if ($this->history[$path] ?? false) {
 			return null;
 		}
 
 		$html = Html::el('script type="text/javascript"')
-			->addAttributes($bundle->getAttributes())
+			->addAttributes($asset->getAttributes())
 			->setSrc($path);
 
-		if ($bundle->getAttribute('cookie-consent')) {
+		if ($asset->getAttribute('cookie-consent')) {
 			$html->setAttribute('type', 'text/plain');
 		}
 

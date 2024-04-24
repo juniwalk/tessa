@@ -19,4 +19,15 @@ interface Asset
 
 	public function setModule(bool $module): void;
 	public function isModule(): bool;
+
+	/**
+	 * @return array<string, mixed>
+	 */
+	public function getAttributes(): array;
+	public function getAttribute(string $name): mixed;
+
+	/**
+	 * @param array<string, mixed> $attributes
+	 */
+	public function setAttributes(array $attributes): void;
 }

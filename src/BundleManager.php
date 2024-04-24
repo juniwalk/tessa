@@ -8,7 +8,6 @@
 namespace JuniWalk\Tessa;
 
 use JuniWalk\Tessa\Bundle;
-use JuniWalk\Tessa\Bundles\AssetBundle;
 use JuniWalk\Tessa\Enums\Type;
 use JuniWalk\Tessa\Exceptions\BundleNotFoundException;
 use JuniWalk\Tessa\Exceptions\BundleRecursionException;
@@ -55,32 +54,26 @@ final class BundleManager
 	/**
 	 * @throws BundleNotFoundException
 	 * @throws BundleRecursionException
+	 * @return Asset[]
 	 */
-	public function compile(string $name, Type $type): Bundle
+	public function compile(string $name, Type $type): iterable
 	{
 		$bundle = $this->getBundle($name);
-		$name = $name.$type->value;
-		$assets = [];
-
 		$this->detectRecursion($bundle);
 
 		if ($extend = $bundle->getExtendBundle()) {
-			$assets = $this->compile($extend, $type)->getAssets();
+			yield from $this->compile($extend, $type);
 		}
 
 		foreach ($bundle->getAssets($type) as $asset) {
+			$asset->setAttributes($bundle->getAttributes());
+
 			if (!$asset->isModule() && !$bundle->isDirectLink()) {
-				$asset = $this->storage->store($asset, $name);
+				$asset = $this->storage->store($asset, $name.$type->value);
 			}
 
-			$assets[] = $asset;
+			yield $asset;
 		}
-
-		$output = new AssetBundle($name, ...$assets);
-		$output->setAttributes($bundle->getAttributes());
-		$output->setDirectLink($bundle->isDirectLink());
-
-		return $output;
 	}
 
 

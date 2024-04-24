@@ -33,16 +33,17 @@ tessa:
 
 	calendar:
 		isModule: true
+		defer: true
 		assets:
 			- %wwwDir%/assets/fullcalendar.mjs
 
 	standard:
-		extend: 'default'
+		extend: default
 		isModule: true
 		assets:
 			- %wwwDir%/assets/fullcalendar.mjs
 
 	extended:
-		extend: 'standard'
+		extend: standard
 		assets:
 			- %wwwDir%/assets/form.js
