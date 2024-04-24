@@ -79,21 +79,21 @@ final class TessaRenderer extends Control
 		}
 
 		$control = $this->getPresenter();
-		$attributes = $this->findAssetAttributes($control);
+		$attrs = $this->findAttributes($control);
 
 		foreach ($control->getComponents() as $component) {
-			$attributes += $this->findAssetAttributes($component);
+			$attrs = array_merge($attrs, $this->findAttributes($component));
 		}
 
 		$output = [];
 
-		foreach ($attributes as $attribute) {
-			if ($attribute->clearPrevious) {
+		foreach ($attrs as $attr) {
+			if ($attr->clearPrevious) {
 				$output = [];
 			}
 
-			$bundle = $this->compile($attribute->bundleName, $type);
-			$output = array_merge($output, $bundle);
+			$assets = $this->compile($attr->bundleName, $type);
+			$output = array_merge($output, $assets);
 		}
 
 		echo implode(PHP_EOL, $output).PHP_EOL;
@@ -175,14 +175,14 @@ final class TessaRenderer extends Control
 	/**
 	 * @return AssetBundle[]
 	 */
-	private function findAssetAttributes(Component $control): array
+	private function findAttributes(Component $control): array
 	{
 		$class = new ReflectionClass($control);
-		$attributes = $class->getAttributes(AssetBundle::class);
+		$attrs = $class->getAttributes(AssetBundle::class);
 
 		if ($parent = $class->getParentClass()) {
 			$items = $parent->getAttributes(AssetBundle::class);
-			$attributes = array_merge($attributes, $items);
+			$attrs = array_merge($attrs, $items);
 		}
 
 		if ($control instanceof Presenter && $view = $control->getAction()) {
@@ -191,15 +191,15 @@ final class TessaRenderer extends Control
 
 			if ($class->hasMethod($viewAction)) {
 				$items = $class->getMethod($viewAction)->getAttributes(AssetBundle::class);
-				$attributes = array_merge($attributes, $items);
+				$attrs = array_merge($attrs, $items);
 			}
 
 			if ($class->hasMethod($viewRender)) {
 				$items = $class->getMethod($viewRender)->getAttributes(AssetBundle::class);
-				$attributes = array_merge($attributes, $items);
+				$attrs = array_merge($attrs, $items);
 			}
 		}
 
-		return array_map(fn($x) => $x->newInstance(), $attributes);
+		return array_map(fn($x) => $x->newInstance(), $attrs);
 	}
 }
