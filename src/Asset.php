@@ -12,13 +12,11 @@ interface Asset
 	public static function match(string $file): bool;
 
 	public function getName(): string;
-	public function getExt(): string;
-
-	public function getFile(): string;
 	public function getPath(): string;
+	public function getFile(): string;
+	public function getExt(): string;
+	public function getContent(): string;
 
 	public function setModule(bool $module): void;
 	public function isModule(): bool;
-
-	public function getContent(): string;
 }

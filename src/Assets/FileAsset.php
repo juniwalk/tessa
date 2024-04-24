@@ -40,12 +40,6 @@ class FileAsset implements Asset
 	}
 
 
-	public function getExt(): string
-	{
-		return $this->ext;
-	}
-
-
 	public function getFile(): string
 	{
 		return $this->file;
@@ -58,15 +52,9 @@ class FileAsset implements Asset
 	}
 
 
-	public function setModule(bool $module): void
+	public function getExt(): string
 	{
-		$this->isModule = $module;
-	}
-
-
-	public function isModule(): bool
-	{
-		return $this->isModule;
+		return $this->ext;
 	}
 
 
@@ -80,6 +68,18 @@ class FileAsset implements Asset
 		}
 
 		return $content;
+	}
+
+
+	public function setModule(bool $module): void
+	{
+		$this->isModule = $module;
+	}
+
+
+	public function isModule(): bool
+	{
+		return $this->isModule;
 	}
 
 
