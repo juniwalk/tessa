@@ -18,11 +18,7 @@ class FileAsset implements Asset
 
 	public function __construct(string $file, string $ext)
 	{
-		if ($ext === 'mjs') {
-			$this->isModule = true;
-			$ext = 'js';
-		}
-
+		$this->isModule = $ext == 'mjs';
 		$this->file = $file;
 		$this->ext = $ext;
 	}
