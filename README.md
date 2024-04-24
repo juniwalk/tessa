@@ -11,7 +11,7 @@ composer require juniwalk/tessa
 
 Check [config.neon](tests/config.neon) from tests for more details.
 
-```yaml
+```neon
 extensions:
 	tessa: JuniWalk\Tessa\DI\TessaExtension
 
