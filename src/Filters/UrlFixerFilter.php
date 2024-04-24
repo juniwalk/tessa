@@ -67,7 +67,7 @@ final class UrlFixerFilter implements Filter
 	}
 
 
-	public function absolutizeUrl(string $url, string $path): string
+	private function absolutizeUrl(string $url, string $path): string
 	{
 		if (preg_match('/^([a-z]+:|\/)/i', $url)) {
 			return $url;
@@ -84,7 +84,7 @@ final class UrlFixerFilter implements Filter
 	}
 
 
-	public function cannonicalizePath(string $path): string
+	private function cannonicalizePath(string $path): string
 	{
 		$path = strtr($path, DIRECTORY_SEPARATOR, '/');
 		$parts = [];
