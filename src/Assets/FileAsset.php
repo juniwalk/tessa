@@ -83,13 +83,6 @@ class FileAsset implements Asset
 	}
 
 
-	// TODO: Drop this and move it into Storage class
-	public function isOutOfDate(string $file): bool
-	{
-		return !is_file($file) || filemtime($this->file) > filemtime($file);
-	}
-
-
 	protected function lastModified(): ?string
 	{
 		if (!$lastModified = @filemtime($this->file)) {

@@ -21,6 +21,4 @@ interface Asset
 	public function isModule(): bool;
 
 	public function getContent(): string;
-
-	public function isOutOfDate(string $file): bool;
 }
