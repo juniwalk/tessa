@@ -9,9 +9,12 @@ namespace JuniWalk\Tessa\Exceptions;
 
 final class AssetStoringFailedException extends TessaException
 {
-	public static function fromFile(string $file): self
+	public static function fromLastError(string $file): self
 	{
-		return new static('Failed to store asset to file '.$file, 500);
+		$lastError = error_get_last()['message'] ?? '';
+		$message = 'Failed to store content of '.$file;
+
+		return new static($message.' | '.$lastError, 500);
 	}
 
 

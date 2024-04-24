@@ -100,8 +100,8 @@ final class Storage
 			$content = $filter->apply($content, $asset);
 		}
 
-		if (file_put_contents($file, $content) === false) {
-			throw AssetStoringFailedException::fromFile($file);
+		if (@file_put_contents($file, $content) === false) {
+			throw AssetStoringFailedException::fromLastError($file);
 		}
 
 		return $temp;
