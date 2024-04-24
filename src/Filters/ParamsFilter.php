@@ -33,10 +33,10 @@ final class ParamsFilter implements Filter
 	}
 
 
-	public function apply(string|false $content, Asset $asset): string
+	public function apply(string $content, Asset $asset): string
 	{
 		if (!$content || !Type::StyleSheet->supports($asset)) {
-			return $content ?: '';
+			return $content;
 		}
 
 		$vars = Strings::matchAll($content, static::Pattern);

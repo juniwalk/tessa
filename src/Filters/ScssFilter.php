@@ -60,10 +60,10 @@ final class ScssFilter implements Filter
 	}
 
 
-	public function apply(string|false $content, Asset $asset): string
+	public function apply(string $content, Asset $asset): string
 	{
 		if (!$content || !Type::StyleSheet->supports($asset)) {
-			return $content ?: '';
+			return $content;
 		}
 
 		return $this->scss->compile($content);
