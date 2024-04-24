@@ -1,56 +1,98 @@
+## Installation
 
-### JuniWalk / Tessa TODO
+To install latest version of `juniwalk/tessa` use [Composer](https://getcomposer.org).
 
-- Bundles can depend on other bundles
-- Circular reference must be forbidden
-- Move Nette stuff into Nette bridge? (make dependency on nette optional)
-
-
-### Structure
-
-- AssetManager
-	- Compiler
-		- $namingStyle
-		- $outputDir
-		- $joinFiles
-	- Bundles
-		- BundleA
-			- FileAsset
-		- BundleB
-			- FileAsset
-- AssetControl
+```bash
+composer require juniwalk/tessa
+```
 
 
-### Console commands
+### Usage
 
-- Compile all bundles (warm up all)
-- Compile specific bundle (warm up)
-- List bundles
+Check [config.neon](tests/config.neon) from tests for more details.
 
-
-### Neon configuration
 ```yaml
 extensions:
-    tessa: JuniWalk\Tessa\DI\TessaExtension
+	tessa: JuniWalk\Tessa\DI\TessaExtension
 
 tessa:
-    outputDir: %wwwDir%/static
-    checkLastModified: FALSE
-    filters:
-        - JuniWalk\Tessa\Filters\UrlFixerFilter(%wwwDir%)
+	outputDir: %wwwDir%/static
+	checkLastModified: true
 
-    default:
-        joinFiles: false
-        assets:
-            - %wwwDir%/vendor/font-awesome/css/font-awesome.min.css
-            - %wwwDir%/vendor/jquery/dist/jquery.min.js
-            - %wwwDir%/vendor/bootstrap/dist/css/bootstrap.min.css
-            - %wwwDir%/vendor/bootstrap/dist/js/bootstrap.min.js
-            - %wwwDir%/vendor/nette-forms/src/assets/netteForms.min.js
-            - %wwwDir%/assets/style.css
-            - %wwwDir%/assets/main.js
+	default:
+		defer: true
+		assets:
+			- %wwwDir%/vendor/font-awesome/css/font-awesome.min.css
+			- %wwwDir%/vendor/jquery/dist/jquery.min.js
+			- %wwwDir%/vendor/bootstrap/dist/css/bootstrap.min.css
+			- %wwwDir%/vendor/bootstrap/dist/js/bootstrap.min.js
+			- %wwwDir%/vendor/nette-forms/src/assets/netteForms.min.js
+			- %wwwDir%/assets/style.css
+			- %wwwDir%/assets/index.js
 
-    frontpage:
-        extend: default
-        assets: []
+	frontend:
+		extend: default
+		assets: []
+
+	backend:
+		extend: default
+		assets:
+			- %wwwDir%/assets/admin.js
+
+	fullcalendar:
+		defer: true
+		assets:
+			- %wwwDir%/vendor/fullcalendar/index.global.min.js
+```
+
+Include `AssetManager` trait to get access to Tessa component.
+
+```php
+#[AssetBundle('frontend')]
+class TessaPresenter extends Presenter
+{
+	use AssetManager;
+
+	#[AssetBundle('calendar')]
+	public function actionCalendar(): void {}
+}
+```
+
+Then render styles and scripts in template.
+
+```latte
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>Tessa example</title>
+	{control tessa 'css'}
+	{control tessa 'js'}
+
+</head>
+<body>
+
+	<!-- your page content -->
+
+</body>
+</html>
+```
+
+Alternatively you can render specific part of bundle.
+
+```latte
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>Render just fullcalendar scripts</title>
+	{control tessa:js 'fullcalendar'}
+
+</head>
+<body>
+
+	<!-- your page content -->
+
+</body>
+</html>
 ```
