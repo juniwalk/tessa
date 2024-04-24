@@ -52,9 +52,9 @@ final class BundleManager
 
 
 	/**
+	 * @return Asset[]
 	 * @throws BundleNotFoundException
 	 * @throws BundleRecursionException
-	 * @return Asset[]
 	 */
 	public function compile(string $name, Type $type): iterable
 	{
