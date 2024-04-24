@@ -9,6 +9,7 @@ namespace JuniWalk\Tessa;
 
 use JuniWalk\Tessa\Bundle;
 use JuniWalk\Tessa\Bundles\AssetBundle;
+use JuniWalk\Tessa\Enums\Type;
 use JuniWalk\Tessa\Exceptions\BundleNotFoundException;
 use JuniWalk\Tessa\Exceptions\BundleRecursionException;
 
@@ -61,11 +62,11 @@ final class BundleManager
 	 * @throws BundleNotFoundException
 	 * @throws BundleRecursionException
 	 */
-	public function compile(string $bundleName, string $type): Bundle
+	public function compile(string $bundleName, Type $type): Bundle
 	{
 		$bundle = $this->getBundle($bundleName);
 		$bundleType = $bundle->getAttribute('type');
-		$bundleName = $bundleName.$type;
+		$bundleName = $bundleName.$type->value;
 		$assets = [];
 
 		$this->detectRecursion($bundle);

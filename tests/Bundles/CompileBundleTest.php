@@ -5,7 +5,9 @@
  * @license   MIT License
  */
 
+use JuniWalk\Tessa\Assets\HttpAsset;
 use JuniWalk\Tessa\BundleManager;
+use JuniWalk\Tessa\Enums\Type;
 use Nette\DI\Container;
 use Tester\Assert;
 use Tester\Helpers as FileSystem;
@@ -37,10 +39,11 @@ final class CompileBundleTest extends TestCase
 
 	public function testBundleStandardCompilation(): void
 	{
-		$bundle = $this->bundleManager->compile('default', 'js');
+		$bundle = $this->bundleManager->compile('default', Type::JavaScript);
 		$patterns = [
-			'defaultjs-script.js' => '#/static/defaultjs-script.js$#i',
-			'module.mjs' => '#/assets/module.mjs$#i',
+			'defaultjs-script.js'	=> '#/static/defaultjs-script.js$#i',
+			'module.mjs'			=> '#/assets/module.mjs$#i',
+			// 'api.js'				=> '#/recaptcha/api.js$#i',
 		];
 
 		Assert::same(null, $bundle->getAttribute('type'));
@@ -51,17 +54,20 @@ final class CompileBundleTest extends TestCase
 
 			Assert::hasKey($name, $patterns);
 			Assert::match($patterns[$name], $file);
-			Assert::true(is_file($file));
+
+			if (!$asset instanceof HttpAsset) {
+				Assert::true(is_file($file));
+			}
 		}
 	}
 
 
 	public function testBundleModuleCompilation(): void
 	{
-		$bundle = $this->bundleManager->compile('module', 'js');
+		$bundle = $this->bundleManager->compile('module', Type::JavaScript);
 		$patterns = [
-			'script.js' => '#/assets/script.js$#i',
-			'module.mjs' => '#/assets/module.mjs$#i',
+			'script.js'		=> '#/assets/script.js$#i',
+			'module.mjs'	=> '#/assets/module.mjs$#i',
 		];
 
 		Assert::same('module', $bundle->getAttribute('type'));
@@ -79,12 +85,13 @@ final class CompileBundleTest extends TestCase
 
 	public function testBundleExtendedCompilation(): void
 	{
-		$bundle = $this->bundleManager->compile('extended', 'js');
+		$bundle = $this->bundleManager->compile('extended', Type::JavaScript);
 		$patterns = [
 			'defaultjs-script.js'	=> '#/static/defaultjs-script.js$#i',
 			'module.mjs'			=> '#/assets/module.mjs$#i',
 			'fullcalendar.mjs'		=> '#/assets/fullcalendar.mjs$#i',
 			'extendedjs-form.js'	=> '#/static/extendedjs-form.js$#i',
+			// 'api.js'				=> '#/recaptcha/api.js$#i',
 		];
 
 		Assert::same(null, $bundle->getAttribute('type'));
@@ -95,7 +102,10 @@ final class CompileBundleTest extends TestCase
 
 			Assert::hasKey($name, $patterns);
 			Assert::match($patterns[$name], $file);
-			Assert::true(is_file($file));
+
+			if (!$asset instanceof HttpAsset) {
+				Assert::true(is_file($file));
+			}
 		}
 	}
 
@@ -104,10 +114,11 @@ final class CompileBundleTest extends TestCase
 	{
 		$this->bundleManager->setStorage(null);
 
-		$bundle = $this->bundleManager->compile('default', 'js');
+		$bundle = $this->bundleManager->compile('default', Type::JavaScript);
 		$patterns = [
-			'script.js' => '#/assets/script.js$#i',
-			'module.mjs' => '#/assets/module.mjs$#i',
+			'script.js'		=> '#/assets/script.js$#i',
+			'module.mjs'	=> '#/assets/module.mjs$#i',
+			// 'api.js'		=> '#/recaptcha/api.js$#i',
 		];
 
 		Assert::same(null, $bundle->getAttribute('type'));
@@ -118,7 +129,10 @@ final class CompileBundleTest extends TestCase
 
 			Assert::hasKey($name, $patterns);
 			Assert::match($patterns[$name], $file);
-			Assert::true(is_file($file));
+
+			if (!$asset instanceof HttpAsset) {
+				Assert::true(is_file($file));
+			}
 		}
 	}
 }

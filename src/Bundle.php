@@ -7,6 +7,8 @@
 
 namespace JuniWalk\Tessa;
 
+use JuniWalk\Tessa\Enums\Type;
+
 interface Bundle
 {
 	public function getName(): string;
@@ -23,6 +25,6 @@ interface Bundle
 	/**
 	 * @return Asset[]
 	 */
-	public function getAssets(?string $type = null): array;
+	public function getAssets(?Type $type = null): array;
 	public function addAsset(Asset $asset): void;
 }

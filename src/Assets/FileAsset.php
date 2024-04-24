@@ -9,30 +9,22 @@ namespace JuniWalk\Tessa\Assets;
 
 use JuniWalk\Tessa\Asset;
 use JuniWalk\Tessa\Exceptions\AssetContentException;
-use JuniWalk\Tessa\Exceptions\AssetTypeException;
 
 class FileAsset implements Asset
 {
 	protected string $file;
-	protected string $type;
+	protected string $ext;
 	protected bool $isModule = false;
 
-	/**
-	 * @throws AssetTypeException
-	 */
-	public function __construct(string $file, ?string $type = null)
+	public function __construct(string $file, string $ext)
 	{
-		if (!$type && !$type = pathinfo($file, PATHINFO_EXTENSION)) {
-			throw AssetTypeException::fromFile($file);
-		}
-
-		if ($type === 'mjs') {
+		if ($ext === 'mjs') {
 			$this->isModule = true;
-			$type = 'js';
+			$ext = 'js';
 		}
 
 		$this->file = $file;
-		$this->type = $type;
+		$this->ext = $ext;
 	}
 
 
@@ -48,9 +40,9 @@ class FileAsset implements Asset
 	}
 
 
-	public function getType(): string
+	public function getExt(): string
 	{
-		return $this->type;
+		return $this->ext;
 	}
 
 
@@ -91,12 +83,7 @@ class FileAsset implements Asset
 	}
 
 
-	public function isTypeOf(string $type): bool
-	{
-		return $this->type == $type;
-	}
-
-
+	// TODO: Drop this and move it into Storage class
 	public function isOutOfDate(string $file): bool
 	{
 		return !is_file($file) || filemtime($this->file) > filemtime($file);

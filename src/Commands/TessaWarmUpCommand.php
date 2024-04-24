@@ -8,6 +8,7 @@
 namespace JuniWalk\Tessa\Commands;
 
 use JuniWalk\Tessa\BundleManager;
+use JuniWalk\Tessa\Enums\Type;
 use JuniWalk\Utils\Console\AbstractCommand;
 use JuniWalk\Utils\Console\Tools\ProgressIndicator;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -38,8 +39,8 @@ final class TessaWarmUpCommand extends AbstractCommand
 		$status->iterate($this->bundleManager->getBundles(), function($status, string $bundleName) {
 			$status->setMessage($bundleName);
 
-			$this->bundleManager->compile($bundleName, 'css');
-			$this->bundleManager->compile($bundleName, 'js');
+			$this->bundleManager->compile($bundleName, Type::StyleSheet);
+			$this->bundleManager->compile($bundleName, Type::JavaScript);
 		});
 
 		return Command::SUCCESS;

@@ -12,7 +12,9 @@ use JuniWalk\Tessa\Assets\FileAsset;
 use JuniWalk\Tessa\Assets\HttpAsset;
 use JuniWalk\Tessa\Assets\ScssAsset;
 use JuniWalk\Tessa\Bundle;
+use JuniWalk\Tessa\Enums\Type;
 use JuniWalk\Tessa\Exceptions\AssetTypeException;
+use JuniWalk\Utils\Strings;
 
 class AssetBundle implements Bundle
 {
@@ -89,21 +91,18 @@ class AssetBundle implements Bundle
 	/**
 	 * @throws AssetTypeException
 	 */
-	public function addAssetFrom(string $file): void
+	public function addAssetFrom(string $file, ?string $ext = null): void
 	{
-		// TODO: Detect type using schema? Example: js://, mjs://, css://
-		// TODO: Remote files will have double schema: mjs://https://cdn.io/jquery-v4.0.0.js
-		$params = $this->parseParams($file);
-		$type = $params['type'] ?? null;
+		$ext ??= $this->discoverExtension($file);
 
-		if (!is_string($type)) {
-			$type = null;
+		if (str_starts_with($file, $ext.'://')) {
+			$file = substr($file, strlen($ext) +3);
 		}
 
 		$this->assets[] = match (true) {
-			ScssAsset::match($file) => new ScssAsset($file, $type),
-			HttpAsset::match($file) => new HttpAsset($file, $type),
-			FileAsset::match($file) => new FileAsset($file, $type),
+			ScssAsset::match($file) => new ScssAsset($file, $ext),
+			HttpAsset::match($file) => new HttpAsset($file, $ext),
+			FileAsset::match($file) => new FileAsset($file, $ext),
 
 			default => throw AssetTypeException::fromFile($file),
 		};
@@ -113,22 +112,31 @@ class AssetBundle implements Bundle
 	/**
 	 * @return Asset[]
 	 */
-	public function getAssets(?string $type = null): array
+	public function getAssets(?Type $type = null): array
 	{
-		return array_filter($this->assets, fn($x) => !$type || $x->isTypeOf($type));
+		return array_filter($this->assets, fn($x) => !$type || $type->supports($x));
 	}
 
 
 	/**
-	 * @return array<int|string, mixed>
+	 * @throws AssetTypeException
 	 */
-	private function parseParams(string $file): array
+	protected function discoverExtension(string $file): string
 	{
-		if (!$query = parse_url($file, PHP_URL_QUERY)) {
-			return [];
+		$scheme = Strings::match($file, '/^([a-z]+):\/\//i')[1] ?? null;
+
+		if ($scheme && Type::fromExtension($scheme)) {
+			return $scheme;
 		}
 
-		parse_str($query, $params);
-		return $params;
+		if ($scheme && $position = strpos($file, '?')) {
+			$file = substr($file, 0, $position);
+		}
+
+		if ($type = pathinfo($file, PATHINFO_EXTENSION)) {
+			return $type;
+		}
+
+		throw AssetTypeException::fromFile($file);
 	}
 }

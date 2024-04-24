@@ -12,7 +12,8 @@ interface Asset
 	public static function match(string $file): bool;
 
 	public function getName(): string;
-	public function getType(): string;
+	public function getExt(): string;
+
 	public function getFile(): string;
 	public function getPath(): string;
 
@@ -21,6 +22,5 @@ interface Asset
 
 	public function getContent(): string;
 
-	public function isTypeOf(string $type): bool;
 	public function isOutOfDate(string $file): bool;
 }

@@ -87,7 +87,7 @@ final class Storage
 		}
 
 		$file = $this->outputDir.'/'.$prefix.$asset->getName();
-		$temp = new FileAsset($file, $asset->getType());
+		$temp = new FileAsset($file, $asset->getExt());
 		$temp->setModule($asset->isModule());
 
 		if (($this->checkLastModified || $this->debugMode) && !$asset->isOutOfDate($file)) {

@@ -7,6 +7,8 @@
 
 namespace JuniWalk\Tessa\Exceptions;
 
+use JuniWalk\Tessa\Enums\Type;
+
 final class AssetTypeException extends TessaException
 {
 	public static function fromFile(string $file): self
@@ -15,8 +17,12 @@ final class AssetTypeException extends TessaException
 	}
 
 
-	public static function fromType(string $type): self
+	public static function fromType(mixed $type): self
 	{
-		return new static('Unknown type of "'.$type.'"', 500);
+		if ($type instanceof Type) {
+			$type = $type->name.'('.$type->value.')';
+		}
+
+		return new static('Type of "'.$type.'" is not supported for rendering.', 500);
 	}
 }

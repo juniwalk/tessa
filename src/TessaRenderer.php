@@ -8,6 +8,7 @@
 namespace JuniWalk\Tessa;
 
 use JuniWalk\Tessa\Attributes\AssetBundle;
+use JuniWalk\Tessa\Enums\Type;
 use JuniWalk\Tessa\Exceptions\AssetTypeException;
 use Nette\ComponentModel\IComponent as Component;
 use Nette\Application\UI\Control;
@@ -42,21 +43,27 @@ final class TessaRenderer extends Control
 
 	public function renderCss(string $bundle = 'default'): void
 	{
-		echo implode(PHP_EOL, $this->compile($bundle, 'css'));
+		echo implode(PHP_EOL, $this->compile($bundle, Type::StyleSheet));
 	}
 
 
 	public function renderJs(string $bundle = 'default'): void
 	{
-		echo implode(PHP_EOL, $this->compile($bundle, 'js'));
+		echo implode(PHP_EOL, $this->compile($bundle, Type::JavaScript));
 	}
 
 
 	/**
 	 * @throws AssetTypeException
 	 */
-	public function render(string $type): void
+	public function render(Type|string $type): void
 	{
+		$type = Type::make($type, false) ?? $type;
+
+		if (!$type instanceof Type) {
+			throw AssetTypeException::fromType($type);
+		}
+
 		$control = $this->getPresenter();
 		$attributes = $this->findAssetAttributes($control);
 
@@ -83,12 +90,12 @@ final class TessaRenderer extends Control
 	 * @return Html[]
 	 * @throws AssetTypeException
 	 */
-	private function compile(string $bundle, string $type): array
+	private function compile(string $bundle, Type $type): array
 	{
 		$bundle = $this->bundleManager->compile($bundle, $type);
 		$create = match ($type) {
-			'css' => $this->createStyle(...),
-			'js' => $this->createScript(...),
+			Type::StyleSheet => $this->createStyleSheet(...),
+			Type::JavaScript => $this->createJavaScript(...),
 
 			default => throw AssetTypeException::fromType($type),
 		};
@@ -103,7 +110,7 @@ final class TessaRenderer extends Control
 	}
 
 
-	private function createStyle(Asset $asset, Bundle $bundle): ?Html
+	private function createStyleSheet(Asset $asset, Bundle $bundle): ?Html
 	{
 		$path = $this->createFilePath($asset);
 
@@ -119,7 +126,7 @@ final class TessaRenderer extends Control
 	}
 
 
-	private function createScript(Asset $asset, Bundle $bundle): ?Html
+	private function createJavaScript(Asset $asset, Bundle $bundle): ?Html
 	{
 		$path = $this->createFilePath($asset);
 		$type = $bundle->getAttribute('type');

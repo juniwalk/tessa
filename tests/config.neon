@@ -21,6 +21,10 @@ tessa:
 			- %wwwDir%/assets/script.js
 			- %wwwDir%/assets/style.css
 
+	fontFamily:
+		assets:
+			- 'css://https://fonts.googleapis.com/css?family=Source+Sans+Pro'
+
 	module:
 		isModule: true
 		assets:

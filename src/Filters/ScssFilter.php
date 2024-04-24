@@ -10,6 +10,7 @@ namespace JuniWalk\Tessa\Filters;
 use InvalidArgumentException;
 use JuniWalk\Tessa\Asset;
 use JuniWalk\Tessa\Filter;
+use JuniWalk\Tessa\Enums\Type;
 use JuniWalk\Tessa\Exceptions\MissingOptionalFeatureException;
 use ScssPhp\ScssPhp\Compiler;
 use ScssPhp\ScssPhp\Formatter;
@@ -61,7 +62,7 @@ final class ScssFilter implements Filter
 
 	public function apply(string|false $content, Asset $asset): string
 	{
-		if (!$content || !$asset->isTypeOf('scss')) {
+		if (!$content || !Type::StyleSheet->supports($asset)) {
 			return $content ?: '';
 		}
 

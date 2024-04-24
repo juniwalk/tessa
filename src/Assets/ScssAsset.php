@@ -23,10 +23,4 @@ class ScssAsset extends FileAsset
 	{
 		return str_replace('.scss', '.css', parent::getName());
 	}
-
-
-	public function isTypeOf(string $type): bool
-	{
-		return in_array($type, ['css', 'scss']);
-	}
 }

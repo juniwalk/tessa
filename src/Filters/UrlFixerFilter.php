@@ -9,6 +9,7 @@ namespace JuniWalk\Tessa\Filters;
 
 use JuniWalk\Tessa\Asset;
 use JuniWalk\Tessa\Filter;
+use JuniWalk\Tessa\Enums\Type;
 use JuniWalk\Utils\Strings;
 use Nette\Http\IRequest;
 
@@ -48,7 +49,7 @@ final class UrlFixerFilter implements Filter
 
 	public function apply(string|false $content, Asset $asset): string
 	{
-		if (!$content || !$asset->isTypeOf('css')) {
+		if (!$content || !Type::StyleSheet->supports($asset)) {
 			return $content ?: '';
 		}
 

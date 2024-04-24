@@ -6,6 +6,7 @@
  */
 
 use JuniWalk\Tessa\Attributes\AssetBundle;
+use JuniWalk\Tessa\Enums\Type;
 use JuniWalk\Tessa\Exceptions\AssetTypeException;
 use JuniWalk\Tessa\TessaRenderer;
 use Nette\Application\UI\Presenter;
@@ -98,9 +99,15 @@ final class TessaRendererTest extends TestCase
 	public function testRenderInvalidType(): void
 	{
 		Assert::exception(
+			fn() => $this->tessa->render(Type::Unknown),
+			AssetTypeException::class,
+			'Type of "%a%" is not supported %A?%',
+		);
+
+		Assert::exception(
 			fn() => $this->tessa->render('unknown'),
 			AssetTypeException::class,
-			'Unknown type of "%w%"',
+			'Type of "%a%" is not supported %A?%',
 		);
 	}
 }
