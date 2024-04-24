@@ -43,27 +43,33 @@ final class TessaRenderer extends Control
 
 	public function renderCss(?string $bundle = null): void
 	{
-		$type = Type::StyleSheet;
-
-		if (!$bundle) {
-			$this->render($type);
-			return;
-		}
-
-		echo implode(PHP_EOL, $this->compile($bundle, $type)).PHP_EOL;
+		$this->renderType(Type::StyleSheet, $bundle);
 	}
 
 
 	public function renderJs(?string $bundle = null): void
 	{
-		$type = Type::JavaScript;
+		$this->renderType(Type::JavaScript, $bundle);
+	}
 
-		if (!$bundle) {
-			$this->render($type);
-			return;
+
+	/**
+	 * @throws AssetTypeException
+	 */
+	public function renderType(Type|string $type, ?string $bundle = null): void
+	{
+		$type = Type::make($type, false) ?? $type;
+
+		if (!$type instanceof Type) {
+			throw AssetTypeException::fromType($type);
 		}
 
-		echo implode(PHP_EOL, $this->compile($bundle, $type)).PHP_EOL;
+		match (true) {
+			$bundle => $this->print(
+				$this->compile($bundle, $type)
+			),
+			default => $this->render($type),
+		};
 	}
 
 
@@ -96,7 +102,7 @@ final class TessaRenderer extends Control
 			$output = array_merge($output, $assets);
 		}
 
-		echo implode(PHP_EOL, $output).PHP_EOL;
+		$this->print($output);
 	}
 
 
@@ -121,6 +127,15 @@ final class TessaRenderer extends Control
 		}
 
 		return array_filter($output);
+	}
+
+
+	/**
+	 * @param Html[] $assets
+	 */
+	private function print(array $assets): void
+	{
+		echo implode(PHP_EOL, $assets).PHP_EOL;
 	}
 
 
