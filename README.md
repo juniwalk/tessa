@@ -61,7 +61,7 @@ class TessaPresenter extends Presenter
 }
 ```
 
-Then render styles and scripts in template.
+Then render styles and scripts in template from Presenter attributes.
 
 ```latte
 <!DOCTYPE html>
@@ -69,8 +69,8 @@ Then render styles and scripts in template.
 <head>
 
 	<title>Tessa example</title>
-	{control tessa 'css'}
-	{control tessa 'js'}
+	{control tessa:css}
+	{control tessa:js}
 
 </head>
 <body>

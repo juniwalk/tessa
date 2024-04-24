@@ -72,7 +72,7 @@ final class TessaRendererTest extends TestCase
 	public function testRenderAutoAssets(): void
 	{
 		$this->tessa->getPresenter()->changeAction('default');
-		$output = Output::capture(fn() => $this->tessa->render('js'));
+		$output = Output::capture(fn() => $this->tessa->renderJs());
 
 		Assert::contains('/static/defaultjs-script.js', $output);
 		Assert::contains('/assets/module.mjs', $output);
@@ -83,7 +83,7 @@ final class TessaRendererTest extends TestCase
 	public function testRenderClearPreviousAssets(): void
 	{
 		$this->tessa->getPresenter()->changeAction('partial');
-		$output = Output::capture(fn() => $this->tessa->render('js'));
+		$output = Output::capture(fn() => $this->tessa->renderJs());
 
 		Assert::notContains('/static/defaultjs-script.js', $output);
 		Assert::notContains('/assets/module.mjs', $output);

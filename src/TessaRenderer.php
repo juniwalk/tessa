@@ -41,15 +41,29 @@ final class TessaRenderer extends Control
 	}
 
 
-	public function renderCss(string $bundle = 'default'): void
+	public function renderCss(?string $bundle = null): void
 	{
-		echo implode(PHP_EOL, $this->compile($bundle, Type::StyleSheet));
+		$type = Type::StyleSheet;
+
+		if (!$bundle) {
+			$this->render($type);
+			return;
+		}
+
+		echo implode(PHP_EOL, $this->compile($bundle, $type));
 	}
 
 
-	public function renderJs(string $bundle = 'default'): void
+	public function renderJs(?string $bundle = null): void
 	{
-		echo implode(PHP_EOL, $this->compile($bundle, Type::JavaScript));
+		$type = Type::JavaScript;
+
+		if (!$bundle) {
+			$this->render($type);
+			return;
+		}
+
+		echo implode(PHP_EOL, $this->compile($bundle, $type));
 	}
 
 
