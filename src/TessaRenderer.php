@@ -65,7 +65,7 @@ final class TessaRenderer extends Control
 		}
 
 		match (true) {
-			$bundle => $this->print(
+			isset($bundle) => $this->print(
 				$this->compile($bundle, $type)
 			),
 			default => $this->render($type),
