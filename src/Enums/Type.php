@@ -9,9 +9,10 @@ namespace JuniWalk\Tessa\Enums;
 
 use JuniWalk\Tessa\Asset;
 use JuniWalk\Tessa\Exceptions\AssetTypeException;
+use JuniWalk\Utils\Enums\Interfaces\LabeledEnum;
 use JuniWalk\Utils\Enums\Traits\Labeled;
 
-enum Type: string
+enum Type: string implements LabeledEnum
 {
 	use Labeled;
 
