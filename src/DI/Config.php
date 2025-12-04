@@ -14,6 +14,9 @@ class Config
 	public bool $directLink = false;
 	public bool $debugMode = false;
 
+	/** @var array<string, string> */
+	public array $modules = [];
+
 	/** @var string[] */
 	public array $filters = [];
 

@@ -10,6 +10,7 @@ namespace JuniWalk\Tessa;
 use JuniWalk\Tessa\Attributes\AssetBundle;
 use JuniWalk\Tessa\Enums\Type;
 use JuniWalk\Tessa\Exceptions\AssetTypeException;
+use JuniWalk\Tessa\Module;
 use Nette\ComponentModel\IComponent as Component;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Presenter;
@@ -50,6 +51,26 @@ final class TessaRenderer extends Control
 	public function renderJs(?string $bundle = null): void
 	{
 		$this->renderType(Type::JavaScript, $bundle);
+	}
+
+
+	public function renderImportMap(): void
+	{
+		if (!$modules = $this->bundleManager->getModules()) {
+			return;
+		}
+
+		foreach ($modules as $name => $module) {
+			$modules[$name] = $this->createFilePath($module);
+		}
+
+		$importmap = json_encode(['imports' => $modules], JSON_PRETTY_PRINT);
+
+		if (!$importmap) {
+			return;
+		}
+
+		echo Html::el('script type="importmap"', $importmap).PHP_EOL;
 	}
 
 
@@ -181,7 +202,7 @@ final class TessaRenderer extends Control
 	}
 
 
-	private function createFilePath(Asset $asset): string
+	private function createFilePath(Asset|Module $asset): string
 	{
 		return str_replace($this->wwwDir, $this->basePath, $asset->getPath());
 	}

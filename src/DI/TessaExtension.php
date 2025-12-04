@@ -10,6 +10,7 @@ namespace JuniWalk\Tessa\DI;
 use JuniWalk\Tessa\BundleManager;
 use JuniWalk\Tessa\Bundles\AssetBundle;
 use JuniWalk\Tessa\Commands\TessaWarmUpCommand;
+use JuniWalk\Tessa\Module;
 use JuniWalk\Tessa\Storage;
 use JuniWalk\Tessa\TessaRenderer;
 use Nette\DI\CompilerExtension;
@@ -59,6 +60,13 @@ final class TessaExtension extends CompilerExtension
 
 		$manager = $builder->addDefinition($this->prefix('manager'))
 			->setFactory(BundleManager::class);
+
+		foreach ($config->modules as $moduleName => $path) {
+			$manager->addSetup('addModule', [new Statement(Module::class, [
+				'name' => $moduleName,
+				'path' => $path,
+			])]);
+		}
 
 		foreach ($config->bundles as $bundleName => $bundle) {
 			$stmt = $builder->addDefinition($this->prefix('bundle.'.$bundleName))

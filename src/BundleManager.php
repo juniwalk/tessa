@@ -7,19 +7,36 @@
 
 namespace JuniWalk\Tessa;
 
-use JuniWalk\Tessa\Bundle;
 use JuniWalk\Tessa\Enums\Type;
 use JuniWalk\Tessa\Exceptions\BundleNotFoundException;
 use JuniWalk\Tessa\Exceptions\BundleRecursionException;
 
 final class BundleManager
 {
+	/** @var array<string, Module> */
+	private array $modules = [];
+
 	/** @var array<string, Bundle> */
 	private array $bundles = [];
 
 	public function __construct(
 		private readonly Storage $storage,
 	) {
+	}
+
+
+	public function addModule(Module $module): void
+	{
+		$this->modules[$module->getName()] = $module;
+	}
+
+
+	/**
+	 * @return array<string, Module>
+	 */
+	public function getModules(): array
+	{
+		return $this->modules;
 	}
 
 
