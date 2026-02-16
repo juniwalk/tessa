@@ -7,13 +7,12 @@
 
 namespace JuniWalk\Tessa\Filters;
 
-use InvalidArgumentException;
 use JuniWalk\Tessa\Asset;
 use JuniWalk\Tessa\Filter;
 use JuniWalk\Tessa\Enums\Type;
 use JuniWalk\Tessa\Exceptions\MissingOptionalFeatureException;
 use ScssPhp\ScssPhp\Compiler;
-use ScssPhp\ScssPhp\Formatter;
+use ScssPhp\ScssPhp\Value\Value;
 
 final class ScssFilter implements Filter
 {
@@ -32,19 +31,6 @@ final class ScssFilter implements Filter
 	}
 
 
-	/**
-	 * @throws InvalidArgumentException
-	 */
-	public function setFormatter(string $formatter): void
-	{
-		if (!is_subclass_of($formatter, Formatter::class, true)) {
-			throw new InvalidArgumentException('Expected name of subclass of '.Formatter::class);
-		}
-
-		$this->scss->setFormatter($formatter);
-	}
-
-
 	public function addImportPath(string $path): void
 	{
 		$this->scss->addImportPath($path);
@@ -52,11 +38,11 @@ final class ScssFilter implements Filter
 
 
 	/**
-	 * @param mixed[] $variables
+	 * @param array<string, Value> $variables
 	 */
 	public function setVariables(array $variables): void
 	{
-		$this->scss->setVariables($variables);
+		$this->scss->addVariables($variables);
 	}
 
 
@@ -66,6 +52,8 @@ final class ScssFilter implements Filter
 			return $content;
 		}
 
-		return $this->scss->compile($content);
+		$result = $this->scss->compileString($content);
+
+		return $result->getCss();
 	}
 }
