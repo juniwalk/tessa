@@ -35,7 +35,7 @@ final class ParamsFilter implements Filter
 
 	public function apply(string $content, Asset $asset): string
 	{
-		if (!$content || !Type::StyleSheet->supports($asset)) {
+		if (!$content || !Type::fromExtension($asset->getExt())) {
 			return $content;
 		}
 
