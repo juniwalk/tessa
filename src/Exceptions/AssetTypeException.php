@@ -17,7 +17,7 @@ final class AssetTypeException extends TessaException
 	}
 
 
-	public static function fromType(mixed $type): self
+	public static function fromType(Type|string $type): self
 	{
 		if ($type instanceof Type) {
 			$type = $type->name.'('.$type->value.')';
