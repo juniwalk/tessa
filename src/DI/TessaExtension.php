@@ -80,6 +80,7 @@ final class TessaExtension extends CompilerExtension
 			}
 
 			$stmt->addSetup('setAttribute', ['cookie-consent', $bundle->cookieConsent]);
+			$stmt->addSetup('setAttribute', ['crossorigin', $bundle->crossorigin]);
 			$stmt->addSetup('setAttribute', ['async', $bundle->async]);
 			$stmt->addSetup('setAttribute', ['defer', $bundle->defer]);
 

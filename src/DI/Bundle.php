@@ -10,6 +10,7 @@ namespace JuniWalk\Tessa\DI;
 class Bundle
 {
 	public ?string $cookieConsent = null;
+	public ?string $crossorigin = null;
 	public ?string $extend = null;
 	public ?bool $directLink = null;
 	public bool $isModule = false;
