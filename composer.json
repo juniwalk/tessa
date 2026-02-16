@@ -22,7 +22,7 @@
 	},
 
 	"require": {
-		"php": ">=8.3",
+		"php": ">=8.2",
 		"juniwalk/utils": "^3.0|^4.0",
 		"nette/application": ">=2.4 <4.0",
 		"nette/di": ">=2.4 <4.0",
@@ -33,11 +33,11 @@
 		"nette/bootstrap": "^3.2",
 		"nette/tester": "^2.5",
 		"phpstan/extension-installer": "^1.0",
-		"phpstan/phpstan": "^1.0",
-		"phpstan/phpstan-nette": "^1.0",
-		"scssphp/scssphp": "^1.0",
-		"staabm/phpstan-todo-by": "^0.1",
-		"symfony/console": "^7.0",
+		"phpstan/phpstan": "^2.0",
+		"phpstan/phpstan-nette": "^2.0",
+		"scssphp/scssphp": "^2.0",
+		"staabm/phpstan-todo-by": "^0.3",
+		"symfony/console": "^7.0|^8.0",
 		"tracy/tracy": "^2.10"
 	},
 
