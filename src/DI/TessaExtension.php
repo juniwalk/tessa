@@ -27,7 +27,8 @@ final class TessaExtension extends CompilerExtension
 			'filters' => Expect::listOf(
 				Expect::string()->dynamic()->transform(fn($stmt) => match (true) {
 					$stmt instanceof Statement => $stmt,
-					default => new Statement($stmt),
+					is_string($stmt) => new Statement($stmt),
+					default => new InvalidConfigurationException,
 				})
 			),
 		])
