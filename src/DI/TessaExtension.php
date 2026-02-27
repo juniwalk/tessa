@@ -13,6 +13,7 @@ use JuniWalk\Tessa\Commands\TessaWarmUpCommand;
 use JuniWalk\Tessa\Module;
 use JuniWalk\Tessa\Storage;
 use JuniWalk\Tessa\TessaRenderer;
+use JuniWalk\Utils\Format;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\Statement;
 use Nette\DI\InvalidConfigurationException;
@@ -70,7 +71,7 @@ final class TessaExtension extends CompilerExtension
 		}
 
 		foreach ($config->bundles as $bundleName => $bundle) {
-			$stmt = $builder->addDefinition($this->prefix('bundle.'.$bundleName))
+			$stmt = $builder->addDefinition($this->prefix('bundle.'.Format::camelCase($bundleName)))
 				->setFactory(AssetBundle::class, [$bundleName])
 				->addSetup('setDirectLink', [$bundle->directLink ?? $config->directLink])
 				->addSetup('setExtendBundle', [$bundle->extend]);
