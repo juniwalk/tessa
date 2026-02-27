@@ -214,12 +214,15 @@ final class TessaRenderer extends Control
 	private function findAttributes(Component $control): array
 	{
 		$class = new ReflectionClass($control);
-		$attrs = $class->getAttributes(AssetBundle::class);
+		$attrs = [];
 
 		if ($parent = $class->getParentClass()) {
 			$items = $parent->getAttributes(AssetBundle::class);
 			$attrs = array_merge($attrs, $items);
 		}
+
+		$items = $class->getAttributes(AssetBundle::class);
+		$attrs = array_merge($attrs, $items);
 
 		if ($control instanceof Presenter && $view = $control->getAction()) {
 			$viewAction = Presenter::formatActionMethod($view);
