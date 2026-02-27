@@ -133,6 +133,29 @@ final class CompileBundleTest extends TestCase
 			}
 		}
 	}
+
+
+	public function testBundleNajaCompilation(): void
+	{
+		$assets = $this->bundleManager->compile('naja', Type::JavaScript);
+		$patterns = [
+			'najajs-overlay-extension.js' => '#/static/najajs-overlay-extension.js$#i',
+		];
+
+		// Assert::same(null, $bundle->getAttribute('type'));
+
+		foreach ($assets as $asset) {
+			$file = $asset->getFile();
+			$name = $asset->getName();
+
+			Assert::hasKey($name, $patterns);
+			Assert::match($patterns[$name], $file);
+
+			if (!$asset instanceof HttpAsset) {
+				Assert::true(is_file($file));
+			}
+		}
+	}
 }
 
 (new CompileBundleTest)->run();

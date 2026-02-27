@@ -12,7 +12,7 @@ use JuniWalk\Tessa\Assets\FileAsset;
 use JuniWalk\Tessa\Assets\HttpAsset;
 use JuniWalk\Tessa\Exceptions\AssetContentException;
 use JuniWalk\Tessa\Exceptions\AssetStoringFailedException;
-use JuniWalk\Tessa\Filter;
+use JuniWalk\Utils\Format;
 
 final class Storage
 {
@@ -86,7 +86,9 @@ final class Storage
 			$prefix = rtrim($prefix, '-').'-';
 		}
 
-		$file = $this->outputDir.'/'.$prefix.$asset->getName();
+		$file = Format::kebabCase($asset->getName());
+		$file = $this->outputDir.'/'.$prefix.$file;
+
 		$temp = new FileAsset($file, $asset->getExt());
 		$temp->setAttributes($asset->getAttributes());
 		$temp->setModule($asset->isModule());

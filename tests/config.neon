@@ -31,6 +31,10 @@ tessa:
 			- %wwwDir%/assets/module.mjs
 			- %wwwDir%/assets/script.js
 
+	naja:
+		assets:
+			- %wwwDir%/assets/OverlayExtension.js
+
 	calendar:
 		isModule: true
 		defer: true
